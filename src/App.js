@@ -44,16 +44,23 @@ languages.forEach(lang => {
 
 themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
-const defaultValue = `function onLoad(editor) {
-  console.log("i've loaded");
-}`;
+const defaultValue = "function onLoad(editor) {\n" +
+    "  console.log(\"i've loaded\");\n" +
+    "}";
+
 class App extends Component {
     onLoad() {
     }
     onChange(newValue) {
+        this.state.code = newValue;
+        console.log(this.state.code);
         this.setState({
             value: newValue
         });
+    }
+
+    send_to_back_end = () => {
+        alert(this.state.code);
     }
 
     onSelectionChange(selection) {
@@ -63,7 +70,6 @@ class App extends Component {
     }
 
     onValidate(annotations) {
-        console.log("fesfessfefsesef");
     }
 
     setPlaceholder(e) {
@@ -117,7 +123,7 @@ class App extends Component {
     }
     render() {
         return (
-            <div className="examples column">
+            <div className="Editor PoCWar">
                 <h1>PoCWar</h1>
                 <AceEditor
                     placeholder={this.state.placeholder}
@@ -143,6 +149,7 @@ class App extends Component {
                         tabSize: 2
                     }}
                 />
+                <button onClick={this.send_to_back_end}>submit</button>
             </div>
         );
     }

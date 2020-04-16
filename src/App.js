@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import AceEditor from "react-ace";
+import "./App.css"
 import "ace-builds/src-noconflict/mode-jsx";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import "ace-builds/src-min-noconflict/ext-language_tools";
@@ -123,33 +124,111 @@ class App extends Component {
     }
     render() {
         return (
-            <div className="Editor PoCWar">
-                <h1>PoCWar</h1>
-                <AceEditor
-                    placeholder={this.state.placeholder}
-                    mode={this.state.mode}
-                    theme={this.state.theme}
-                    name="blah2"
-                    onLoad={this.onLoad}
-                    onChange={this.onChange}
-                    onSelectionChange={this.onSelectionChange}
-                    onCursorChange={this.onCursorChange}
-                    onValidate={this.onValidate}
-                    value={this.state.value}
-                    fontSize={this.state.fontSize}
-                    showPrintMargin={this.state.showPrintMargin}
-                    showGutter={this.state.showGutter}
-                    highlightActiveLine={this.state.highlightActiveLine}
-                    setOptions={{
-                        useWorker: false,
-                        enableBasicAutocompletion: this.state.enableBasicAutocompletion,
-                        enableLiveAutocompletion: this.state.enableLiveAutocompletion,
-                        enableSnippets: this.state.enableSnippets,
-                        showLineNumbers: this.state.showLineNumbers,
-                        tabSize: 2
-                    }}
-                />
-                <button onClick={this.send_to_back_end}>submit</button>
+            <div className="editor">
+                <h1 className="title">PoCWar</h1>
+                <div className="option-tools">
+                <div className="column">
+                    <div className="field">
+                        <label>Language:</label>
+                        <p className="control">
+                          <span className="select">
+                            <select
+                                name="language"
+                                onChange={this.setMode}
+                                value={this.state.mode}
+                            >
+                              {languages.map(lang => (
+                                  <option key={lang} value={lang}>
+                                      {lang}
+                                  </option>
+                              ))}
+                            </select>
+                          </span>
+                        </p>
+                    </div>
+                </div>
+                <div className="field">
+                    <label>Theme:</label>
+                    <p className="control">
+                 <span className="select">
+                     <select
+                         name="Theme"
+                         onChange={this.setTheme}
+                         value={this.state.theme}
+                     >
+                  {themes.map(lang => (
+                      <option key={lang} value={lang}>
+                          {lang}
+                      </option>
+                  ))}
+                     </select>
+                 </span>
+                    </p>
+                </div>
+                    <div className="field">
+                        <p className="control">
+                            <label className="checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={this.state.enableBasicAutocompletion}
+                                    onChange={e =>
+                                        this.setBoolean(
+                                            "enableBasicAutocompletion",
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                                Enable Basic Autocomplete
+                            </label>
+                        </p>
+                    </div>
+                    <div className="field">
+                        <p className="control">
+                            <label className="checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={this.state.enableLiveAutocompletion}
+                                    onChange={e =>
+                                        this.setBoolean(
+                                            "enableLiveAutocompletion",
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                                Enable Live Autocomplete
+                            </label>
+                        </p>
+                    </div>
+                </div>
+                <div className="text-editor">
+                    <AceEditor
+                        placeholder={this.state.placeholder}
+                        mode={this.state.mode}
+                        theme={this.state.theme}
+                        name="blah2"
+                        onLoad={this.onLoad}
+                        onChange={this.onChange}
+                        onSelectionChange={this.onSelectionChange}
+                        onCursorChange={this.onCursorChange}
+                        onValidate={this.onValidate}
+                        value={this.state.value}
+                        fontSize={this.state.fontSize}
+                        showPrintMargin={this.state.showPrintMargin}
+                        showGutter={this.state.showGutter}
+                        highlightActiveLine={this.state.highlightActiveLine}
+                        setOptions={{
+                            useWorker: false,
+                            enableBasicAutocompletion: this.state.enableBasicAutocompletion,
+                            enableLiveAutocompletion: this.state.enableLiveAutocompletion,
+                            enableSnippets: this.state.enableSnippets,
+                            showLineNumbers: this.state.showLineNumbers,
+                            tabSize: 2
+                        }}
+                    />
+                </div>
+                <div className="sub">
+                    <button onClick={this.send_to_back_end}>submit</button>
+                </div>
             </div>
         );
     }

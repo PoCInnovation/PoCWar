@@ -7,11 +7,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
 
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '10.x'
+
     - name: install the dependencies
       run: ./scripts/install.sh
-
     - name: build the project
       run: ./scripts/build.sh
+
+    - uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only hosting
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

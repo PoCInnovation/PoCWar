@@ -1,0 +1,13 @@
+name: firebase-deploy
+
+on:
+  push:
+    branches: [ master, firebase ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: build the project
+      run: ./scripts/build.sh

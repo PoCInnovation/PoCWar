@@ -9,5 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: install the dependencies
+      run: ./scripts/install.sh
+
     - name: build the project
       run: ./scripts/build.sh

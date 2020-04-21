@@ -1,10 +1,10 @@
 .pocWarLogoContainer {
-    display: inline-block;
+    display: flex;
     align-items: center;
     height: 100%;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0);
-    transition: background-color 375ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
 }
 
 .pocWarLogoContainer:hover {

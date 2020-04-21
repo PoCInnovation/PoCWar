@@ -7,6 +7,8 @@ const useStyles = makeStyles(() => ({
   pocWarLogo: {
     paddingLeft: 17,
     paddingRight: 17,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 }));
 

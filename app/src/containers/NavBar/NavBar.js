@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import { common } from '@material-ui/core/colors';
 import PocWarLogo from '../../components/Logo/PocWarLogo';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     flexGrow: 1,
   },

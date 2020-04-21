@@ -1,1 +1,1 @@
-./build.sh && ./deploy.sh
+./scripts/build.sh && ./scripts/deploy.sh

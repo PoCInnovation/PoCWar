@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../../assets/PocWarLogo.png'
-import './PocWarLogo.css'
+import './PocWarLogoContainer.css'
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({

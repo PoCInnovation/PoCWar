@@ -1,0 +1,23 @@
+name: firebase-deploy
+
+on:
+  push:
+    branches: [master, firebase]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install the dependencies
+      run: ./scripts/install.sh
+    - name: build the project
+      run: ./scripts/build.sh
+
+    - uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only hosting
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

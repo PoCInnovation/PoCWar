@@ -59,7 +59,8 @@ const languages = [
   "csharp",
   "elixir",
   "typescript",
-  "css"
+  "css",
+  "c_cpp"
 ];
 
 languages.forEach(lang => {

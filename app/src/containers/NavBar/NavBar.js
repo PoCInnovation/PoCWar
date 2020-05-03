@@ -28,9 +28,11 @@ export default function NavBar() {
   return (
     <AppBar color={common.white} className={classes.root}>
       <Toolbar className={classes.toolbar}>
-        <PocWarLogo className={classes.pocWarLogo} />
+        <PocWarLogo className={classes.pocWarLogo}/>
         <Typography variant="h6" className={classes.title} />
-        <Button color="inherit">Login</Button>
+        <Button color="inherit">
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );

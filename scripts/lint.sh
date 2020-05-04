@@ -1,0 +1,1 @@
+npm run-script lint --prefix app

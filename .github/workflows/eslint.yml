@@ -1,0 +1,14 @@
+name: Eslint
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: ESLint Action
+      uses: hallee/eslint-action@1.0.1

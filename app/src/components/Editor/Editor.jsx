@@ -83,7 +83,7 @@ export default function Editor(props) {
           labelId="change_label"
           id="change_form"
           value={theme}
-          onChange={(event) => {setTheme(event.target.value)}}
+          onChange={(event) => { setTheme(event.target.value) }}
         >
           {themes.map((newthemes) => (
             <MenuItem key={newthemes} value={newthemes}>
@@ -96,7 +96,7 @@ export default function Editor(props) {
         <InputLabel>Language</InputLabel>
         <Select
           value={language}
-          onChange={(event) => {setLanguage(event.target.value)}}
+          onChange={(event) => { setLanguage(event.target.value) }}
         >
           {languages.map((lang) => (
             <MenuItem key={lang} value={lang}>
@@ -108,8 +108,10 @@ export default function Editor(props) {
       <FormControlLabel
         className={classes.formControl}
         value="autocompletion"
-        onChange={(e) => {setAutocompletebasic(e.target.checked);
+        onChange={(e) => {
+          setAutocompletebasic(e.target.checked);
           setAutocompletelive(e.target.checked);
+        }}
         control={<Checkbox color="primary" />}
         label="Auto completion"
         labelPlacement="end"
@@ -137,7 +139,7 @@ export default function Editor(props) {
         showPrintMargin={false}
         editorProps={{ $blockScrolling: true }}
         value={editValue}
-        onChange={(newValue) => {seteditValue(newValue)}}
+        onChange={(newValue) => { seteditValue(newValue) }}
       />
     </div>
   );

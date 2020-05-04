@@ -6,7 +6,12 @@ import {
 } from 'react-router-dom';
 import EditorLayout from './layouts/Editor';
 import Home from './layouts/Home';
-import { editorRoute, homeRoute } from './consts/routes';
+import Login from './layouts/Login';
+import {
+  editorRoute,
+  homeRoute,
+  loginRoute
+} from './consts/routes';
 
 export default function App() {
   return (
@@ -14,6 +19,9 @@ export default function App() {
       <Switch>
         <Route path={editorRoute}>
           <EditorLayout />
+        </Route>
+        <Route path={loginRoute}>
+          <Login />
         </Route>
         <Route path={homeRoute}>
           <Home />

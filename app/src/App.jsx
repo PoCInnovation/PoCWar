@@ -1,22 +1,25 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import EditorLayout from "./layouts/Editor";
-import Home from "./layouts/Home";
-import Login from "./layouts/Login";
+import HomeLayout from "./layouts/Home";
+import LoginLayout from "./layouts/Login";
 import { editorRoute, homeRoute, loginRoute } from "./consts/routes";
+import { app } from './firebase/core';
 
 export default function App() {
+  var user = app.auth().currentUser;
+
   return (
     <Router>
       <Switch>
         <Route path={editorRoute}>
-          <EditorLayout />
+          <EditorLayout user={user}/>
         </Route>
         <Route path={loginRoute}>
-          <Login />
+          <LoginLayout user={user}/>
         </Route>
         <Route path={homeRoute}>
-          <Home />
+          <HomeLayout user={user}/>
         </Route>
       </Switch>
     </Router>

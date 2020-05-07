@@ -13,6 +13,8 @@ jobs:
 
     - name: install the dependencies
       run: ./scripts/install.sh
+    - name: run eslint
+      run: ./scripts/lint.sh
     - name: build the project
       run: ./scripts/build.sh
 

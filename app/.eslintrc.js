@@ -23,5 +23,6 @@ module.exports = {
     'react',
   ],
   rules: {
+    'jsx-quotes': [2, 'prefer-single'],
   },
 };

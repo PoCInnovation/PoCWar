@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function StatingDisplay({ stating, inputExample, outputExample }) {
+export default function StatingDisplay({ title, stating, inputExample, outputExample }) {
   const classes = useStyles();
   stating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
   inputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
@@ -38,7 +38,7 @@ export default function StatingDisplay({ stating, inputExample, outputExample })
       <Paper className={classes.paperBlock}>
         <Box className={classes.titleBlock} color='primary.main'>
           <Typography align='justify' component='h1' variant='h5'>
-            Stating
+            {title}
         </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>

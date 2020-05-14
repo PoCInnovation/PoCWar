@@ -15,6 +15,8 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     borderRadius: '5px',
     cursor: 'pointer',
+    maxWidth: 100,
+    maxHeight: 100,
   },
 }));
 

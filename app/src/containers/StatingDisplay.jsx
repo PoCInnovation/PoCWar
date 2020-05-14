@@ -1,25 +1,29 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { Typography } from '@material-ui/core';
+import { Typography, Paper } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {
     position: 'relative',
-    marginTop: '4%',
   },
   textBlock: {
-    margin: '4%',
+    paddingLeft: '6%',
+    paddingRight: '6%',
     component: 'div',
     display: 'block',
     font: 'Roboto',
     fontSize: '18',
   },
   titleBlock: {
-    marginLeft: '2%',
+    padding: '3%',
     component: 'div',
     display: 'block',
     font: 'Oxygen',
+  },
+  paperBlock: {
+    margin: '2%',
+    height: '800px',
   }
 }));
 
@@ -31,34 +35,41 @@ export default function StatingDisplay({ stating, inputExample, outputExample })
 
   return (
     <div className={classes.root}>
-      <Box className={classes.titleBlock} color='primary.main'>
-        <Typography align='justify' component='h1' variant='h5'>
-          Stating
+      <Paper className={classes.paperBlock}>
+        <Box className={classes.titleBlock} color='primary.main'>
+          <Typography align='justify' component='h1' variant='h5'>
+            Stating
         </Typography>
-      </Box>
-      <Box className={classes.textBlock} color='text.secondary'>
-        <Typography align='left'>
-          {stating}
-        </Typography>
-      </Box>
+        </Box>
+        <Box className={classes.textBlock} color='text.secondary'>
+          <Typography align='left'>
+            {stating}
+          </Typography>
+        </Box>
 
-      <Box className={classes.titleBlock} color='primary.main'>
-        <Typography align='justify' component='h1' variant='h5'>
-          Input example
+        <Box className={classes.titleBlock} color='primary.main'>
+          <Typography align='justify' component='h1' variant='h5'>
+            Input example
         </Typography>
-      </Box>
-      <Box className={classes.textBlock} color='text.secondary'>
-        {inputExample}
-      </Box>
+        </Box>
+        <Box className={classes.textBlock} color='text.secondary'>
+          <Typography align='left'>
+            {inputExample}
+          </Typography>
+        </Box>
 
-      <Box className={classes.titleBlock} color='primary.main'>
-        <Typography align='justify' component='h1' variant='h5'>
-          Expected output
+        <Box className={classes.titleBlock} color='primary.main'>
+          <Typography align='justify' component='h1' variant='h5'>
+            Expected output
         </Typography>
-      </Box>
-      <Box className={classes.textBlock} color='text.secondary'>
-        {outputExample}
-      </Box>
+        </Box>
+        <Box className={classes.textBlock} color='text.secondary'>
+          <Typography align='left'>
+            {outputExample}
+          </Typography>
+
+        </Box>
+      </Paper>
     </div>
   );
 }

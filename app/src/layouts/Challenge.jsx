@@ -12,7 +12,6 @@ const outputExample = '2 4 6';
 const useStyles = makeStyles((theme) => ({
   gridRoot: {
     position: 'relative',
-    paddingTop: '1%',
   },
 }));
 
@@ -24,7 +23,7 @@ export default function ChallengeLayout({ user }) {
       <NavBar user={user} />
       <Grid className={classes.gridRoot} container spacing={0}>
         <Grid item xs={12} sm={4}>
-          <StatingDisplay inputExample={inputExample} outputExample={outputExample} stating={loreipsum}></StatingDisplay>
+          <StatingDisplay inputExample={inputExample} outputExample={outputExample} stating={loreipsum}/>
         </Grid>
         <Grid item xs={12} sm={8}>
           <Editor language='python' theme='xcode' />

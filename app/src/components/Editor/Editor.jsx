@@ -13,7 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import { Grid } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,10 +24,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     width: '90%',
   },
-  editor: {
-    borderRadius: 3,
-    border: '3px solid rgb(150, 150, 150)',
-  },
+  paperBlock: {
+    margin: '1%',
+  }
 }));
 
 const themes = [
@@ -79,23 +78,23 @@ export default function Editor(props) {
 
   return (
     <div className={classes.root}>
-
-      <AceEditor
-        className={classes.editor}
-        mode={language}
-        theme={theme}
-        width='100%%'
-        height='800px'
-        fontSize={props.fontSize || 16}
-        enableBasicAutocompletion={Boolean(autocompletebasic)}
-        enableLiveAutocompletion={Boolean(autocompletelive)}
-        showGutter={false}
-        name='MainEditor'
-        showPrintMargin={false}
-        editorProps={{ $blockScrolling: true }}
-        value={editValue}
-        onChange={(newValue) => { seteditValue(newValue) }}
-      />
+      <Paper className={classes.paperBlock}>
+        <AceEditor
+          mode={language}
+          theme={theme}
+          width='100%'
+          height='800px'
+          fontSize={props.fontSize || 16}
+          enableBasicAutocompletion={Boolean(autocompletebasic)}
+          enableLiveAutocompletion={Boolean(autocompletelive)}
+          showGutter={true}
+          name='MainEditor'
+          showPrintMargin={false}
+          editorProps={{ $blockScrolling: true }}
+          value={editValue}
+          onChange={(newValue) => { seteditValue(newValue) }}
+        />
+      </Paper>
       <Grid container spacing={0}>
         <Grid item xs={12} sm={3}>
           <FormControl className={classes.formControl}>

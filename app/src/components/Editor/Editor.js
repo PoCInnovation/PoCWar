@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,6 +77,13 @@ export default function Editor(props) {
   const [autocompletelive, setAutocompletelive] = useState("false");
   const [editValue, seteditValue] = useState("");
 
+  const send_data_to_backend = (text_to_send) => {
+    console.log(text_to_send);
+    axios.post(`http://192.168.1.59:4000/clang`, { "code": text_to_send })
+      .then(res => {
+        console.log(res.data);
+      })
+  };
   return (
     <div className={classes.root}>
       <FormControl className={classes.formControl}>
@@ -113,7 +121,7 @@ export default function Editor(props) {
           label="Auto completion"
           labelPlacement="end"
       />
-      <Button className={classes.formControl} variant="contained" onClick={() => {alert(editValue)}}>Submit</Button>
+      <Button className={classes.formControl} variant="contained" onClick={() => {send_data_to_backend(editValue)}}>Submit</Button>
       <AceEditor
           className={classes.editor}
           mode={language}

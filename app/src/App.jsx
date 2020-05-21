@@ -6,7 +6,7 @@ import LoginLayout from './layouts/Login';
 import { editorRoute, homeRoute, loginRoute } from './consts/routes';
 import { app } from './firebase/core';
 import { ThemeProvider } from '@material-ui/core';
-import { theme } from './consts/themes';
+import theme from './consts/themes';
 
 export default function App() {
   var user = app.auth().currentUser;

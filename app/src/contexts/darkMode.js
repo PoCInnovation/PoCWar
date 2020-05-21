@@ -1,6 +1,6 @@
-import React from 'react';
+// import React from "react";
 
-export default darkModeContext = React.createContext({
-  darkMode: false,
-  setDarkMode: () => {},
-});
+// export default darkModeContext = React.createContext({
+//   darkMode: false,
+//   setDarkMode: () => {},
+// });

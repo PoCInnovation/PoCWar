@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Typography, Paper } from '@material-ui/core';
-import { theme } from '../consts/themes';
+import theme from '../consts/themes';
 
 const useStyles = makeStyles(() => ({
   root: {

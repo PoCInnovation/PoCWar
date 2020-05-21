@@ -1,5 +1,6 @@
 import React from 'react';
-import Logo from '../../assets/PocWarLogo.png';
+import DarkLogo from '../../assets/dark-logo.png';
+import LightLogo from '../../assets/light-logo.png';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { homeRoute } from '../../consts/routes';
@@ -13,26 +14,26 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     height: '100%',
-    borderRadius: '5px',
     cursor: 'pointer',
     maxWidth: 100,
     maxHeight: 100,
   },
 }));
 
-export default function PocWarLogo({ className }) {
+export default function PocWarLogo({ className, darkMode }) {
   const classes = useStyles();
   const history = useHistory();
   const redirectHome = () => {
     history.push(homeRoute);
   };
+  const src = String(darkMode ? DarkLogo : LightLogo);
 
   return (
     <div className='pocWarLogoContainer' onClick={redirectHome}>
       <img
         alt='PocWarLogo'
         className={`${className} ${classes.pocWarLogo}`}
-        src={String(Logo)}
+        src={src}
       />
     </div>
   );

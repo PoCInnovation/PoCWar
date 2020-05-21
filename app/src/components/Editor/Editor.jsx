@@ -4,8 +4,6 @@ import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/mode-jsx';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
 import { makeStyles } from '@material-ui/core';
@@ -26,20 +24,51 @@ const useStyles = makeStyles((theme) => ({
   },
   paperBlock: {
     margin: '1%',
+  },
+  editor: {
+    borderRadius: '3px',
   }
 }));
 
 const themes = [
-  'monokai',
+  'chrome',
+  'clouds',
+  'crimson_editor',
+  'dawn',
+  'dreamweaver',
+  'eclipse',
   'github',
-  'tomorrow',
-  'kuroir',
-  'twilight',
-  'xcode',
-  'textmate',
-  'solarized_dark',
+  'iplastic',
   'solarized_light',
+  'textmate',
+  'tomorrow',
+  'xcode',
+  'kuroir',
+  'katzenmilch',
+  'sqlserver',
+  'ambiance',
+  'chaos',
+  'clouds_midnight',
+  'dracula',
+  'cobalt',
+  'gruvbox',
+  'gob',
+  'idle_fingers',
+  'kr_theme',
+  'merbivore',
+  'merbivore_soft',
+  'mono_industrial',
+  'monokai',
+  'nord_dark',
+  'pastel_on_dark',
+  'solarized_dark',
   'terminal',
+  'tomorrow_night',
+  'tomorrow_night_blue',
+  'tomorrow_night_bright',
+  'tomorrow_night_eighties',
+  'twilight',
+  'vibrant_ink',
 ];
 
 themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
@@ -72,21 +101,19 @@ export default function Editor(props) {
   const classes = useStyles();
   const [theme, setTheme] = useState(props.theme);
   const [language, setLanguage] = useState(props.language);
-  const [autocompletebasic, setAutocompletebasic] = useState('false');
-  const [autocompletelive, setAutocompletelive] = useState('false');
   const [editValue, seteditValue] = useState('');
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paperBlock}>
-        <AceEditor
+        <AceEditor className={classes.editor}
           mode={language}
           theme={theme}
           width='100%'
           height='800px'
           fontSize={props.fontSize || 16}
-          enableBasicAutocompletion={Boolean(autocompletebasic)}
-          enableLiveAutocompletion={Boolean(autocompletelive)}
+          enableBasicAutocompletion={true}
+          enableLiveAutocompletion={true}
           showGutter={true}
           name='MainEditor'
           showPrintMargin={false}
@@ -96,7 +123,7 @@ export default function Editor(props) {
         />
       </Paper>
       <Grid container spacing={0}>
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={4}>
           <FormControl className={classes.formControl}>
             <InputLabel>Themes</InputLabel>
             <Select
@@ -114,7 +141,7 @@ export default function Editor(props) {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={4}>
           <FormControl className={classes.formControl}>
             <InputLabel>Language</InputLabel>
             <Select
@@ -129,22 +156,7 @@ export default function Editor(props) {
             </Select>
           </FormControl>
         </Grid>
-
-        <Grid item xs={12} sm={3}>
-          <FormControlLabel
-            className={classes.formControl}
-            value='autocompletion'
-            onChange={(e) => {
-              setAutocompletebasic(e.target.checked);
-              setAutocompletelive(e.target.checked);
-            }}
-            control={<Checkbox color='primary' />}
-            label='Auto completion'
-            labelPlacement='end'
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={4}>
           <Button
             className={classes.formControl}
             variant='contained'

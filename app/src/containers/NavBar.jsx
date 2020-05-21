@@ -28,7 +28,7 @@ export default function NavBar({ user }) {
   return (
     <AppBar className={classes.root}>
       <Toolbar className={classes.toolbar}>
-        <PocWarLogo className={classes.pocWarLogo} />
+        <PocWarLogo className={classes.pocWarLogo} darkMode={false} />
         <Typography variant='h6' className={classes.title} />
         <LogButton user={user} />
       </Toolbar>

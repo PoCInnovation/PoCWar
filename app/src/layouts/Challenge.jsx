@@ -27,7 +27,7 @@ export default function ChallengeLayout({ user }) {
           <StatingDisplay title={titleExample} inputExample={inputExample} outputExample={outputExample} stating={loreipsum}/>
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Editor language='python' theme='xcode' />
+          <Editor language='python' theme='dracula' />
         </Grid>
       </Grid>
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Typography, Paper } from '@material-ui/core';
+import { theme } from '../consts/themes';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,7 +17,8 @@ const useStyles = makeStyles(() => ({
     fontSize: '18',
   },
   titleBlock: {
-    padding: '3%',
+    paddingTop: '3%',
+    paddingLeft: '3%',
     component: 'div',
     display: 'block',
     font: 'Oxygen',
@@ -24,6 +26,7 @@ const useStyles = makeStyles(() => ({
   paperBlock: {
     margin: '2%',
     height: '800px',
+    background: theme.palette.primary.main,
   }
 }));
 
@@ -36,10 +39,10 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
   return (
     <div className={classes.root}>
       <Paper className={classes.paperBlock}>
-        <Box className={classes.titleBlock} color='primary.main'>
+        <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             {title}
-        </Typography>
+          </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>
           <Typography align='left'>
@@ -47,7 +50,7 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
           </Typography>
         </Box>
 
-        <Box className={classes.titleBlock} color='primary.main'>
+        <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             Input example
         </Typography>
@@ -58,7 +61,7 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
           </Typography>
         </Box>
 
-        <Box className={classes.titleBlock} color='primary.main'>
+        <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             Expected output
         </Typography>

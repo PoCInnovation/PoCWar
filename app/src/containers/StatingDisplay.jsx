@@ -25,8 +25,9 @@ const useStyles = makeStyles(() => ({
   },
   paperBlock: {
     margin: '2%',
-    height: '800px',
+    height: '600px',
     background: theme.palette.primary.main,
+    overflow: 'auto',
   }
 }));
 

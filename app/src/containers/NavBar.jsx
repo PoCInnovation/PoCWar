@@ -22,15 +22,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function NavBar({ user }) {
+export default function NavBar() {
   const classes = useStyles();
 
   return (
     <AppBar className={classes.root}>
       <Toolbar className={classes.toolbar}>
-        <PocWarLogo className={classes.pocWarLogo} darkMode={false} />
-        <Typography variant='h6' className={classes.title} />
-        <LogButton user={user} />
+        <PocWarLogo className={classes.pocWarLogo} />
+        <Typography variant='h6' className={classes.title}/>
+        <LogButton />
       </Toolbar>
     </AppBar>
   );

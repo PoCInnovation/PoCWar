@@ -1,7 +1,8 @@
 import React from 'react';
-import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
-import { loginRoute } from "../consts/routes";
+import Button from '@material-ui/core/Button';
+import { useHistory } from 'react-router-dom';
+import { loginRoute, homeRoute } from '../consts/routes';
+import { signout } from '../firebase/sign';
 import { app } from '../firebase/core';
 
 export function LoginButton() {
@@ -11,22 +12,30 @@ export function LoginButton() {
   };
 
   return (
-    <Button color="inherit" onClick={redirectLogin}>
+    <Button color='inherit' onClick={redirectLogin}>
       Login
     </Button>
   );
 }
 
 export function LogoutButton() {
+  const user = app.auth().currentUser;
+  const history = useHistory();
+
   return (
-    <Button color="inherit" onClick={app.auth().signOut}>
-      Logout
+    <Button color='inherit' onClick={async () => {
+      await signout();
+      history.push(homeRoute);
+    }}>
+      {user.email}
     </Button>
   );
 }
 
-export function LogButton({ user }) {
-  if (user == null) {
+export function LogButton() {
+  const user = app.auth().currentUser;
+
+  if (user === null) {
     return <LoginButton />;
   } else {
     return <LogoutButton />;

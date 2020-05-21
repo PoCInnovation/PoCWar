@@ -8,8 +8,8 @@ import StdLog from '../components/StdLog/StdLog';
 
 let loreipsum = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.\nIt was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
 loreipsum += loreipsum;
-const inputExample = '1 2 3';
-const outputExample = '2 4 6';
+const inputExample = '$> ./your_program 1 2 3';
+const outputExample = '$> 2 4 6';
 const titleExample = 'Double the arguments';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,15 +18,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ChallengeLayout({ user }) {
+export default function ChallengeLayout() {
   const classes = useStyles();
 
   return (
     <div>
-      <NavBar user={user} />
+      <NavBar />
       <Grid className={classes.gridRoot} container spacing={0}>
         <Grid item xs={12} sm={4}>
-          <StatingDisplay title={titleExample} inputExample={inputExample} outputExample={outputExample} stating={loreipsum}/>
+          <StatingDisplay title={titleExample} inputExample={inputExample} outputExample={outputExample} stating={loreipsum} />
           <StdLog stdout='bonjour' stderr='out'></StdLog>
         </Grid>
         <Grid item xs={12} sm={8}>

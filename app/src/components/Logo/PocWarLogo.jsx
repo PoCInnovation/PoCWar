@@ -20,9 +20,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function PocWarLogo({ className, darkMode }) {
+export default function PocWarLogo({ className }) {
   const classes = useStyles();
   const history = useHistory();
+  const darkMode = false;
   const redirectHome = () => {
     history.push(homeRoute);
   };

@@ -28,6 +28,12 @@ const useStyles = makeStyles(() => ({
     height: '600px',
     background: theme.palette.primary.main,
     overflow: 'auto',
+  },
+  inputPaper: {
+    paddingTop: '5px',
+    paddingBottom: '2px',
+    margin: '2%',
+    background: theme.palette.primary.light,
   }
 }));
 
@@ -56,23 +62,27 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
             Input example
         </Typography>
         </Box>
-        <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left'>
-            {inputExample}
-          </Typography>
-        </Box>
+        <Paper className={classes.inputPaper}>
+          <Box className={classes.textBlock} color='text.secondary'>
+            <Typography align='left'>
+              {inputExample}
+            </Typography>
+          </Box>
+        </Paper>
 
         <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             Expected output
         </Typography>
         </Box>
-        <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left'>
-            {outputExample}
-          </Typography>
+        <Paper className={classes.inputPaper}>
+          <Box className={classes.textBlock} color='text.secondary'>
+            <Typography align='left'>
+              {outputExample}
+            </Typography>
 
-        </Box>
+          </Box>
+        </Paper>
       </Paper>
     </div>
   );

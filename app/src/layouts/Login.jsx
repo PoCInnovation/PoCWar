@@ -1,13 +1,11 @@
-import React from "react";
-import NavBar from "../containers/NavBar";
-import Login from "../containers/Login"
-// import { app } from '../firebase/core';
-// import * as firebase from 'firebase';
+import React from 'react';
+import NavBar from '../containers/NavBar';
+import Login from '../containers/Login'
 
-export default function LoginLayout({ user }) {
+export default function LoginLayout() {
   return (
     <div>
-      <NavBar user={user} />
+      <NavBar />
       <Login />
     </div>
   );

@@ -8,6 +8,7 @@ import theme from '../consts/themes';
 import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
 import { signin, signinGmail } from '../firebase/sign';
+import GoogleLogoSvg from '../assets/google/google_logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,7 +28,28 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    textTransform: 'none',
   },
+  googleSignin: {
+    height: '40px',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+    color: '#000000',
+  },
+  googleLogo: {
+    maxWidth: '18px',
+    maxHeight: '18px',
+    marginRight: '24px',
+    float: 'left',
+  },
+  googleSigninText: {
+    textAlign: 'center',
+    fontFamily: 'Roboto, sans-serif',
+    fontSize: 14,
+    color: '#757575',
+    fontWeight: 500,
+    textTransform: 'none',
+  }
 }));
 
 async function onSignin(history, signinMethod, params = {}) {
@@ -71,13 +93,15 @@ function GmailSigninButton() {
       type='submit'
       fullWidth
       variant='contained'
-      color='primary'
-      className={classes.submit}
+      className={classes.googleSignin}
       onClick={async () => {
         await onSignin(history, signinGmail);
       }}
     >
-      Sign in with Gmail
+      <img src={GoogleLogoSvg} alt='GoogleLogoSvg' className={classes.googleLogo} />
+      <div className={classes.googleSigninText}>
+        Sign in with Google
+      </div>
     </Button>
   );
 }

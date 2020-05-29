@@ -2,37 +2,51 @@ import React from 'react';
 import NavBar from '../containers/NavBar';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, CircularProgress } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import StdLog from '../components/StdLog/StdLog';
-
-let loreipsum = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.\nIt was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.';
-loreipsum += loreipsum;
-const inputExample = '$> ./your_program 1 2 3';
-const outputExample = '$> 2 4 6';
-const titleExample = 'Double the arguments';
+import useChallenge from '../hooks/challenge';
 
 const useStyles = makeStyles((theme) => ({
   gridRoot: {
     position: 'relative',
   },
+  loading: {
+    paddingTop: '20%',
+  }
 }));
 
 export default function ChallengeLayout() {
   const classes = useStyles();
+  const query = new URLSearchParams(window.location.search);
+  const c = useChallenge(query.get('challengeID'));
+  let display = null;
 
-  return (
-    <div>
-      <NavBar />
+  if (c.loading === true) {
+    display = <>
+      <Grid className={classes.loading} container justify='center'>
+        <CircularProgress color='secondary' />;
+      </Grid>
+    </>
+  } else if (c.challenge !== null) {
+    const d = c.challenge;
+    display = <>
       <Grid className={classes.gridRoot} container spacing={0}>
         <Grid item xs={12} sm={4}>
-          <StatingDisplay title={titleExample} inputExample={inputExample} outputExample={outputExample} stating={loreipsum} />
-          <StdLog stdout='bonjour' stderr='out'></StdLog>
+          <StatingDisplay title={d.title} inputExample={d.input_example} outputExample={d.output_example} stating={d.description} />
+          <StdLog stdout={'output'} stderr='output error'></StdLog>
         </Grid>
         <Grid item xs={12} sm={8}>
           <Editor language='python' theme='dracula' />
         </Grid>
       </Grid>
+    </>
+  }
+
+  return (
+    <div>
+      <NavBar />
+      {display}
     </div>
   );
 }

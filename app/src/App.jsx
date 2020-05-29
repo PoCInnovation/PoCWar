@@ -3,9 +3,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ChallengeLayout from './layouts/Challenge';
 import HomeLayout from './layouts/Home';
 import LoginLayout from './layouts/Login';
-import { editorRoute, homeRoute, loginRoute } from './consts/routes';
 import { ThemeProvider } from '@material-ui/core';
 import theme from './consts/themes';
+import {
+  editorRoute,
+  homeRoute,
+  loginRoute,
+} from './consts/routes';
 
 export default function App() {
   return (

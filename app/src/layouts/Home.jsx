@@ -1,23 +1,32 @@
 import React from "react";
-import { Button, Grid } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+// import { Button, Grid } from "@material-ui/core";
+import ChallengeList from '../containers/ChallengeList'
+// import { useHistory } from "react-router-dom";
 import NavBar from "../containers/NavBar";
-import { editorRoute } from "../consts/routes";
+import { makeStyles } from "@material-ui/core";
+// import { editorRoute } from "../consts/routes";
+
+const useStyles = makeStyles(() => ({
+  challengesList: {
+    marginLeft: '20%',
+    marginRight: '20%',
+    marginTop: '2%',
+  },
+}));
 
 export default function Home() {
-  const history = useHistory();
-  const redirectEditor = () => {
-    history.push(editorRoute);
-  };
+  const classes = useStyles();
+  // const history = useHistory();
+  // const redirectEditor = () => {
+  // history.push(editorRoute);
+  // };
 
   return (
     <div>
       <NavBar />
-      <Grid container spacing={0} direction='column' alignItems='center' justify='center' style={{ minHeight: '100vh' }}>
-        <Grid item xs={3}>
-          <Button onClick={redirectEditor}>Go to Editor</Button>
-        </Grid>
-      </Grid>
+      <div className={classes.challengesList}>
+        <ChallengeList />
+      </div>
     </div>
   );
 }

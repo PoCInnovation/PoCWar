@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { loginRoute, homeRoute } from '../consts/routes';
 import { signout } from '../firebase/sign';
 import { app } from '../firebase/core';
+import { useLocation } from 'react-router-dom';
+
+// textTransform: 'none',
 
 export function LoginButton() {
   const history = useHistory();
@@ -33,9 +36,11 @@ export function LogoutButton() {
 }
 
 export function LogButton() {
-  const user = app.auth().currentUser;
-
-  if (user === null) {
+  const location = useLocation();
+  if (location.pathname === loginRoute) {
+    return <div></div>;
+  }
+  if (app.auth().currentUser === null) {
     return <LoginButton />;
   } else {
     return <LogoutButton />;

@@ -10,18 +10,20 @@ const useStyles = makeStyles(() => ({
   },
   textBlock: {
     paddingLeft: '6%',
-    paddingRight: '6%',
-    component: 'div',
+    paddingRight: '1%',
     display: 'block',
-    font: 'Roboto',
-    fontSize: '18',
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 300,
+    fontSize: 18,
   },
   titleBlock: {
     paddingTop: '3%',
     paddingLeft: '3%',
     component: 'div',
     display: 'block',
-    font: 'Oxygen',
+    fontFamily: 'Roboto, sans-serif',
+    textAlign: 'justify',
+    fontWeight: 400,
   },
   paperBlock: {
     margin: '2%',
@@ -52,7 +54,7 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
           </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left'>
+          <Typography align='left' component={'span'} variant={'body2'}>
             {stating}
           </Typography>
         </Box>
@@ -64,7 +66,7 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
         </Box>
         <Paper className={classes.inputPaper}>
           <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left'>
+            <Typography align='left' component={'span'} variant={'body2'}>
               {inputExample}
             </Typography>
           </Box>
@@ -77,7 +79,7 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
         </Box>
         <Paper className={classes.inputPaper}>
           <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left'>
+            <Typography align='left' component={'span'} variant={'body2'}>
               {outputExample}
             </Typography>
 

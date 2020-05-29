@@ -1,5 +1,6 @@
-import * as firebase from "firebase";
-import { app } from "./core";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { app } from './core';
 
 export async function signout() {
   try {
@@ -21,7 +22,7 @@ export async function signin(email, password) {
 
 export async function signinGmail() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+  provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
   try {
     await app.auth().signInWithPopup(provider);

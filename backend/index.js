@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 var jsonParser = bodyParser.json()
-const { exec } = require("child_process");
+let { exec } = require("child_process");
 var cors = require("cors");
 
 app.listen(4000, () => {
@@ -26,7 +26,7 @@ app.post('/clang', jsonParser, function (req, res) {
             return;
         }
         console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        res.status(200).send(`{"stdout":"${stdout}", "stderr":"${stderr}"}`);
+        res.status(200).send({stdout:stdout, stderr:stderr});
     });
 });
 
@@ -44,7 +44,7 @@ app.post('/python', jsonParser, function (req, res) {
             return;
         }
         console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        res.status(200).send(`{"stdout":"${stdout}", "stderr":"${stderr}"}`);
+        res.status(200).send({stdout:stdout, stderr:stderr});
     });
 });
 
@@ -62,6 +62,6 @@ app.post('/javascript', jsonParser, function (req, res) {
             return;
         }
         console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        res.status(200).send(`{"stdout":"${stdout}", "stderr":"${stderr}"}`);
+        res.status(200).send({stdout:stdout, stderr:stderr});
     });
 });

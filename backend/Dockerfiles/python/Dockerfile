@@ -2,4 +2,4 @@ FROM python
 
 WORKDIR /execution
 
-CMD python test.js
+CMD python3.7 test.py

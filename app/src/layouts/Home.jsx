@@ -16,10 +16,6 @@ const useStyles = makeStyles(() => ({
 
 export default function Home() {
   const classes = useStyles();
-  // const history = useHistory();
-  // const redirectEditor = () => {
-  // history.push(editorRoute);
-  // };
 
   return (
     <div>

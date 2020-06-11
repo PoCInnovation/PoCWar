@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 var jsonParser = bodyParser.json()
 let { exec } = require("child_process");
+const { v4: uuidv4 } = require('uuid');
 var cors = require("cors");
 
 app.listen(4000, () => {
@@ -14,6 +15,8 @@ app.use(cors());
 
 app.post('/clang', jsonParser, function (req, res) {
     console.log("request POST on /clang.");
+    let name = uuidv4();
+    console.log(name);
     fs = require('fs');
     fs.writeFile('test.c', req.body.code, function (err) {
         if (err) return console.log(err);
@@ -22,7 +25,7 @@ app.post('/clang', jsonParser, function (req, res) {
     exec(`docker run -v "${process.cwd()}:/execution" app`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
-            res.status(500).send(`error in docker run : ${error.message}`);
+            res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
             return;
         }
         console.log(`stdout: ${stdout} stderr: ${stderr}`);

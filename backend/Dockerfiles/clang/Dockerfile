@@ -2,4 +2,4 @@ FROM gcc
 
 WORKDIR /execution
 
-CMD gcc -o test test.c && ./test
+CMD gcc -o test *.c && ./test

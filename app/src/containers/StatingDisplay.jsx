@@ -82,7 +82,6 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
             <Typography align='left' component={'span'} variant={'body2'}>
               {outputExample}
             </Typography>
-
           </Box>
         </Paper>
       </Paper>

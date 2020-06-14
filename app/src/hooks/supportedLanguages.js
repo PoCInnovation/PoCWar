@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { store } from "../firebase/core";
 
+// Not used for the moment (hardcoded values in consts/languages.js
+
 export default function useSupportedLanguages() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);

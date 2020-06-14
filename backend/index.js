@@ -14,7 +14,7 @@ app.listen(4000, () => {
 
 app.use(cors());
 
-async function execLang(image, filename, res) {
+async function execLang(image, filename, req, res) {
   let dir = uuidv4();
   console.log(`${process.cwd()}/${dir}`);
   await fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
@@ -43,17 +43,17 @@ async function execLang(image, filename, res) {
   });
 }
 
-app.post('/clang', jsonParser, function (req, res) {
+app.post('/clang', jsonParser, async function (req, res) {
   console.log("request POST on /clang.");
-  execLang("c_app", "test.c", res);
+  await execLang("c_app", "test.c", req, res);
 });
 
-app.post('/python', jsonParser, function (req, res) {
+app.post('/python', jsonParser, async function (req, res) {
   console.log("request POST on /python.");
-  execLang("python_app", "test.py", res);
+  await execLang("python_app", "test.py", req, res);
 });
 
-app.post('/javascript', jsonParser, function (req, res) {
+app.post('/javascript', jsonParser, async function (req, res) {
   console.log("request POST on /javascript.");
-  execLang("javascript_app", "test.js", res);
+  await execLang("javascript_app", "test.js", req, res);
 });

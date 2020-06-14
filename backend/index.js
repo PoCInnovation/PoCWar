@@ -55,7 +55,7 @@ app.post('/python', jsonParser, function (req, res) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });
-    exec(`docker run -v "${process.cwd()}:/execution" python_app`, (error, stdout, stderr) => {
+    exec(`docker run -v "${process.cwd()}/${dir}:/execution" python_app`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
@@ -85,7 +85,7 @@ app.post('/javascript', jsonParser, function (req, res) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });
-    exec(`docker run -v "${process.cwd()}:/execution" javascript_app`, (error, stdout, stderr) => {
+    exec(`docker run -v "${process.cwd()}/${dir}:/execution" javascript_app`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});

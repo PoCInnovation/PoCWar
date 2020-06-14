@@ -21,11 +21,11 @@ app.post('/clang', jsonParser, function (req, res) {
     fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
         if (err) throw err;
     });
-    fs.writeFile(dir + "/file.c", req.body.code, function (err) {
+    fs.writeFile(`${dir}/test.c`, req.body.code, function (err) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });
-    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" app`, (error, stdout, stderr) => {
+    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" app`, { timeout: 1000 }, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
@@ -51,7 +51,7 @@ app.post('/python', jsonParser, function (req, res) {
     fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
         if (err) throw err;
     });
-    fs.writeFile(dir + "/test.py", req.body.code, function (err) {
+    fs.writeFile(`${process.cwd()}/${dir}/test.py`, req.body.code, function (err) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });
@@ -81,7 +81,7 @@ app.post('/javascript', jsonParser, function (req, res) {
     fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
         if (err) throw err;
     });
-    fs.writeFile(dir + "/test.js", req.body.code, function (err) {
+    fs.writeFile(`${process.cwd()}/${dir}/test.js`, req.body.code, function (err) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });

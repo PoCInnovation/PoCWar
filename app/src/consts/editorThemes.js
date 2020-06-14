@@ -1,4 +1,4 @@
-export const editorThemes = [
+const editorThemes = [
   "chrome",
   "clouds",
   "crimson_editor",
@@ -38,3 +38,5 @@ export const editorThemes = [
   "twilight",
   "vibrant_ink",
 ];
+
+export default editorThemes;

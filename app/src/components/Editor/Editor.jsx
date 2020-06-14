@@ -7,8 +7,8 @@ import 'ace-builds/src-min-noconflict/ext-searchbox';
 import 'ace-builds/src-min-noconflict/ext-language_tools';
 import { makeStyles } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
-import { editorThemes } from '../../consts/editorThemes';
-import { languages } from '../../consts/languages';
+import editorThemes from '../../consts/editorThemes';
+import languages from '../../consts/languages';
 
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
 languages.forEach((lang) => {
@@ -17,7 +17,7 @@ languages.forEach((lang) => {
 });
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     position: 'relative',
   },

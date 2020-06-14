@@ -15,7 +15,9 @@ export function useChallenge(id) {
         setError(true);
       }
       setLoading(false);
-      setChallenge(data.data());
+      if (data !== null) {
+        setChallenge(data.data());
+      }
     }
     fetchData();
   }, [id]);

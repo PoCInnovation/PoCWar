@@ -12,6 +12,7 @@ const theme = createMuiTheme({
     text: {
       primary: "#B0B7CB",
       secondary: "#757E8E",
+      accent: "#F50057",
     },
   },
 });

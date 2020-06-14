@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, FormControl, InputLabel, makeStyles, Select, MenuItem, Button, CircularProgress } from '@material-ui/core';
-import { languages } from '../consts/languages';
-import { editorThemes as themes } from '../consts/editorThemes';
+import languages from '../consts/languages';
+import editorThemes from '../consts/editorThemes';
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -37,7 +37,7 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
               value={theme}
               onChange={(event) => { setTheme(event.target.value) }}
             >
-              {themes.map((newthemes) => (
+              {editorThemes.map((newthemes) => (
                 <MenuItem key={newthemes} value={newthemes}>
                   {newthemes}
                 </MenuItem>

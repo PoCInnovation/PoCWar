@@ -1,1 +1,3 @@
-export const languages = ["javascript", "python"];
+const languages = ["javascript", "python"];
+
+export default languages;

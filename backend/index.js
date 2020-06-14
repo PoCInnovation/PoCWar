@@ -9,97 +9,51 @@ var cors = require("cors");
 const fs = require('fs-extra')
 
 app.listen(4000, () => {
-    console.log("listening on port 4000");
+  console.log("listening on port 4000");
 });
 
 app.use(cors());
 
+async function execLang(image, filename, res) {
+  let dir = uuidv4();
+  console.log(`${process.cwd()}/${dir}`);
+  await fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
+    if (err) throw err;
+  });
+  fs.writeFile(`${process.cwd()}/${dir}/${filename}`, req.body.code, function (err) {
+    if (err) return console.log(err);
+    console.log(`file written: ${filename}`);
+  });
+  exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`);
+      res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
+      return;
+    }
+    console.log(`stdout: ${stdout} stderr: ${stderr}`);
+    fs.remove(`${process.cwd()}/${dir}`, (error) => {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log("Recursive: Directories Deleted!");
+      }
+    });
+    res.status(200).send({ stdout: stdout, stderr: stderr });
+  });
+}
+
 app.post('/clang', jsonParser, function (req, res) {
-    console.log("request POST on /clang.");
-    let dir = uuidv4();
-    console.log(`${process.cwd()}/${dir}`);
-    fs.mkdirSync(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
-        if (err) throw err;
-    });
-    fs.writeFile(`${process.cwd()}/${dir}/test.c`, req.body.code, function (err) {
-        if (err) return console.log(err);
-        console.log('file write in test.c');
-    });
-    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" app`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
-            return;
-        }
-        console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        fs.remove(`${process.cwd()}/${dir}`, (error) => { 
-            if (error) { 
-              console.log(error); 
-            } 
-            else { 
-              console.log("Recursive: Directories Deleted!"); 
-            } 
-          });
-        res.status(200).send({stdout:stdout, stderr:stderr});
-    });
+  console.log("request POST on /clang.");
+  execLang("c_app", "test.c", res);
 });
 
 app.post('/python', jsonParser, function (req, res) {
-    console.log("request POST on /python.");
-    let dir = uuidv4();
-    console.log(`${process.cwd()}/${dir}`);
-    fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
-        if (err) throw err;
-    });
-    fs.writeFile(`${process.cwd()}/${dir}/test.py`, req.body.code, function (err) {
-        if (err) return console.log(err);
-        console.log('file write in test.c');
-    });
-    exec(`docker run -v "${process.cwd()}/${dir}:/execution" python_app`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
-            return;
-        }
-        console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        fs.remove(`${process.cwd()}/${dir}`, (error) => { 
-            if (error) { 
-              console.log(error); 
-            } 
-            else { 
-              console.log("Recursive: Directories Deleted!"); 
-            } 
-          });
-        res.status(200).send({stdout:stdout, stderr:stderr});
-    });
+  console.log("request POST on /python.");
+  execLang("python_app", "test.py", res);
 });
 
 app.post('/javascript', jsonParser, function (req, res) {
-    console.log("request POST on /javascript.");
-    let dir = uuidv4();
-    console.log(`${process.cwd()}/${dir}`);
-    fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
-        if (err) throw err;
-    });
-    fs.writeFile(`${process.cwd()}/${dir}/test.js`, req.body.code, function (err) {
-        if (err) return console.log(err);
-        console.log('file write in test.c');
-    });
-    exec(`docker run -v "${process.cwd()}/${dir}:/execution" javascript_app`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});
-            return;
-        }
-        console.log(`stdout: ${stdout} stderr: ${stderr}`);
-        fs.remove(`${process.cwd()}/${dir}`, (error) => { 
-            if (error) { 
-              console.log(error); 
-            } 
-            else { 
-              console.log("Recursive: Directories Deleted!"); 
-            } 
-          });
-        res.status(200).send({stdout:stdout, stderr:stderr});
-    });
+  console.log("request POST on /javascript.");
+  execLang("javascript_app", "test.js", res);
 });

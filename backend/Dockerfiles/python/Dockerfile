@@ -2,4 +2,4 @@ FROM python
 
 WORKDIR /execution
 
-CMD python3.7 test.py
+CMD timeout 10s python3.7 test.py

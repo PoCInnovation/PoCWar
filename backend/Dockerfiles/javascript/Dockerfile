@@ -2,4 +2,4 @@ FROM node
 
 WORKDIR /execution
 
-CMD node test.js
+CMD timeout 10s node test.js

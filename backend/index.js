@@ -18,14 +18,14 @@ app.post('/clang', jsonParser, function (req, res) {
     console.log("request POST on /clang.");
     let dir = uuidv4();
     console.log(`${process.cwd()}/${dir}`);
-    fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
+    fs.mkdirSync(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
         if (err) throw err;
     });
-    fs.writeFile(`${dir}/test.c`, req.body.code, function (err) {
+    fs.writeFile(`${process.cwd()}/${dir}/test.c`, req.body.code, function (err) {
         if (err) return console.log(err);
         console.log('file write in test.c');
     });
-    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" app`, { timeout: 1000 }, (error, stdout, stderr) => {
+    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" app`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             res.status(500).send({stdout:stdout, stderr:stderr, error:error.message});

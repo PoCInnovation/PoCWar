@@ -5,7 +5,7 @@ import StatingDisplay from '../containers/StatingDisplay';
 import { makeStyles, CircularProgress } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import StdLog from '../components/StdLog/StdLog';
-import { useChallenge } from '../hooks/challenge';
+import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
 import axios from 'axios';
 import apiEndpoint from '../consts/apiEndpoint';

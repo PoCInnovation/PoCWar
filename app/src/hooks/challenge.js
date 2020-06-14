@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { store } from "../firebase/core";
 
-export function useChallenge(id) {
+export default function useChallenge(id) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState(null);

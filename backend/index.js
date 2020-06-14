@@ -3,12 +3,16 @@ var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 var jsonParser = bodyParser.json()
+var https = require('https');
 let { exec } = require("child_process");
 const { v4: uuidv4 } = require('uuid');
 var cors = require("cors");
 const fs = require('fs-extra')
 
-app.listen(4000, () => {
+https.createServer({
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert'),
+}, app).listen(4000, () => {
   console.log("listening on port 4000");
 });
 

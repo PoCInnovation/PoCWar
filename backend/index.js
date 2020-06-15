@@ -16,30 +16,28 @@ app.use(cors());
 
 async function execLang(image, filename, req, res) {
   let dir = uuidv4();
-  console.log(`${process.cwd()}/${dir}`);
-  await fs.mkdir(`${process.cwd()}/${dir}`, { recursive: true }, (err) => {
-    if (err) throw err;
-  });
-  fs.writeFile(`${process.cwd()}/${dir}/${filename}`, req.body.code, function (err) {
-    if (err) return console.log(err);
-    console.log(`file written: ${filename}`);
-  });
-  exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
-      return;
+  fs.outputFile(`${process.cwd()}/${dir}/${filename}`, req.body.code, function (err) {
+    if (err) {
+      return console.log(err);
     }
-    console.log(`stdout: ${stdout} stderr: ${stderr}`);
-    fs.remove(`${process.cwd()}/${dir}`, (error) => {
+    console.log(`file written: ${filename}`);
+    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
       if (error) {
-        console.log(error);
+        console.log(`error: ${error.message}`);
+        res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
+        return;
       }
-      else {
-        console.log("Recursive: Directories Deleted!");
-      }
+      console.log(`stdout: ${stdout} stderr: ${stderr}`);
+      fs.remove(`${process.cwd()}/${dir}`, (error) => {
+        if (error) {
+          console.log(error);
+        }
+        else {
+          console.log("Recursive: Directories Deleted!");
+        }
+      });
+      res.status(200).send({ stdout: stdout, stderr: stderr });
     });
-    res.status(200).send({ stdout: stdout, stderr: stderr });
   });
 }
 

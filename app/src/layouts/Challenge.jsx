@@ -9,6 +9,7 @@ import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
 import axios from 'axios';
 import apiEndpoint from '../consts/apiEndpoint';
+import languages from '../consts/languages';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -60,7 +61,7 @@ export default function ChallengeLayout() {
           <StdLog stdout={stdout} stderr={stderr}></StdLog>
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Editor language='python' theme='dracula' editValue={editValue} setEditValue={onEditorChange} />
+          <Editor language={language} theme={theme} editValue={editValue} setEditValue={onEditorChange} />
           <EditorSubBar
             theme={theme}
             setTheme={setTheme}
@@ -71,7 +72,7 @@ export default function ChallengeLayout() {
             onClickSubmit={async () => {
               try {
                 setIsSubmiting(true);
-                const res = await axios.post(new URL(language, apiEndpoint), { 'code': editValue });
+                const res = await axios.post(new URL(languages[language], apiEndpoint), { 'code': editValue });
                 var stdout = res.data.stdout.replace(/\n+$/, "");
                 var stderr = res.data.stderr.replace(/\n+$/, "");
                 setStdout(stdout);
@@ -80,7 +81,7 @@ export default function ChallengeLayout() {
                   alert('Your output is identical to the expected output');
                 }
               } catch (e) {
-                alert(e.response.data.error);
+                alert(e.response.data.error ? e.response.data.error : e);
               } finally {
                 setIsSubmiting(false);
               }

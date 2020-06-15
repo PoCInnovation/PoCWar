@@ -8,10 +8,11 @@ import 'ace-builds/src-min-noconflict/ext-language_tools';
 import { makeStyles } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
 import editorThemes from '../../consts/editorThemes';
-import languages from '../../consts/languages';
+import autocompleteLanguages from '../../consts/autoComplete';
 
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
-languages.forEach((lang) => {
+
+autocompleteLanguages.forEach((lang) => {
   require(`ace-builds/src-noconflict/mode-${lang}`);
   require(`ace-builds/src-noconflict/snippets/${lang}`);
 });

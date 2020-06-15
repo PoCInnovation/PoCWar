@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, FormControl, InputLabel, makeStyles, Select, MenuItem, Button, CircularProgress } from '@material-ui/core';
 import languages from '../consts/languages';
 import editorThemes from '../consts/editorThemes';
+import autocompleteLanguages from '../consts/autoComplete';
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -11,8 +12,30 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function EditorSubBar({ theme, setTheme, language, setLanguage, onClickSubmit, isSubmiting }) {
+  const query = new URLSearchParams(window.location.search);
+  const challengeID = query.get('challengeID');
+  const localStorageLanguage = `${challengeID}_language`;
+  const localStorageTheme = `${challengeID}_theme`;
   const classes = useStyles();
   let submitButton = null;
+
+  if (localStorage.getItem(localStorageLanguage) !== null) {
+    setLanguage(localStorage.getItem(localStorageLanguage));
+  }
+
+  if (localStorage.getItem(localStorageTheme) !== null) {
+    setTheme(localStorage.getItem(localStorageTheme));
+  }
+
+  function onLanguageChange(ace_language) {
+    setLanguage(ace_language);
+    localStorage.setItem(localStorageLanguage, ace_language);
+  };
+
+  function onThemeChange(theme) {
+    setTheme(theme);
+    localStorage.setItem(localStorageTheme, theme);
+  };
 
   if (isSubmiting) {
     submitButton = <CircularProgress color='secondary' />;
@@ -35,7 +58,7 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
               labelId='change_label'
               id='change_form'
               value={theme}
-              onChange={(event) => { setTheme(event.target.value) }}
+              onChange={(event) => { onThemeChange(event.target.value) }}
             >
               {editorThemes.map((newthemes) => (
                 <MenuItem key={newthemes} value={newthemes}>
@@ -51,11 +74,11 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
             <InputLabel>Language</InputLabel>
             <Select
               value={language}
-              onChange={(event) => { setLanguage(event.target.value) }}
+              onChange={(event) => { onLanguageChange(event.target.value) }}
             >
-              {languages.map((lang) => (
+              {autocompleteLanguages.map((lang) => (
                 <MenuItem key={lang} value={lang}>
-                  {lang}
+                  {languages[lang]}
                 </MenuItem>
               ))}
             </Select>

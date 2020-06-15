@@ -80,7 +80,7 @@ export default function ChallengeLayout() {
                   alert('Your output is identical to the expected output');
                 }
               } catch (e) {
-                alert(e);
+                alert(e.response.data.error);
               } finally {
                 setIsSubmiting(false);
               }

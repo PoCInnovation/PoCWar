@@ -22,12 +22,6 @@ async function execLang(image, filename, req, res) {
     }
     console.log(`file written: ${filename}`);
     exec(`docker run --net=none --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
-        return;
-      }
-      console.log(`stdout: ${stdout} stderr: ${stderr}`);
       fs.remove(`${process.cwd()}/${dir}`, (error) => {
         if (error) {
           console.log(error);
@@ -36,6 +30,12 @@ async function execLang(image, filename, req, res) {
           console.log("Recursive: Directories Deleted!");
         }
       });
+      if (error) {
+        console.log(`error: ${error.message}`);
+        res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
+        return;
+      }
+      console.log(`stdout: ${stdout} stderr: ${stderr}`);
       res.status(200).send({ stdout: stdout, stderr: stderr });
     });
   });

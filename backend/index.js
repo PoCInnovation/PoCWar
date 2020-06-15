@@ -21,7 +21,7 @@ async function execLang(image, filename, req, res) {
       return console.log(err);
     }
     console.log(`file written: ${filename}`);
-    exec(`docker run --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
+    exec(`docker run --net=none --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
       if (error) {
         console.log(`error: ${error.message}`);
         res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });

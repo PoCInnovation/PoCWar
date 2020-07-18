@@ -1,29 +1,34 @@
-const express = require("express");
+const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require("cors");
+const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const fse = require('fs-extra');
 const Docker = require('dockerode');
 const { WritableStream } = require('memory-streams');
+const fs = require('fs');
+const generateTest = require('./challenge');
 
-async function execLang(docker, image, filename, req, res) {
+async function execLang(docker, config, res, code) {
   const directory = `${process.cwd()}/${uuidv4()}`;
   const stdout = new WritableStream();
   const stderr = new WritableStream();
 
   try {
-    await fse.outputFile(`${directory}/${filename}`, req.body.code);
-    console.log(`file written: ${filename}`);
+    await fse.outputFile(`${directory}/code.${config.ext}`, code);
+    console.log(`file written: code.${config.ext}`);
+    fs.copyFile(`./scripts/${config.lang}.sh`, `${directory}/build.sh`, () => {});
+    await fse.outputFile(`${directory}/exec.sh`, generateTest({ print_alpha: [ { code: 0, args: [], stdout: "abcdefghijklmnopqrstuvwxyz", stderr: "" } ] }));
   } catch (err) {
     console.log(err);
     return;
   }
 
-  docker.run(image, [], [stdout, stderr], {
+  docker.run(config.image, ['./build.sh', '&&', './exec.sh', '||', 'exit 1'], [stdout, stderr], {
       Tty: false,
-      AutoRemove: true,       // --rm
-      NetworkDisabled: false, // --net=none
-      Binds: [`${directory}:/execution`]
+      AutoRemove: true,                   // --rm
+      NetworkDisabled: false,             // --net=none
+      Binds: [`${directory}:/execution`],
+      Memory: '1g',                       // limit RAM
     })
     .then(([data, container]) => {
       console.log(`stdout: ${stdout}\n stderr: ${stderr}`);
@@ -35,15 +40,15 @@ async function execLang(docker, image, filename, req, res) {
     })
     .finally(() => {
       fse.remove(directory)
-        .then(() => { console.log("Recursive: Directories Deleted!") })
+        .then(() => { console.log('Recursive: Directories Deleted!') })
         .catch(error => { console.log(error); });
     });
 }
 
 const endpoints = [
-  { path: '/clang',      image: 'c_app',          filename: "test.c"  },
-  { path: '/python',     image: 'python_app',     filename: "test.py" },
-  { path: '/javascript', image: 'javascript_app', filename: "test.js" },
+  { lang: 'clang',      image: 'c_app',          ext: 'c'  },
+  { lang: 'python',     image: 'python_app',     ext: 'py' },
+  { lang: 'javascript', image: 'javascript_app', ext: 'js' },
 ];
 
 function main() {
@@ -55,9 +60,9 @@ function main() {
   app.use(cors());
 
   endpoints.forEach(endpoint => {
-    app.post(endpoint.path, async function (req, res) {
-      console.log(`request POST on ${endpoint.path}`);
-      await execLang(docker, endpoint.image, endpoint.filename, req, res);
+    app.post(`/${endpoint.lang}`, async function (req, res) {
+      console.log(`request POST on ${endpoint.lang}`);
+      await execLang(docker, endpoint, res, req.body.code);
     });
   });
 

@@ -6,13 +6,10 @@ const fse = require('fs-extra');
 const Docker = require('dockerode');
 const { WritableStream } = require('memory-streams');
 
-const docker = new Docker()
-
-async function execLang(image, filename, req, res) {
-  const stdout = new WritableStream()
-  const stderr = new WritableStream()
-
+async function execLang(docker, image, filename, req, res) {
   const directory = `${process.cwd()}/${uuidv4()}`;
+  const stdout = new WritableStream();
+  const stderr = new WritableStream();
 
   try {
     await fse.outputFile(`${directory}/${filename}`, req.body.code);
@@ -43,24 +40,30 @@ async function execLang(image, filename, req, res) {
     });
 }
 
-endpoints = [
+const endpoints = [
   { path: '/clang',      image: 'c_app',          filename: "test.c"  },
   { path: '/python',     image: 'python_app',     filename: "test.py" },
   { path: '/javascript', image: 'javascript_app', filename: "test.js" },
 ];
 
-const app = express();
+function main() {
+  const host = 4000;
+  const app = express();
+  const docker = new Docker();
 
-app.use(bodyParser.json());
-app.use(cors());
+  app.use(bodyParser.json());
+  app.use(cors());
 
-endpoints.forEach(endpoint => {
-  app.post(endpoint.path, async function (req, res) {
-    console.log(`request POST on ${endpoint.path}`);
-    await execLang(endpoint.image, endpoint.filename, req, res);
+  endpoints.forEach(endpoint => {
+    app.post(endpoint.path, async function (req, res) {
+      console.log(`request POST on ${endpoint.path}`);
+      await execLang(docker, endpoint.image, endpoint.filename, req, res);
+    });
   });
-});
 
-app.listen(4000, () => {
-  console.log("listening on port 4000");
-});
+  app.listen(host, () => {
+    console.log(`listening on port ${host}`);
+  });
+}
+
+main();

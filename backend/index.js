@@ -1,57 +1,66 @@
-var express = require("express");
-var app = express();
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-var jsonParser = bodyParser.json()
-let { exec } = require("child_process");
+const express = require("express");
+const bodyParser = require('body-parser');
+const cors = require("cors");
 const { v4: uuidv4 } = require('uuid');
-var cors = require("cors");
-const fs = require('fs-extra')
+const fse = require('fs-extra');
+const Docker = require('dockerode');
+const { WritableStream } = require('memory-streams');
+
+const docker = new Docker()
+
+async function execLang(image, filename, req, res) {
+  const stdout = new WritableStream()
+  const stderr = new WritableStream()
+
+  const directory = `${process.cwd()}/${uuidv4()}`;
+
+  try {
+    await fse.outputFile(`${directory}/${filename}`, req.body.code);
+    console.log(`file written: ${filename}`);
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+
+  docker.run(image, [], [stdout, stderr], {
+      Tty: false,
+      AutoRemove: true,       // --rm
+      NetworkDisabled: false, // --net=none
+      Binds: [`${directory}:/execution`]
+    })
+    .then(([data, container]) => {
+      console.log(`stdout: ${stdout}\n stderr: ${stderr}`);
+      res.send({ stdout: stdout.toString(), stderr: stderr.toString() });
+    })
+    .catch(error => {
+      console.log(`error: ${error.message}`);
+      res.status(500).send({ stdout: stdout.toString(), stderr: stderr.toString(), error: error.message });
+    })
+    .finally(() => {
+      fse.remove(directory)
+        .then(() => { console.log("Recursive: Directories Deleted!") })
+        .catch(error => { console.log(error); });
+    });
+}
+
+endpoints = [
+  { path: '/clang',      image: 'c_app',          filename: "test.c"  },
+  { path: '/python',     image: 'python_app',     filename: "test.py" },
+  { path: '/javascript', image: 'javascript_app', filename: "test.js" },
+];
+
+const app = express();
+
+app.use(bodyParser.json());
+app.use(cors());
+
+endpoints.forEach(endpoint => {
+  app.post(endpoint.path, async function (req, res) {
+    console.log(`request POST on ${endpoint.path}`);
+    await execLang(endpoint.image, endpoint.filename, req, res);
+  });
+});
 
 app.listen(4000, () => {
   console.log("listening on port 4000");
-});
-
-app.use(cors());
-
-async function execLang(image, filename, req, res) {
-  let dir = uuidv4();
-  fs.outputFile(`${process.cwd()}/${dir}/${filename}`, req.body.code, function (err) {
-    if (err) {
-      return console.log(err);
-    }
-    console.log(`file written: ${filename}`);
-    exec(`docker run --net=none --rm -v "${process.cwd()}/${dir}:/execution" ${image}`, (error, stdout, stderr) => {
-      fs.remove(`${process.cwd()}/${dir}`, (error) => {
-        if (error) {
-          console.log(error);
-        }
-        else {
-          console.log("Recursive: Directories Deleted!");
-        }
-      });
-      if (error) {
-        console.log(`error: ${error.message}`);
-        res.status(500).send({ stdout: stdout, stderr: stderr, error: error.message });
-        return;
-      }
-      console.log(`stdout: ${stdout} stderr: ${stderr}`);
-      res.status(200).send({ stdout: stdout, stderr: stderr });
-    });
-  });
-}
-
-app.post('/clang', jsonParser, async function (req, res) {
-  console.log("request POST on /clang.");
-  await execLang("c_app", "test.c", req, res);
-});
-
-app.post('/python', jsonParser, async function (req, res) {
-  console.log("request POST on /python.");
-  await execLang("python_app", "test.py", req, res);
-});
-
-app.post('/javascript', jsonParser, async function (req, res) {
-  console.log("request POST on /javascript.");
-  await execLang("javascript_app", "test.js", req, res);
 });

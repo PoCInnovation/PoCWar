@@ -16,19 +16,18 @@ async function execLang(docker, config, res, code) {
   try {
     await fse.outputFile(`${directory}/code.${config.ext}`, code);
     console.log(`file written: code.${config.ext}`);
-    fs.copyFile(`./scripts/${config.lang}.sh`, `${directory}/build.sh`, () => {});
     await fse.outputFile(`${directory}/exec.sh`, generateTest({ print_alpha: [ { code: 0, args: [], stdout: "abcdefghijklmnopqrstuvwxyz", stderr: "" } ] }));
   } catch (err) {
     console.log(err);
     return;
   }
 
-  docker.run(config.image, ['./build.sh', '&&', './exec.sh', '||', 'exit 1'], [stdout, stderr], {
+  docker.run(config.image, [], [stdout, stderr], {
       Tty: false,
       AutoRemove: true,                   // --rm
       NetworkDisabled: false,             // --net=none
       Binds: [`${directory}:/execution`],
-      Memory: '1g',                       // limit RAM
+      //Memory: '1g',                       // limit RAM
     })
     .then(([data, container]) => {
       console.log(`stdout: ${stdout}\n stderr: ${stderr}`);

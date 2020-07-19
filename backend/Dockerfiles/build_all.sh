@@ -2,6 +2,7 @@
 
 declare -a images=(
 	"c_app"
+    "go_app"
 	"javascript_app"
 	"python_app"
 	"rust_app"

@@ -4,6 +4,7 @@ declare -a images=(
 	"c_app"
 	"javascript_app"
 	"python_app"
+	"rust_app"
 )
 
 for image in "${images[@]}"

@@ -48,6 +48,7 @@ const endpoints = [
   { lang: 'clang',      image: 'c_app',          ext: 'c'  },
   { lang: 'python',     image: 'python_app',     ext: 'py' },
   { lang: 'javascript', image: 'javascript_app', ext: 'js' },
+  { lang: 'rust',       image: 'rust_app',       ext: 'rs' },
 ];
 
 function main() {

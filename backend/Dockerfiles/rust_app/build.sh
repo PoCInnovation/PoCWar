@@ -1,13 +1,12 @@
 #!/bin/bash
 
-shebang='#!/usr/bin/env python3'
-file='code.py'
+cargo init
 
-if [ "$(head -c 2 $file)" != '#!' ]; then
-    cat <(echo "$shebang") $file > bin.out
-fi
+mv code.rs src/main.rs
 
-chmod 755 bin.out
+cargo build --release
+
+mv ./target/release/execution ./bin.out
 
 chmod 755 exec.sh
 

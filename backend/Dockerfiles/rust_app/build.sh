@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cargo init
+USER='user' cargo init
 
 mv code.rs src/main.rs
 

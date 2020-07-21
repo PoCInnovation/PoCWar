@@ -11,5 +11,5 @@ declare -a images=(
 
 for image in "${images[@]}"
 do
-	(cd "$image" && docker build . -t $image)
+	(cd "$(git rev-parse --show-toplevel)/backend/Dockerfiles/$image" && docker build . -t $image)
 done

@@ -9,7 +9,9 @@ declare -a images=(
 	"rust_app"
 )
 
+path="$(git rev-parse --show-toplevel)/backend/Dockerfiles/"
+
 for image in "${images[@]}"
 do
-	(cd "$(git rev-parse --show-toplevel)/backend/Dockerfiles/$image" && docker build . -t $image)
+	(cd "$path$image" && docker build . -t $image)
 done

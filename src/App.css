@@ -1,0 +1,28 @@
+.title {
+  color: darkmagenta;
+  display: flex;
+  justify-content: center;
+}
+
+.option-tools {
+  width: 220px;
+  height: 90px;
+  justify-content: space-around;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sub {
+  justify-content: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-editor {
+  justify-content: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -2,6 +2,8 @@ FROM python
 
 WORKDIR /execution
 
-COPY ./build.sh /
+COPY ./build.sh /tmp
 
-CMD /build.sh
+RUN chmod 755 /tmp/build.sh
+
+CMD /tmp/build.sh

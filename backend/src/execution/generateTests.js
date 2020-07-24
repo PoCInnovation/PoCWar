@@ -1,7 +1,3 @@
-const firebase = require('firebase');
-const admin = require('firebase-admin');
-require('firebase/storage');
-
 function generateTests(challenge) {
     let command = `#!/bin/bash
 
@@ -54,31 +50,7 @@ ${array}
 
 exec_suite_${suiteName}`;
     });
-    console.log(command + '\necho "]}"');
     return command + '\necho "]}"';
 }
 
-function addChallenge(req, res) {
-    const firebaseConfig = {
-        apiKey: 'AIzaSyAN3COB5bWH1k9SsdX0cRQlNJ-inmYxJEU',
-        authDomain: 'poc-war.firebaseapp.com',
-        databaseURL: 'https://poc-war.firebaseio.com',
-        storageBucket: 'poc-war.appspot.com',
-        messagingSenderId: "899918222184",
-        appId: "1:899918222184:web:f7af640d76a824a7aefcdd",
-        measurementId: "G-N7V8BE95V2"
-    };
-    firebase.initializeApp(firebaseConfig);
-    firebase.database().ref('challenges/').push(req.body)
-        .then(() => {
-            res.send('All good!').status(200);
-        })
-        .catch((e) => {
-            res.send(`error: ${e}`).status(500);
-        });
-}
-
-module.exports = {
-    generateTests,
-    addChallenge
-};
+module.exports = generateTests;

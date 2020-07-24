@@ -1,0 +1,37 @@
+{
+    "extends": [
+      "airbnb-base"
+    ],
+    "plugins": [
+    ],
+    "rules": {
+      "arrow-parens": [ "error", "as-needed", {
+        "requireForBlockBody": true
+      }],
+      "class-methods-use-this": 0,
+      "comma-dangle": 0,
+      "implicit-arrow-linebreak": 0,
+      "import/no-unresolved": 0,
+      "indent": [
+        2,
+        "tab",
+        { "SwitchCase": 1 }
+      ],
+      "no-await-in-loop": 0,
+      "no-console": 0,
+      "no-nested-ternary": 0,
+      "no-plusplus": 0,
+      "no-tabs": 0,
+      "no-underscore-dangle": 0,
+      "no-unused-vars": [
+        "error",
+        {
+          "varsIgnorePattern": "should|expect"
+        }
+      ],
+      "no-useless-catch": 0,
+      "prefer-object-spread": 0,
+      "space-before-function-paren": 0,
+      "strict": 0
+    }
+  }

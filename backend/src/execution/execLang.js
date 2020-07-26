@@ -20,12 +20,16 @@ function dockerRun(image, langExtension, sourceCode, testScript) {
       .then(() => docker.run(image, [], null, dockerConfig))
       .then((_) => fse.readJSON(`${directory}/output.json`))
       .then((data) => {
+        resolve(data);
+      })
+      .catch(err => {
+        reject(err);
+      })
+      .finally(() => {
         fse.remove(directory)
           .then(() => {})
           .catch(error => { console.error(`Folder (${directory}) deletion failed: ${error.message}`); });
-        resolve(data);
-      })
-      .catch(err => { reject(err); });
+      });
   });
 }
 

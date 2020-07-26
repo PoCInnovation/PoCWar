@@ -4,6 +4,6 @@ WORKDIR /execution
 
 RUN apk add --no-cache python3 jq
 
-COPY ./build.sh ./build.sh
+COPY ./build.sh /tmp/build.sh
 
-CMD ./build.sh && ./exec.sh
+CMD /tmp/build.sh

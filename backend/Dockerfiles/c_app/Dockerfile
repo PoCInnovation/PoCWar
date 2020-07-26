@@ -1,9 +1,7 @@
-FROM gcc
+FROM alpine:3.12.0
 
 WORKDIR /execution
 
-COPY ./build.sh /tmp
+RUN apk add --no-cache gcc musl-dev jq
 
-RUN chmod 755 /tmp/build.sh
-
-CMD /tmp/build.sh
+CMD gcc -W -Wall -Wextra -o bin.out code.c && ./exec.sh

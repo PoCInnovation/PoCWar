@@ -1,9 +1,7 @@
-FROM rust
+FROM c_app
 
 WORKDIR /execution
 
-COPY ./build.sh /tmp
+RUN apk add --no-cache rust
 
-RUN chmod 755 /tmp/build.sh
-
-CMD /tmp/build.sh
+CMD rustc -o bin.out ./code && ./exec.sh

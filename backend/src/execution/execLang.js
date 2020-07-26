@@ -1,45 +1,44 @@
-const challenge = require('../routes/challenge');
 const Docker = require('dockerode');
-const { WritableStream } = require('memory-streams');
 const { v4: uuidv4 } = require('uuid');
 const fse = require('fs-extra');
-const fs = require('fs');
-
 const generateTests = require('./generateTests');
 
-async function execLang(config, res, code) {
-  const docker = new Docker();
-  const directory = `${process.cwd()}/${uuidv4()}`;
-  const stdout = new WritableStream();
-  const stderr = new WritableStream();
+function dockerRun(image, langExtension, sourceCode, testScript) {
+  return new Promise((resolve, reject) => {
+    const directory = `${process.cwd()}/${uuidv4()}`;
+    const docker = new Docker();
+    const dockerConfig = { // timeout 10s
+      Tty: false,
+      AutoRemove: true,
+      NetworkDisabled: false,
+      Binds: [`${directory}:/execution:delegated`],
+      //Memory: '1g', // limit RAM
+    };
 
-  try {
-    await fse.outputFile(`${directory}/code.${config.ext}`, code);
-    await fse.outputFile(`${directory}/exec.sh`, generateTests({ print_alpha: [ { code: 0, args: [], stdout: "abcdefghijklmnopqrstuvwxyz", stderr: "" } ] }));
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-    return;
-  }
+    fse.outputFile(`${directory}/code.${langExtension}`, sourceCode, { mode: 0o755 })
+      .then(() => fse.outputFile(`${directory}/exec.sh`, testScript, { mode: 0o755 }))
+      .then(() => docker.run(image, [], null, dockerConfig))
+      .then((_) => fse.readJSON(`${directory}/output.json`))
+      .then((data) => {
+        fse.remove(directory)
+          .then(() => {})
+          .catch(error => { console.error(`Folder (${directory}) deletion failed: ${error.message}`); });
+        resolve(data);
+      })
+      .catch(err => { reject(err); });
+  });
+}
 
-  docker.run(config.image, [], [stdout, stderr], {
-    Tty: false,
-    AutoRemove: true,
-    NetworkDisabled: false,
-    Binds: [`${directory}:/execution`],
-    //Memory: '1g', // limit RAM
-  })
-    .then(([data, container]) => {
-      res.json({ stdout: stdout.toString(), stderr: stderr.toString() });
-    })
-    .catch(error => {
-      console.log(`error: ${error.message}`);
-      res.status(500).json({ stdout: stdout.toString(), stderr: stderr.toString(), error: error.message });
-    })
-    .finally(() => {
-      fse.remove(directory)
-        .then(() => {})
-        .catch(error => { console.log(error); });
-    });
+async function execLang(refLang, refCode, userLang, userCode) {
+  testScript = generateTests({ tests: [ { args: '1 2 3 4' } ] });
+
+  ref = dockerRun(refLang.image, refLang.ext, refCode, testScript);
+  user = dockerRun(userLang.image, userLang.ext, userCode, testScript);
+
+  return {
+    ref: await ref,
+    user: await user
+  };
 }
 
 module.exports = {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-shebang='#!/usr/bin/env python3'
+shebang='#!/usr/bin/env ruby'
 file='code.py'
 
 if [ "$(head -c 2 $file)" != '#!' ]; then

@@ -1,9 +1,7 @@
-FROM gcc
+FROM c_app
 
 WORKDIR /execution
 
-COPY ./build.sh /tmp
+RUN apk add --no-cache g++
 
-RUN chmod 755 /tmp/build.sh
-
-CMD /tmp/build.sh
+CMD g++ -W -Wall -Wextra -o bin.out code.cpp && ./exec.sh

@@ -8,7 +8,3 @@ if [ "$(head -c 2 $file)" != '#!' ]; then
 fi
 
 chmod 755 bin.out
-
-chmod 755 exec.sh
-
-timeout 10s ./exec.sh

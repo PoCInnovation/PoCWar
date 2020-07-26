@@ -18,20 +18,21 @@ module.exports = {
 	 *
 	 * @api {post} /api/v1/challenge Add challenge
 	 * @apiName Add challenge
-	 * @apiGroup Accounts
+	 * @apiGroup Challenge
 	 *
 	 * @apiHeader {String} authorization Authorization token
 	 * @apiHeader {String="application/json"} accept
 	 *
-	 * @apiParam {Object} challengeData Account code, name, type, and description
+	 * @apiParam {Object} challenge
 	 */
     addChallenge(req, res) {
+        // validate body
         firebase.database().ref('challenges/').push(req.body)
             .then(() => {
-                res.send('All good!').status(200);
+                res.send('All good!');
             })
             .catch((e) => {
-                res.send(`error: ${e}`).status(500);
+                res.status(500).json({ message: err.message });
             });
     },
 
@@ -41,7 +42,13 @@ module.exports = {
         if (lang === undefined) {
             res.status(500).send('Unknown lang');
         } else {
-            execLang(lang, res, req.body.code);
+            try {
+                const output = execLang(lang, res, req.body.code);
+
+                res.json(output);
+            } catch (err) {
+                res.status(500).json({ message: err.message });
+            }
         }
     }
 }

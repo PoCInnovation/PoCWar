@@ -61,7 +61,7 @@ export default function ChallengeLayout() {
           <StdLog stdout={stdout} stderr={stderr}></StdLog>
         </Grid>
         <Grid item xs={12} sm={8}>
-          <Editor language={language} theme={theme} editValue={editValue} setEditValue={onEditorChange} />
+        <Editor language={language} theme={theme} editValue={editValue} setEditValue={onEditorChange} />
           <EditorSubBar
             theme={theme}
             setTheme={setTheme}

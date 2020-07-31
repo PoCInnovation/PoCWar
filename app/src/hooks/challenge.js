@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { store } from "../firebase/core";
+import { server } from './server';
+import axios from 'axios';
 
 export default function useChallenge(id) {
   const [error, setError] = useState(false);
@@ -10,14 +11,18 @@ export default function useChallenge(id) {
     async function fetchData() {
       let data = null;
       try {
-        data = await store.collection("challenges").doc(id).get();
+        await axios.get(server + '/challenge/' + id)
+          .then((response) => {
+            data = response.data;
+            console.log(data)
+          }).catch((e) => {
+            console.log(e);
+          })
       } catch (e) {
         setError(true);
       }
       setLoading(false);
-      if (data !== null) {
-        setChallenge(data.data());
-      }
+      setChallenge(data);
     }
     fetchData();
   }, [id]);

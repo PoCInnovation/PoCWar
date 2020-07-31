@@ -26,6 +26,7 @@ export default function ChallengeLayout() {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
   const c = useChallenge(challengeID);
+  console.log(challengeID, c);
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
@@ -54,6 +55,7 @@ export default function ChallengeLayout() {
     </>
   } else if (c.challenge !== null) {
     const d = c.challenge;
+    console.log(d);
     display = <>
       <Grid className={classes.gridRoot} container spacing={0}>
         <Grid item xs={12} sm={4}>

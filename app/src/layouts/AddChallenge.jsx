@@ -3,6 +3,8 @@ import NavBar from '../containers/NavBar';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import { server } from '../hooks/server';
 
 let nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
@@ -20,9 +22,10 @@ function submitChallenge() {
       "description": document.getElementById('challDescriptionField').value,
       "input_example": document.getElementById('challInputExampleField').value,
       "output_example": document.getElementById('challOutputExampleField').value,
+      "date": Date.now()
     }
   }
-  console.log(document.getElementById('testList').childNodes);
+  axios.post(server + '/challenge', data);
   console.log(data);
 }
 

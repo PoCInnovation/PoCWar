@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import NavBar from '../containers/NavBar';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import FormLabel from '@material-ui/core/FormLabel';
 import axios from 'axios';
 import { server } from '../hooks/server';
+import AddIcon from '@material-ui/icons/Add';
+import BackupIcon from '@material-ui/icons/Backup';
+import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
+import Fab from '@material-ui/core/Fab';
+import { app } from '../firebase/core';
 
-let nbOfTests = [1];
+const nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
   input: {
     color: theme.palette.primary.A100,
@@ -22,62 +27,45 @@ function submitChallenge() {
       "description": document.getElementById('challDescriptionField').value,
       "input_example": document.getElementById('challInputExampleField').value,
       "output_example": document.getElementById('challOutputExampleField').value,
-      "date": Date.now()
+      "date": Date.now(),
+      "tests": getTestEditorValues(),
+      "author": app.auth().currentUser.email
     }
   }
   axios.post(server + '/challenge', data);
   console.log(data);
 }
 
-function addTests() {
-  nbOfTests.push(nbOfTests[nbOfTests.length - 1] + 1);
-  console.log(nbOfTests);
+function addTests(list, setList) {
+  if (list.length === 0) {
+    setList(list.concat(1));
+  } else {
+    setList(list.concat(list[list.length - 1] + 1));
+  }
+}
+
+function deleteTest(list, setList) {
+  list.pop();
+  setList(list.concat());
 }
 
 function TestList(props) {
-  const [theme, setTheme] = useState('dracula');
-  const classes = useStyles(theme);
   const items = props.tests.map((i) => 
-      <div key={i.toString()} id="testList" style={{display: 'flex', justifyContent: 'space-between'}}>
-        <TextField
-          variant='outlined'
-          margin='normal'
-          label='Input'
-          name='input'
-          autoComplete='input'
-          autoFocus
-          InputProps={{
-            className: classes.input
-          }}
-          style={{
-            width: '49%'
-          }}
-        />
-        <TextField
-          variant='outlined'
-          margin='normal'
-          label='Output'
-          name='output'
-          autoComplete='output'
-          autoFocus
-          InputProps={{
-            className: classes.input
-          }}
-          style={{
-            width: '49%'
-          }}
-        />
+      <div key={i.toString()} id="testList">
+        <TestEditor deleteFunction={props.deleteFunction} />
       </div>
     );
   return (
     <div>
+      <FormLabel>Tests</FormLabel>
       {items}
     </div>
   );
 }
 
-export default function AddChallengeLayout() {
+export default function CreateChallLayout() {
   const [theme, setTheme] = useState('dracula');
+  let [list, setList] = useState(nbOfTests);
   const classes = useStyles(theme);
 
   return (
@@ -168,16 +156,19 @@ export default function AddChallengeLayout() {
                 }}
               />
             </div>
-            <TestList tests={nbOfTests} />
+            <br/>
+            <div>
+              <TestList tests={list} deleteFunction={() => deleteTest(list, setList)} />
+              <Fab color="primary" aria-label="add" onClick={() => addTests(list, setList)}>
+                <AddIcon />
+              </Fab>
+            </div>
           </div>
         </div>
       </div>
-      <Button onClick={submitChallenge}>
-        Submit
-      </Button>
-      <Button onClick={addTests}>
-        +
-      </Button>
+      <Fab color="primary" aria-label="submit" onClick={submitChallenge} style={{position: 'absolute', bottom: '15px', right: '15px'}}>
+        <BackupIcon />
+      </Fab>
     </div>
   );
 }

@@ -1,0 +1,64 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Lang {
+  C
+  CPP
+  Go
+  Javascript
+  Python
+  Rust
+  Ruby
+}
+
+model User {
+  id          Int @default(autoincrement()) @id
+  name        String
+  email       String @unique
+  password    String
+  challenges  Challenge[]
+  codeSources CodeSource[]
+}
+
+model Challenge {
+  id          Int @default(autoincrement()) @id
+  name        String
+  slug        String @unique
+  tests       Test[]
+  codeSources CodeSource[]
+  author      User @relation(fields: [authorId], references: [id])
+  authorId    Int
+}
+
+model Test {
+  id          Int @default(autoincrement()) @id
+  name        String
+  out         String
+  err         String
+  ret         Int
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  challengeId Int
+}
+
+model TestResult {
+  id           Int @default(autoincrement()) @id
+  codeSource   User @relation(fields: [codeSourceId], references: [id])
+  codeSourceId Int
+}
+
+model CodeSource {
+  id           Int @default(autoincrement()) @id
+  lang         Lang
+  code         String
+  challenge    Challenge @relation(fields: [challengeId], references: [id])
+  challengeId  Int
+  author       User @relation(fields: [authorId], references: [id])
+  authorId     Int
+  lastResult   TestResult?
+}

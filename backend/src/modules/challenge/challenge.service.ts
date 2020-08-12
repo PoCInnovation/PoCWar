@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {
   Challenge,
-  ChallengeCreateInput,
   ChallengeWhereUniqueInput,
   ChallengeWhereInput,
   ChallengeOrderByInput,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateChallengeDto } from '../../dto/create-challenge.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -30,13 +30,16 @@ export class ChallengeService {
     });
   }
 
-  async createChallenge(userId: number, { name, slug }: ChallengeCreateInput): Promise<Challenge> {
+  async createChallenge(userId: number, { name, slug, tests }: CreateChallengeDto): Promise<Challenge> {
     return this.prisma.challenge.create({
       data: {
         name,
         slug,
         author: {
           connect: { id: userId },
+        },
+        tests: {
+          create: tests,
         },
       },
     });

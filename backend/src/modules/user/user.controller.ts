@@ -3,14 +3,15 @@ import {
   Get,
   Param,
   Delete,
-  ParseIntPipe, UseGuards,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { User as UserModel } from '@prisma/client';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
-import { Roles } from '../decorators/role.decorator';
-import { RoleType } from '../common/constants/role-type';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
+import { Roles } from '../../decorators/role.decorator';
+import { RoleType } from '../../common/constants/role-type';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller()

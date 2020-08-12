@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  Challenge,
+  Challenge as ChallengeModel,
   ChallengeWhereUniqueInput,
   ChallengeWhereInput,
   ChallengeOrderByInput,
@@ -12,7 +12,9 @@ import { CreateChallengeDto } from '../../dto/create-challenge.dto';
 export class ChallengeService {
   constructor(private prisma: PrismaService) {}
 
-  async challenge(challengeWhereUniqueInput: ChallengeWhereUniqueInput): Promise<Challenge | null> {
+  async challenge(
+    challengeWhereUniqueInput: ChallengeWhereUniqueInput,
+  ): Promise<ChallengeModel | null> {
     return this.prisma.challenge.findOne({
       where: challengeWhereUniqueInput,
     });
@@ -24,13 +26,22 @@ export class ChallengeService {
     cursor?: ChallengeWhereUniqueInput;
     where?: ChallengeWhereInput;
     orderBy?: ChallengeOrderByInput;
-  }): Promise<Challenge[]> {
+  }): Promise<ChallengeModel[]> {
     return this.prisma.challenge.findMany({
       ...params,
     });
   }
 
-  async createChallenge(userId: number, { name, slug, tests }: CreateChallengeDto): Promise<Challenge> {
+  async challengeByIdWithTests(challengeId: number): Promise<ChallengeModel[]> {
+    return this.prisma.challenge.findMany({
+      where: { id: challengeId },
+      include: {
+        tests: true,
+      },
+    });
+  }
+
+  async createChallenge(userId: number, { name, slug, tests }: CreateChallengeDto): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {
         name,
@@ -45,7 +56,7 @@ export class ChallengeService {
     });
   }
 
-  async deleteChallenge(where: ChallengeWhereUniqueInput): Promise<Challenge> {
+  async deleteChallenge(where: ChallengeWhereUniqueInput): Promise<ChallengeModel> {
     return this.prisma.challenge.delete({
       where,
     });

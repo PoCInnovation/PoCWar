@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  Test,
+  Test as TestModel,
   TestWhereUniqueInput,
   TestWhereInput,
   TestOrderByInput,
@@ -12,7 +12,7 @@ import { CreateTestDto } from '../../dto/create-test.dto';
 export class TestService {
   constructor(private prisma: PrismaService) {}
 
-  async test(testWhereUniqueInput: TestWhereUniqueInput): Promise<Test | null> {
+  async test(testWhereUniqueInput: TestWhereUniqueInput): Promise<TestModel | null> {
     return this.prisma.test.findOne({
       where: testWhereUniqueInput,
     });
@@ -24,13 +24,13 @@ export class TestService {
     cursor?: TestWhereUniqueInput;
     where?: TestWhereInput;
     orderBy?: TestOrderByInput;
-  }): Promise<Test[]> {
+  }): Promise<TestModel[]> {
     return this.prisma.test.findMany({
       ...params,
     });
   }
 
-  async createTest(challengeId: number, testDto: CreateTestDto): Promise<Test> {
+  async createTest(challengeId: number, testDto: CreateTestDto): Promise<TestModel> {
     return this.prisma.test.create({
       data: {
         ...testDto,
@@ -41,7 +41,7 @@ export class TestService {
     });
   }
 
-  async deleteTest(where: TestWhereUniqueInput): Promise<Test> {
+  async deleteTest(where: TestWhereUniqueInput): Promise<TestModel> {
     return this.prisma.test.delete({
       where,
     });

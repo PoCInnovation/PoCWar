@@ -10,4 +10,4 @@ import { AuthModule } from '../../auth/auth.module';
   providers: [TestService],
   exports: [TestService],
 })
-export class ChallengeModule {}
+export class TestModule {}

@@ -1,5 +1,5 @@
 import {
-  Controller, Post, Body, Get, Param,
+  Controller, Post, Body,
 } from '@nestjs/common';
 import { Test as TestModel } from '@prisma/client';
 import { TestService } from './test.service';

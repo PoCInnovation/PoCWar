@@ -1,11 +1,11 @@
 import {
-  Controller, Post, Body, Get, Param,
+  Controller, Post, Body, Get, Param, UseGuards, ParseIntPipe, Query,
 } from '@nestjs/common';
 import { Challenge as ChallengeModel } from '@prisma/client';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../decorators/auth-user.decorator';
 import { CreateChallengeDto } from '../../dto/create-challenge.dto';
-import { GetChallengesDto } from '../../dto/get-challenges.dto';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
 @Controller()
 export class ChallengeController {
@@ -14,9 +14,12 @@ export class ChallengeController {
   ) {}
 
   @Get('challenge')
-  async getChallenges(@Body() { page, pageSize }: GetChallengesDto): Promise<ChallengeModel[]> {
+  async getChallenges(
+    @Query('page', ParseIntPipe) page: number,
+      @Query('pageSize', ParseIntPipe) pageSize: number,
+  ): Promise<ChallengeModel[]> {
     return this.challengeService.challenges({
-      skip: page * pageSize,
+      skip: (page - 1) * pageSize,
       take: pageSize,
     });
   }
@@ -26,6 +29,7 @@ export class ChallengeController {
     return this.challengeService.challenge({ slug });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('challenge')
   async createChallenge(
     @AuthUser() user: any, @Body() challenge: CreateChallengeDto,

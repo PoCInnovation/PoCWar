@@ -5,7 +5,7 @@ import { Challenge as ChallengeModel } from '@prisma/client';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../decorators/auth-user.decorator';
 import { CreateChallengeDto } from '../../dto/create-challenge.dto';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller()
 export class ChallengeController {

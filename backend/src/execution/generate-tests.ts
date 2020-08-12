@@ -1,6 +1,6 @@
-export default function generateTests(challenge) {
+export default function generateTests(tests: { args: string}[]): string {
   let array = '';
-  challenge.tests.forEach((test, _) => {
+  tests.forEach((test) => {
     array += `eval_test '${test.args}'\n`;
   });
   return `#!/bin/sh
@@ -17,7 +17,7 @@ eval_test() {
     bout=$(./bin.out $1 2> /tmp/stderr)
     bret=$?
     berr=$(cat < /tmp/stderr)
-    json_output=$(echo $json_output | jq -c --arg out "$bout" --arg err "$berr" --arg ret "$bret" '.execution += [{"out":$out, "err":$err,"ret":$ret}]')
+    json_output=$(echo $json_output | jq -c --arg out "$bout" --arg err "$berr" --arg ret "$bret" '.execution += [{"out":$out, "err":$err,"ret":$ret | tonumber}]')
 }
 ${array}
 echo $json_output > output.json

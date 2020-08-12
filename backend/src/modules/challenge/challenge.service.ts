@@ -41,7 +41,9 @@ export class ChallengeService {
     });
   }
 
-  async createChallenge(userId: number, { name, slug, tests }: CreateChallengeDto): Promise<ChallengeModel> {
+  async createChallenge(
+    userId: number, { name, slug, tests }: CreateChallengeDto,
+  ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {
         name,
@@ -50,7 +52,7 @@ export class ChallengeService {
           connect: { id: userId },
         },
         tests: {
-          create: tests,
+          create: tests.map(({ args, ...test }) => ({ ...test, args: args.join(' ') })),
         },
       },
     });

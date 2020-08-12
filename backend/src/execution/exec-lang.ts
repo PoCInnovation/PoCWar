@@ -2,8 +2,9 @@ import * as os from 'os';
 import * as Docker from 'dockerode';
 import * as fse from 'fs-extra';
 import generateTests from './generate-tests';
+import { SupportedLangInfo } from '../common/constants/supported-lang';
 
-async function dockerRun(image, langExtension, sourceCode, testScript): Promise<string> {
+async function dockerRun(image: string, langExtension: string, sourceCode: string, testScript: string): Promise<any> {
   const tmpdir = await fse.promises.mkdtemp(`${os.tmpdir()}/pocwar-execution-`);
   const docker = new Docker();
   const dockerConfig = {
@@ -25,8 +26,8 @@ async function dockerRun(image, langExtension, sourceCode, testScript): Promise<
   return jsonOutput;
 }
 
-export default async function execLang(refLang, refCode, userLang, userCode): Promise<string> {
-  const testScript = generateTests({ tests: [{ args: '1 2 3 4' }] });
+export default async function execLang(lang: SupportedLangInfo, code: string, tests: { args: string}[]): Promise<any> {
+  const testScript = generateTests(tests);
 
-  return dockerRun(userLang.image, userLang.ext, userCode, testScript);
+  return dockerRun(lang.image, lang.extension, code, testScript);
 }

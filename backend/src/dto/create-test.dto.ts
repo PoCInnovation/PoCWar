@@ -1,5 +1,5 @@
 import {
-  IsInt, IsString, Min, Max,
+  IsInt, IsString, Min, Max, IsArray,
 } from 'class-validator';
 
 export class CreateTestDto {
@@ -16,4 +16,7 @@ export class CreateTestDto {
   @Min(0)
   @Max(255)
   ret: number;
+
+  @IsArray()
+  args: string[];
 }

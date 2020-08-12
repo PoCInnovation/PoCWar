@@ -30,10 +30,11 @@ export class TestService {
     });
   }
 
-  async createTest(challengeId: number, testDto: CreateTestDto): Promise<TestModel> {
+  async createTest(challengeId: number, { args, ...data }: CreateTestDto): Promise<TestModel> {
     return this.prisma.test.create({
       data: {
-        ...testDto,
+        args: args.join(' '),
+        ...data,
         challenge: {
           connect: { id: challengeId },
         },

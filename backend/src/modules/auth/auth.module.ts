@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
+// eslint-disable-next-line import/no-cycle
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 

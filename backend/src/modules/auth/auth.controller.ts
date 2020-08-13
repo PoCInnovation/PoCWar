@@ -23,6 +23,7 @@ export class AuthController {
     return this.authService.register(userData)
       .then(() => 'User created')
       .catch((err) => {
+        // eslint-disable-next-line no-console
         console.log(err);
         return 'Email is already taken';
       });
@@ -30,6 +31,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
+  // eslint-disable-next-line class-methods-use-this
   profile(@Request() req) {
     return req.user;
   }

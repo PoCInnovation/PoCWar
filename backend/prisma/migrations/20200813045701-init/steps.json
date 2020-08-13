@@ -2,6 +2,19 @@
   "version": "0.3.14-fixed",
   "steps": [
     {
+      "tag": "CreateEnum",
+      "enum": "Lang",
+      "values": [
+        "c",
+        "cpp",
+        "go",
+        "javascript",
+        "python",
+        "rust",
+        "ruby"
+      ]
+    },
+    {
       "tag": "CreateSource",
       "source": "db"
     },
@@ -98,8 +111,22 @@
     {
       "tag": "CreateField",
       "model": "User",
+      "field": "password",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
       "field": "challenges",
       "type": "Challenge",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "codeSources",
+      "type": "CodeSource",
       "arity": "List"
     },
     {
@@ -179,6 +206,13 @@
       "model": "Challenge",
       "field": "tests",
       "type": "Test",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Challenge",
+      "field": "codeSources",
+      "type": "CodeSource",
       "arity": "List"
     },
     {
@@ -312,6 +346,13 @@
     {
       "tag": "CreateField",
       "model": "Test",
+      "field": "args",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Test",
       "field": "challenge",
       "type": "Challenge",
       "arity": "Required"
@@ -361,6 +402,157 @@
       "field": "challengeId",
       "type": "Int",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateModel",
+      "model": "CodeSource"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "lang",
+      "type": "Lang",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "code",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "challenge",
+      "type": "Challenge",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "challenge"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "challenge"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[challengeId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "challenge"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "challengeId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "author",
+      "type": "User",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "author"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "author"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[authorId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "author"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "authorId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "lastResult",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "CodeSource",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[authorId, challengeId]"
+            },
+            {
+              "name": "name",
+              "value": "\"ux_codesource_author_challenge\""
+            }
+          ]
+        },
+        "directive": "unique"
+      }
     }
   ]
 }

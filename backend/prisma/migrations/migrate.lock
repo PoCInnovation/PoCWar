@@ -1,5 +1,3 @@
 # Prisma Migrate lockfile v1
 
-20200809152954-init
-20200810060326-add-code_source-test_result
-20200812122053-add_args_to_test_and_update_enum
+20200813045701-init

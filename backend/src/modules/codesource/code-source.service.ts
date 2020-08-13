@@ -35,8 +35,8 @@ export class CodeSourceService {
   async submitCodeSource(
     userId: number, { code, lang, challengeId }: SubmitCodeSourceDto,
   ): Promise<CodeSourceModel> {
-    return this.prisma.codeSource.create({
-      data: {
+    return this.prisma.codeSource.upsert({
+      create: {
         code,
         lang,
         challenge: {
@@ -44,6 +44,15 @@ export class CodeSourceService {
         },
         author: {
           connect: { id: userId },
+        },
+      },
+      update: {
+        code,
+        lang,
+      },
+      where: {
+        ux_codesource_author_challenge: {
+          authorId: userId, challengeId,
         },
       },
     });

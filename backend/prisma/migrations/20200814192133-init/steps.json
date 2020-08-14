@@ -577,7 +577,7 @@
     {
       "tag": "CreateField",
       "model": "CodeSource",
-      "field": "passAllTest",
+      "field": "passAllTests",
       "type": "Boolean",
       "arity": "Required"
     },
@@ -587,7 +587,7 @@
         "path": {
           "tag": "Field",
           "model": "CodeSource",
-          "field": "passAllTest"
+          "field": "passAllTests"
         },
         "directive": "default"
       }
@@ -599,7 +599,7 @@
         "path": {
           "tag": "Field",
           "model": "CodeSource",
-          "field": "passAllTest"
+          "field": "passAllTests"
         },
         "directive": "default"
       },

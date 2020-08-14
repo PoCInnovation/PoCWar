@@ -54,14 +54,14 @@ model Test {
 }
 
 model CodeSource {
-  lang        Lang
-  code        String
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
-  challengeId String
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    String
-  lastResult  String?
-  passAllTest Boolean   @default(false)
+  lang         Lang
+  code         String
+  challenge    Challenge @relation(fields: [challengeId], references: [id])
+  challengeId  String
+  author       User      @relation(fields: [authorId], references: [id])
+  authorId     String
+  lastResult   String?
+  passAllTests Boolean   @default(false)
 
   @@unique([authorId, challengeId], name: "ux_codesource_author_challenge")
 }

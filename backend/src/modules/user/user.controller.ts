@@ -6,13 +6,12 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
-import { User as UserModel } from '@prisma/client';
+import { User as UserModel, Role as RoleType } from '@prisma/client';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { RoleType } from '../../common/constants/role-type';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
 import { AuthUserInterface } from '../../common/interface/auth-user.interface';
 
@@ -25,15 +24,15 @@ export class UserController {
     private readonly userService: UserService,
   ) {}
 
-  @Roles(RoleType.ADMIN)
+  @Roles(RoleType.admin)
   @Get('user/:id')
-  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserModel> {
+  async getUserById(@Param('id') id: string): Promise<UserModel> {
     return this.userService.user({ id });
   }
 
-  @Roles(RoleType.ADMIN)
+  @Roles(RoleType.admin)
   @Delete('user/:id')
-  async deleteUser(@Param('id') id: number): Promise<UserModel> {
+  async deleteUser(@Param('id') id: string): Promise<UserModel> {
     return this.userService.deleteUser({ id });
   }
 

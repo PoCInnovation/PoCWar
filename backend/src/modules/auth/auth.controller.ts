@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Request, Post, UseGuards, Body,
+  Controller, Get, Request, Post, UseGuards, Body, ForbiddenException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -26,10 +26,8 @@ export class AuthController {
   ): Promise<string> {
     return this.authService.register(userData)
       .then(() => 'User created')
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.log(err);
-        return 'Email is already taken';
+      .catch(() => {
+        throw new ForbiddenException('Email already exists');
       });
   }
 

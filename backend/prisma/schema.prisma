@@ -18,13 +18,13 @@ enum Lang {
 }
 
 enum Role {
-    user
-    admin
+  user
+  admin
 }
 
 model User {
-  id          Int          @default(autoincrement()) @id
-  role        Role
+  id          String       @id @default(uuid())
+  role        Role         @default(value: user)
   name        String
   email       String       @unique
   password    String
@@ -33,35 +33,35 @@ model User {
 }
 
 model Challenge {
-  id          Int          @default(autoincrement()) @id
+  id          String       @id @default(uuid())
   name        String
   slug        String       @unique
   tests       Test[]
   codeSources CodeSource[]
   author      User         @relation(fields: [authorId], references: [id])
-  authorId    Int
+  authorId    String
 }
 
 model Test {
-  id          Int       @default(autoincrement()) @id
+  id          String    @id @default(uuid())
   name        String
   out         String
   err         String
   ret         Int
   args        String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
-  challengeId Int
+  challengeId String
 }
 
 model CodeSource {
   lang        Lang
   code        String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
-  challengeId Int
+  challengeId String
   author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int
+  authorId    String
   lastResult  String?
-  passAllTest Bool      @default(false)
+  passAllTest Boolean   @default(false)
 
   @@unique([authorId, challengeId], name: "ux_codesource_author_challenge")
 }

@@ -22,6 +22,6 @@ export class CreateChallengeDto {
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
   @Type(() => CreateTestDto)
-  @ApiProperty()
+  @ApiProperty({ type: [CreateTestDto] })
   tests: CreateTestDto[];
 }

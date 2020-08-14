@@ -3,8 +3,20 @@ export interface TestResultInterface {
   pass: boolean;
 }
 
-export interface TestsResultInterface {
+export interface OutputResultInterface {
+  out: string;
+  err: string;
+  ret: number;
+}
+
+export interface ExecutionResultInterface {
+  compilation?: OutputResultInterface;
+  tests: OutputResultInterface[];
+}
+
+export interface ChallengeResultInterface {
   passed: number;
   failed: number;
+  compilation: OutputResultInterface;
   tests: TestResultInterface[];
 }

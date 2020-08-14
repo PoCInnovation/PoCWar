@@ -9,8 +9,11 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { SubmitCodeSourceDto } from '../../common/dto/submit-code-source.dto';
 import execLang from '../../execution/exec-lang';
-import { supportedLangs } from '../../common/constants/supported-lang';
-import { TestsResultInterface } from '../../common/interface/challenge-result.interface';
+import { supportedLangs } from '../../common/constants/supported-langs';
+import {
+  ChallengeResultInterface,
+  TestResultInterface,
+} from '../../common/interface/challenge-result.interface';
 
 @Injectable()
 export class CodeSourceService {
@@ -37,7 +40,7 @@ export class CodeSourceService {
   }
 
   async submitCodeSource(
-    userId: number, { code, lang, challengeId }: SubmitCodeSourceDto,
+    userId: string, { code, lang, challengeId }: SubmitCodeSourceDto,
   ): Promise<CodeSourceModel> {
     return this.prisma.codeSource.upsert({
       create: {
@@ -70,13 +73,13 @@ export class CodeSourceService {
 
   async executeTests({
     lang, code, challengeId, authorId,
-  }: CodeSourceModel, tests: TestModel[]): Promise<TestsResultInterface> {
-    const result: {execution: {out: string, err: string, ret: number}[]} = await execLang(
+  }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultInterface> {
+    const result = await execLang(
       supportedLangs[lang], code, tests,
     );
     let passed: number = 0;
     let failed: number = 0;
-    const formattedResult = result.execution.map((test, index) => {
+    const formattedResult: TestResultInterface[] = result.tests.map((test, index) => {
       const pass = tests[index].out === test.out
         && tests[index].err === test.err
         && tests[index].ret === test.ret;
@@ -90,9 +93,10 @@ export class CodeSourceService {
         pass,
       };
     });
-    const testResult = {
+    const testResult: ChallengeResultInterface = {
       passed,
       failed,
+      compilation: result.compilation,
       tests: formattedResult,
     };
     this.prisma.codeSource.update({

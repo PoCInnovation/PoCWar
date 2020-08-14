@@ -1,13 +1,12 @@
 import {
-  IsInt, IsString, Min, Max, IsArray, IsPositive,
+  IsInt, IsString, Min, Max, IsArray, IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpsertTestDto {
-  @IsInt()
-  @IsPositive()
+  @IsUUID()
   @ApiProperty()
-  id?: number;
+  id?: string;
 
   @IsString()
   @ApiProperty()

@@ -10,7 +10,6 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
-import { UpdateTestDto } from '../../common/dto/update-test.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 
 @Injectable()
@@ -37,7 +36,7 @@ export class ChallengeService {
     });
   }
 
-  async challengeByIdWithTests(challengeId: number): Promise<ChallengeModel[]> {
+  async challengeByIdWithTests(challengeId: string): Promise<ChallengeModel[]> {
     return this.prisma.challenge.findMany({
       where: { id: challengeId },
       include: {
@@ -47,7 +46,7 @@ export class ChallengeService {
   }
 
   async createChallenge(
-    userId: number, { name, slug, tests }: CreateChallengeDto,
+    userId: string, { name, slug, tests }: CreateChallengeDto,
   ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {
@@ -63,7 +62,7 @@ export class ChallengeService {
     });
   }
 
-  async deleteChallenge(userId: number, slug: string): Promise<ChallengeModel> {
+  async deleteChallenge(userId: string, slug: string): Promise<ChallengeModel> {
     const challenge = await this.prisma.challenge.findOne(
       {
         where: { slug },
@@ -81,7 +80,7 @@ export class ChallengeService {
   }
 
   async updateChallenge(
-    userId: number, challengeDto: UpdateChallengeDto, slug: string,
+    userId: string, challengeDto: UpdateChallengeDto, slug: string,
   ): Promise<ChallengeModel> {
     const challenge = await this.prisma.challenge.findOne(
       {

@@ -1,6 +1,6 @@
 export interface AuthUserInterface {
-  id: number,
-  email: string,
-  passHash: string,
-  role: string,
+  id: string;
+  email: string;
+  passHash: string;
+  role: string;
 }

@@ -17,7 +17,7 @@ eval_test() {
     bout=$(./bin.out $1 2> /tmp/stderr)
     bret=$?
     berr=$(cat < /tmp/stderr)
-    json_output=$(echo $json_output | jq -c --arg out "$bout" --arg err "$berr" --arg ret "$bret" '.execution += [{"out":$out, "err":$err,"ret":$ret | tonumber}]')
+    json_output=$(echo $json_output | jq -c --arg out "$bout" --arg err "$berr" --arg ret "$bret" '.tests += [{"out":$out, "err":$err,"ret":$ret | tonumber}]')
 }
 ${array}
 echo $json_output > output.json

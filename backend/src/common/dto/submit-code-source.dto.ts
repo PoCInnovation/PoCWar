@@ -1,7 +1,8 @@
 import {
-  IsInt, IsString, IsEnum,
+  IsString, IsEnum, IsUUID,
 } from 'class-validator';
 import { Lang } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class SubmitCodeSourceDto {
   @IsString()
@@ -11,6 +12,7 @@ export class SubmitCodeSourceDto {
   @IsString()
   code: string;
 
-  @IsInt()
-  challengeId: number;
+  @IsUUID()
+  @ApiProperty()
+  challengeId: string;
 }

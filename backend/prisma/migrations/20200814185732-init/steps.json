@@ -15,6 +15,14 @@
       ]
     },
     {
+      "tag": "CreateEnum",
+      "enum": "Role",
+      "values": [
+        "user",
+        "admin"
+      ]
+    },
+    {
       "tag": "CreateSource",
       "source": "db"
     },
@@ -44,8 +52,19 @@
       "tag": "CreateField",
       "model": "User",
       "field": "id",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "id"
+        },
+        "directive": "id"
+      }
     },
     {
       "tag": "CreateDirective",
@@ -70,7 +89,14 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "autoincrement()"
+      "value": "uuid()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "role",
+      "type": "Role",
+      "arity": "Required"
     },
     {
       "tag": "CreateDirective",
@@ -78,10 +104,24 @@
         "path": {
           "tag": "Field",
           "model": "User",
-          "field": "id"
+          "field": "role"
         },
-        "directive": "id"
+        "directive": "default"
       }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "role"
+        },
+        "directive": "default"
+      },
+      "argument": "value",
+      "value": "user"
     },
     {
       "tag": "CreateField",
@@ -137,8 +177,19 @@
       "tag": "CreateField",
       "model": "Challenge",
       "field": "id",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Challenge",
+          "field": "id"
+        },
+        "directive": "id"
+      }
     },
     {
       "tag": "CreateDirective",
@@ -163,18 +214,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "autoincrement()"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Challenge",
-          "field": "id"
-        },
-        "directive": "id"
-      }
+      "value": "uuid()"
     },
     {
       "tag": "CreateField",
@@ -265,7 +305,7 @@
       "tag": "CreateField",
       "model": "Challenge",
       "field": "authorId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -276,8 +316,19 @@
       "tag": "CreateField",
       "model": "Test",
       "field": "id",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Test",
+          "field": "id"
+        },
+        "directive": "id"
+      }
     },
     {
       "tag": "CreateDirective",
@@ -302,18 +353,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "autoincrement()"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Test",
-          "field": "id"
-        },
-        "directive": "id"
-      }
+      "value": "uuid()"
     },
     {
       "tag": "CreateField",
@@ -400,7 +440,7 @@
       "tag": "CreateField",
       "model": "Test",
       "field": "challengeId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -471,7 +511,7 @@
       "tag": "CreateField",
       "model": "CodeSource",
       "field": "challengeId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -524,7 +564,7 @@
       "tag": "CreateField",
       "model": "CodeSource",
       "field": "authorId",
-      "type": "Int",
+      "type": "String",
       "arity": "Required"
     },
     {
@@ -533,6 +573,38 @@
       "field": "lastResult",
       "type": "String",
       "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CodeSource",
+      "field": "passAllTest",
+      "type": "Boolean",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "passAllTest"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "CodeSource",
+          "field": "passAllTest"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "false"
     },
     {
       "tag": "CreateDirective",

@@ -1,4 +1,4 @@
-#!/bin/env
+#!/bin/env bash
 
 docker run --name pocwar-db		\
 	-e POSTGRES_PASSWORD=postgres 	\

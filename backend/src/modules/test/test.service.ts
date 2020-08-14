@@ -6,7 +6,7 @@ import {
   TestOrderByInput,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTestDto } from '../../dto/create-test.dto';
+import { CreateTestDto } from '../../common/dto/create-test.dto';
 
 @Injectable()
 export class TestService {
@@ -27,18 +27,6 @@ export class TestService {
   }): Promise<TestModel[]> {
     return this.prisma.test.findMany({
       ...params,
-    });
-  }
-
-  async createTest(challengeId: number, { args, ...data }: CreateTestDto): Promise<TestModel> {
-    return this.prisma.test.create({
-      data: {
-        args: args.join(' '),
-        ...data,
-        challenge: {
-          connect: { id: challengeId },
-        },
-      },
     });
   }
 

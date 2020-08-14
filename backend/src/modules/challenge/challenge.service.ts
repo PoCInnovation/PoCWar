@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   Challenge as ChallengeModel,
   ChallengeWhereUniqueInput,
   ChallengeWhereInput,
   ChallengeOrderByInput,
+  TestUpdateWithWhereUniqueWithoutChallengeInput,
+  TestCreateWithoutChallengeInput,
+  Enumerable,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateChallengeDto } from '../../dto/create-challenge.dto';
+import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
+import { UpdateTestDto } from '../../common/dto/update-test.dto';
+import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -58,9 +63,60 @@ export class ChallengeService {
     });
   }
 
-  async deleteChallenge(where: ChallengeWhereUniqueInput): Promise<ChallengeModel> {
+  async deleteChallenge(userId: number, slug: string): Promise<ChallengeModel> {
+    const challenge = await this.prisma.challenge.findOne(
+      {
+        where: { slug },
+        select: { id: true, author: { select: { id: true } } },
+      },
+    );
+    if (challenge.author.id !== userId) {
+      throw new UnauthorizedException();
+    }
+    await this.prisma.test.deleteMany({ where: { challengeId: challenge.id } });
+    await this.prisma.codeSource.deleteMany({ where: { challengeId: challenge.id } });
     return this.prisma.challenge.delete({
-      where,
+      where: { slug },
+    });
+  }
+
+  async updateChallenge(
+    userId: number, challengeDto: UpdateChallengeDto, slug: string,
+  ): Promise<ChallengeModel> {
+    const challenge = await this.prisma.challenge.findOne(
+      {
+        where: { slug },
+        select: {
+          id: true,
+          author: { select: { id: true } },
+          tests: { select: { id: true } },
+        },
+      },
+    );
+    if (challenge.author.id !== userId) {
+      throw new UnauthorizedException();
+    }
+    const toCreate: Enumerable<TestCreateWithoutChallengeInput> = [];
+    const toUpdate: Enumerable<TestUpdateWithWhereUniqueWithoutChallengeInput> = [];
+    challengeDto.tests.forEach(({ id, args, ...testModel }) => {
+      if (!id) {
+        toCreate.push({ args: args.join(' '), ...testModel });
+      } else if (challenge.tests.find((test) => id === test.id)) {
+        toUpdate.push({
+          where: { id },
+          data: { args: args.join(' '), ...testModel },
+        });
+      }
+    });
+    return this.prisma.challenge.update({
+      where: { id: challenge.id },
+      data: {
+        name: challengeDto.name,
+        tests: {
+          update: toUpdate,
+          create: toCreate,
+        },
+      },
     });
   }
 }

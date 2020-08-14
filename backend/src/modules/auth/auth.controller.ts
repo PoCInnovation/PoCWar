@@ -1,15 +1,19 @@
 import {
   Controller, Get, Request, Post, UseGuards, Body,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../../dto/create-user.dto';
+import { CreateUserDto } from '../../common/dto/create-user.dto';
 
+@ApiTags('User')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiBearerAuth()
+  @ApiBody({ type: [CreateUserDto] })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
@@ -29,6 +33,7 @@ export class AuthController {
       });
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   // eslint-disable-next-line class-methods-use-this

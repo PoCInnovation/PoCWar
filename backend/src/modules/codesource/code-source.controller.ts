@@ -1,14 +1,15 @@
 import {
   Controller, Post, Body, UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CodeSourceService } from './code-source.service';
-import { AuthUser } from '../../decorators/auth-user.decorator';
-import { SubmitCodeSourceDto } from '../../dto/submit-code-source.dto';
-import execLang from '../../execution/exec-lang';
-import { lang } from '../../common/constants/supported-lang';
+import { AuthUser } from '../../common/decorators/auth-user.decorator';
+import { SubmitCodeSourceDto } from '../../common/dto/submit-code-source.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TestService } from '../test/test.service';
+import { AuthUserInterface } from '../../common/interface/auth-user.interface';
 
+@ApiTags('CodeSource')
 @Controller()
 export class CodeSourceController {
   constructor(
@@ -19,18 +20,12 @@ export class CodeSourceController {
   @UseGuards(JwtAuthGuard)
   @Post('code')
   async submitCodeSource(
-    @AuthUser() user: any, @Body() codeSource: SubmitCodeSourceDto,
+    @AuthUser() user: AuthUserInterface, @Body() codeSourceDto: SubmitCodeSourceDto,
   ): Promise<any> {
-    await this.codeSourceService.submitCodeSource(user.id, codeSource);
-    const tests = await this.testService.tests({ where: { challengeId: codeSource.challengeId } });
-    const result: {execution: {out: string, err: string, ret: number}[]} = await execLang(
-      lang[codeSource.lang], codeSource.code, tests,
-    );
-    return result.execution.map((test, index) => ({
-      name: tests[index].name,
-      pass: tests[index].out === test.out
-          && tests[index].err === test.err
-          && tests[index].ret === test.ret,
-    }));
+    const codeSource = await this.codeSourceService.submitCodeSource(user.id, codeSourceDto);
+    const tests = await this.testService.tests({
+      where: { challengeId: codeSourceDto.challengeId },
+    });
+    return this.codeSourceService.executeTests(codeSource, tests);
   }
 }

@@ -17,8 +17,14 @@ enum Lang {
   ruby
 }
 
+enum Role {
+    user
+    admin
+}
+
 model User {
   id          Int          @default(autoincrement()) @id
+  role        Role
   name        String
   email       String       @unique
   password    String
@@ -55,6 +61,7 @@ model CodeSource {
   author      User      @relation(fields: [authorId], references: [id])
   authorId    Int
   lastResult  String?
+  passAllTest Bool      @default(false)
 
   @@unique([authorId, challengeId], name: "ux_codesource_author_challenge")
 }

@@ -9,7 +9,7 @@ type SupportedLangDictionary<T extends string> = {
   [K in T]: SupportedLangInfo;
 };
 
-export const lang: SupportedLangDictionary<Lang> = {
+export const supportedLangs: SupportedLangDictionary<Lang> = {
   c: { image: 'c_app', extension: 'c' },
   cpp: { image: 'cpp_app', extension: 'cpp' },
   go: { image: 'go_app', extension: 'go' },

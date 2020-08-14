@@ -102,7 +102,7 @@ export class CodeSourceService {
     this.prisma.codeSource.update({
       where: { ux_codesource_author_challenge: { challengeId, authorId } },
       data: {
-        code, lang, lastResult: testResult.toString(), passAllTest: failed === 0,
+        code, lang, lastResult: testResult.toString(), passAllTests: failed === 0,
       },
     });
     return testResult;

@@ -1,7 +1,9 @@
 import {
   Controller, Get, Request, Post, UseGuards, Body, ForbiddenException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth, ApiBody, ApiResponse, ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
@@ -21,6 +23,14 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiResponse({
+    description: 'Register a new user.',
+    type: 'stringsrc/modules/codesource/code-source.service.ts',
+  })
+  @ApiResponse({
+    description: 'Forbidden. Email already exists.',
+    status: 403,
+  })
   async register(
     @Body() userData: CreateUserDto,
   ): Promise<string> {

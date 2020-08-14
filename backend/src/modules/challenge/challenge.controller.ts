@@ -2,13 +2,12 @@ import {
   Controller, Post, Body, Get, Param, UseGuards, ParseIntPipe, Query, Delete, Put,
 } from '@nestjs/common';
 import { Challenge as ChallengeModel } from '@prisma/client';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AuthUserInterface } from '../../common/interface/auth-user.interface';
-import { UpdateTestDto } from '../../common/dto/update-test.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 
 @ApiTags('Challenge')
@@ -19,6 +18,10 @@ export class ChallengeController {
   ) {}
 
   @Get('challenge')
+  @ApiResponse({
+    description: 'Get paginated challenges',
+    isArray: true,
+  })
   async getChallenges(
     @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,

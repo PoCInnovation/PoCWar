@@ -3,7 +3,6 @@ import {
   Get,
   Param,
   Delete,
-  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { User as UserModel, Role as RoleType } from '@prisma/client';

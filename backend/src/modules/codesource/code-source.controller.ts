@@ -20,8 +20,8 @@ export class CodeSourceController {
     private readonly testService: TestService,
   ) {}
 
-  @ApiOperation({ summary: 'Submit a code.' })
-  @ApiCreatedResponse({ type: ChallengeResultResponse })
+  @ApiOperation({ summary: 'Execute tests from challenge to submitted code source.' })
+  @ApiCreatedResponse({ description: 'Tests successfully executed.', type: ChallengeResultResponse })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('code')

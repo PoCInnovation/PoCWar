@@ -3,7 +3,7 @@ import * as Docker from 'dockerode';
 import * as fse from 'fs-extra';
 import generateTests from './generate-tests';
 import { SupportedLangInfo } from '../common/constants/supported-langs';
-import { ExecutionResultInterface } from '../common/interface/challenge-result.interface';
+import { ExecutionResultInterface } from '../common/dto/challenge-result.dto';
 
 async function dockerRun(
   image: string, langExtension: string, sourceCode: string, testScript: string,

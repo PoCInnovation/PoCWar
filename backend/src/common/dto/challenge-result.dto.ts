@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export interface TestResultInterface {
   name: string;
   pass: boolean;
@@ -14,9 +16,16 @@ export interface ExecutionResultInterface {
   tests: OutputResultInterface[];
 }
 
-export interface ChallengeResultInterface {
+export class ChallengeResultResponse {
+  @ApiProperty()
   passed: number;
+
+  @ApiProperty()
   failed: number;
+
+  @ApiProperty()
   compilation: OutputResultInterface;
+
+  @ApiProperty()
   tests: TestResultInterface[];
 }

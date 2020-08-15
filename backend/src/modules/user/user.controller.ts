@@ -12,7 +12,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
-import { AuthUserInterface } from '../../common/interface/auth-user.interface';
+import { AuthUserDto } from '../../common/dto/auth-user.dto';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -36,7 +36,7 @@ export class UserController {
   }
 
   @Delete('user')
-  async delete(@AuthUser() user: AuthUserInterface): Promise<UserModel> {
+  async delete(@AuthUser() user: AuthUserDto): Promise<UserModel> {
     return this.userService.deleteUser({ id: user.id });
   }
 }

@@ -1,8 +1,11 @@
 import { Role } from '@prisma/client';
 
-export interface JwtPayloadInterface {
+export class AuthUserDto {
   id: string;
+
   email: string;
-  hash: string;
+
+  password: string;
+
   role: Role;
 }

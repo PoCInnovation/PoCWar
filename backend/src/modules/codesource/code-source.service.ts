@@ -11,9 +11,9 @@ import { SubmitCodeSourceDto } from '../../common/dto/submit-code-source.dto';
 import execLang from '../../execution/exec-lang';
 import { supportedLangs } from '../../common/constants/supported-langs';
 import {
-  ChallengeResultInterface,
+  ChallengeResultResponse,
   TestResultInterface,
-} from '../../common/interface/challenge-result.interface';
+} from '../../common/dto/challenge-result.dto';
 
 @Injectable()
 export class CodeSourceService {
@@ -73,7 +73,7 @@ export class CodeSourceService {
 
   async executeTests({
     lang, code, challengeId, authorId,
-  }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultInterface> {
+  }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultResponse> {
     const result = await execLang(
       supportedLangs[lang], code, tests,
     );
@@ -93,7 +93,7 @@ export class CodeSourceService {
         pass,
       };
     });
-    const testResult: ChallengeResultInterface = {
+    const testResult: ChallengeResultResponse = {
       passed,
       failed,
       compilation: result.compilation,

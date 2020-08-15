@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User, Role } from '@prisma/client';
+import { User } from '@prisma/client';
 import { UserService } from '../user/user.service';
-import { JwtPayloadInterface } from '../../common/interface/jwt-payload.interface';
 import { CreateUserDto } from '../../common/dto/create-user.dto';
+import { AuthUserDto } from '../../common/dto/auth-user.dto';
+import { LoginResponseDto } from '../../common/dto/response/login-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,22 +14,21 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.userService.user({ email });
+  async validateUser(email: string, pass: string): Promise<AuthUserDto> {
+    const user: AuthUserDto = await this.userService.user({ email });
     if (user && await bcrypt.compare(pass, user.password)) {
-      const { password, ...result } = user;
-      return result;
+      return user;
     }
     return null;
   }
 
-  login(payload: JwtPayloadInterface): { access_token: string } {
+  login(payload: AuthUserDto): LoginResponseDto {
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
   async register(userData: CreateUserDto): Promise<User> {
-    return this.userService.createUser({ ...userData, role: Role.user });
+    return this.userService.createUser(userData);
   }
 }

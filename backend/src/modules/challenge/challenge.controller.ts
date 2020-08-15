@@ -33,7 +33,7 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Get a paginated array of challenge.' })
   @Get('challenge')
-  @ApiResponse({ isArray: true, type: GetChallengeResponseDto })
+  @ApiOkResponse({ isArray: true, type: GetChallengeResponseDto })
   async getChallenges(
     @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,
@@ -77,18 +77,19 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Delete a challenge by slug.' })
   @ApiBearerAuth()
-  @ApiOkResponse({ description: 'Challenge successfully deleted.' })
+  @ApiOkResponse({ description: 'Challenge successfully deleted.', type: String })
   @UseGuards(JwtAuthGuard)
   @Delete('challenge/:slug')
   async deleteChallenge(
     @AuthUser() user: AuthUserDto, @Param('slug') slug: string,
-  ): Promise<ChallengeModel> {
-    return this.challengeService.deleteChallenge(user.id, slug);
+  ): Promise<string> {
+    const { name } = await this.challengeService.deleteChallenge(user.id, slug);
+    return `Challenge ${name} successfully deleted.`;
   }
 
   @ApiOperation({ summary: 'Update a challenge by slug' })
   @ApiBearerAuth()
-  @ApiOkResponse({ type: String })
+  @ApiOkResponse({ description: 'Challenge successfully updated.', type: String })
   @UseGuards(JwtAuthGuard)
   @Put('challenge/:slug')
   async updateChallenge(
@@ -96,7 +97,7 @@ export class ChallengeController {
       @Param('slug') slug: string,
       @Body() challengeDto: UpdateChallengeDto,
   ): Promise<string> {
-    await this.challengeService.updateChallenge(user.id, challengeDto, slug);
-    return 'Challenge updated';
+    const { name } = await this.challengeService.updateChallenge(user.id, challengeDto, slug);
+    return `Challenge ${name} successfully updated.`;
   }
 }

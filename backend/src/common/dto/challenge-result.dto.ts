@@ -1,19 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export interface TestResultInterface {
+export class TestResultClass {
   name: string;
+
   pass: boolean;
 }
 
-export interface OutputResultInterface {
+export class OutputResultClass {
   out: string;
+
   err: string;
+
   ret: number;
 }
 
-export interface ExecutionResultInterface {
-  compilation?: OutputResultInterface;
-  tests: OutputResultInterface[];
+export class ExecutionResultInterface {
+  compilation?: OutputResultClass;
+
+  tests: OutputResultClass[];
 }
 
 export class ChallengeResultResponse {
@@ -24,8 +28,8 @@ export class ChallengeResultResponse {
   failed: number;
 
   @ApiProperty()
-  compilation: OutputResultInterface;
+  compilation: OutputResultClass;
 
-  @ApiProperty()
-  tests: TestResultInterface[];
+  @ApiProperty({ isArray: true, type: TestResultClass })
+  tests: TestResultClass[];
 }

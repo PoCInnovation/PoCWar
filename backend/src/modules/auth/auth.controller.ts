@@ -27,7 +27,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Log in a user.' })
   @ApiBearerAuth()
   @ApiBody({ type: [CreateUserDto] })
-  @ApiOkResponse({ description: 'Successfully logged in.', type: LoginResponseDto })
+  @ApiCreatedResponse({ description: 'Successfully logged in.', type: LoginResponseDto })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req): Promise<LoginResponseDto> {

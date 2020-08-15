@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { User as UserModel, Role as RoleType } from '@prisma/client';
 import {
-  ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags,
+  ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -26,7 +26,8 @@ export class UserController {
   ) {}
 
   @ApiOperation({ summary: 'Get user by id.' })
-  @ApiOkResponse()
+  @ApiOkResponse({})
+  @ApiNotFoundResponse({ description: 'User not found.' })
   @Roles(RoleType.admin)
   @Get('user/:id')
   async getUserById(@Param('id') id: string): Promise<UserModel> {
@@ -42,9 +43,9 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Delete connected user.' })
-  @ApiCreatedResponse()
+  @ApiOkResponse({ description: 'User successfully deleted.' })
   @Delete('user')
-  async delete(@AuthUser() user: AuthUserDto): Promise<UserModel> {
-    return this.userService.deleteUser({ id: user.id });
+  async delete(@AuthUser() { id }: AuthUserDto): Promise<UserModel> {
+    return this.userService.deleteUser({ id });
   }
 }

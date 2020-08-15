@@ -12,7 +12,7 @@ import execLang from '../../execution/exec-lang';
 import { supportedLangs } from '../../common/constants/supported-langs';
 import {
   ChallengeResultResponse,
-  TestResultInterface,
+  TestResultClass,
 } from '../../common/dto/challenge-result.dto';
 
 @Injectable()
@@ -79,7 +79,7 @@ export class CodeSourceService {
     );
     let passed: number = 0;
     let failed: number = 0;
-    const formattedResult: TestResultInterface[] = result.tests.map((test, index) => {
+    const formattedResult: TestResultClass[] = result.tests.map((test, index) => {
       const pass = tests[index].out === test.out
         && tests[index].err === test.err
         && tests[index].ret === test.ret;

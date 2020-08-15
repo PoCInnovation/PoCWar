@@ -15,7 +15,7 @@ describe('UserController', () => {
   describe('getHello', () => {
     it('should return "Hello World!"', () => {
       const userController = user.get<UserController>(UserController);
-      expect(userController.getUserById(1)).toBe(null);
+      expect(userController.getUserById('')).toBe(null);
     });
   });
 });

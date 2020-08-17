@@ -11,9 +11,9 @@ import { SubmitCodeSourceDto } from '../../common/dto/submit-code-source.dto';
 import execLang from '../../execution/exec-lang';
 import { supportedLangs } from '../../common/constants/supported-langs';
 import {
-  ChallengeResultInterface,
-  TestResultInterface,
-} from '../../common/interface/challenge-result.interface';
+  ChallengeResultResponse,
+  TestResultClass,
+} from '../../common/dto/challenge-result.dto';
 
 @Injectable()
 export class CodeSourceService {
@@ -73,13 +73,13 @@ export class CodeSourceService {
 
   async executeTests({
     lang, code, challengeId, authorId,
-  }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultInterface> {
+  }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultResponse> {
     const result = await execLang(
       supportedLangs[lang], code, tests,
     );
     let passed: number = 0;
     let failed: number = 0;
-    const formattedResult: TestResultInterface[] = result.tests.map((test, index) => {
+    const formattedResult: TestResultClass[] = result.tests.map((test, index) => {
       const pass = tests[index].out === test.out
         && tests[index].err === test.err
         && tests[index].ret === test.ret;
@@ -93,7 +93,7 @@ export class CodeSourceService {
         pass,
       };
     });
-    const testResult: ChallengeResultInterface = {
+    const testResult: ChallengeResultResponse = {
       passed,
       failed,
       compilation: result.compilation,
@@ -102,7 +102,7 @@ export class CodeSourceService {
     this.prisma.codeSource.update({
       where: { ux_codesource_author_challenge: { challengeId, authorId } },
       data: {
-        code, lang, lastResult: testResult.toString(), passAllTest: failed === 0,
+        code, lang, lastResult: testResult.toString(), passAllTests: failed === 0,
       },
     });
     return testResult;

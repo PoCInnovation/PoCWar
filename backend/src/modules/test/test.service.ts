@@ -6,7 +6,6 @@ import {
   TestOrderByInput,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTestDto } from '../../common/dto/create-test.dto';
 
 @Injectable()
 export class TestService {

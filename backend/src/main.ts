@@ -12,6 +12,11 @@ async function bootstrap() {
     .setDescription('PoCWar API')
     .setVersion('1.0')
     .addTag('poc')
+    .addBearerAuth({
+      type: 'apiKey',
+      bearerFormat: 'JWT',
+      scheme: 'bearer',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('openapi', app, document);

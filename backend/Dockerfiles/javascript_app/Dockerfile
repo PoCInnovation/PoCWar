@@ -1,6 +1,6 @@
-FROM node
+FROM alpine:3.12.0
 
-RUN apk add --no-cache node
+RUN apk add --no-cache node jq
 
 WORKDIR /execution
 

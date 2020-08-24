@@ -7,7 +7,7 @@ import Container from '@material-ui/core/Container';
 import theme from '../consts/themes';
 import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
-import { signin, signinGmail } from '../firebase/sign';
+import { signin } from '../hooks/login';
 import GoogleLogoSvg from '../assets/google/google_logo.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 async function onSignin(history, signinMethod, params = {}) {
   const err = await signinMethod(...(Object.values(params)));
-
+  console.log(__filename, err);
   if (err === null) {
     history.push(homeRoute);
   } else {
@@ -95,7 +95,6 @@ function GmailSigninButton() {
       variant='contained'
       className={classes.googleSignin}
       onClick={async () => {
-        await onSignin(history, signinGmail);
       }}
     >
       <img src={GoogleLogoSvg} alt='GoogleLogoSvg' className={classes.googleLogo} />
@@ -141,7 +140,6 @@ export default function SignInContainer() {
           }}
         />
         <SigninButton />
-        <GmailSigninButton />
       </Paper>
     </Container>
   );

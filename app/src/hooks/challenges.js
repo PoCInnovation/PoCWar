@@ -11,13 +11,12 @@ export default function useChallenges() {
     async function fetchData() {
       let data = null;
       try {
-        await axios.get(server + '/challenge/all')
-          .then((response) => {
-            data = response.data;
-            console.log(data);
-          }).catch((e) => {
-            console.log(e);
-          })
+        await axios.get(server + '/challenge?page=1&pageSize=20')
+        .then((response) => {
+          data = response.data;
+        }).catch((e) => {
+          console.log(e);
+        })
       } catch (e) {
         setError(true);
       }

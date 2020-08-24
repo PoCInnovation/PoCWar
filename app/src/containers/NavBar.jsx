@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { Typography } from '@material-ui/core';
 import PocWarLogo from '../components/Logo/PocWarLogo';
 import { LogButton } from '../components/LogButtons';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(() => ({
   root: {

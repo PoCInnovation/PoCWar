@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { server } from './server';
 import axios from 'axios';
 
-export default function useChallenge(id) {
+export default function useChallenge(slug) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [challenge, setChallenge] = useState(null);
@@ -11,10 +11,9 @@ export default function useChallenge(id) {
     async function fetchData() {
       let data = null;
       try {
-        await axios.get(server + '/challenge/' + id)
+        await axios.get(server + '/challenge/' + slug)
           .then((response) => {
             data = response.data;
-            console.log(data)
           }).catch((e) => {
             console.log(e);
           })
@@ -25,7 +24,7 @@ export default function useChallenge(id) {
       setChallenge(data);
     }
     fetchData();
-  }, [id]);
+  }, [slug]);
 
   return {
     error,

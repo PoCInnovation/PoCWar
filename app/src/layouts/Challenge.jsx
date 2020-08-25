@@ -7,9 +7,7 @@ import { Grid } from '@material-ui/core';
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
-import axios from 'axios';
-import apiEndpoint from '../consts/apiEndpoint';
-import languages from '../consts/languages';
+import { submitCode } from '../hooks/submit';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -26,7 +24,7 @@ export default function ChallengeLayout() {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
   const c = useChallenge(challengeID);
-  console.log(challengeID, c);
+  console.log('here', challengeID, c);
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
@@ -72,21 +70,9 @@ export default function ChallengeLayout() {
             editValue={editValue}
             isSubmiting={isSubmiting}
             onClickSubmit={async () => {
-              try {
-                setIsSubmiting(true);
-                const res = await axios.post(new URL(languages[language], apiEndpoint), { 'code': editValue });
-                var stdout = res.data.stdout.replace(/\n+$/, "");
-                var stderr = res.data.stderr.replace(/\n+$/, "");
-                setStdout(stdout);
-                setStderr(stderr);
-                if (stdout === d.output_example) {
-                  alert('Your output is identical to the expected output');
-                }
-              } catch (e) {
-                alert(e.response.data.error ? e.response.data.error : e);
-              } finally {
-                setIsSubmiting(false);
-              }
+              const res = await submitCode(c.challenge, language, editValue);
+              setStderr(res.compilation.err);
+              setStdout(res.compilation.out);
             }} />
         </Grid>
       </Grid>

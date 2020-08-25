@@ -14,10 +14,9 @@ export default function ChallengeList() {
   } else {
     challenges = [];
     let i = 0;
-    console.log(data);
     data.challenges.forEach((chall) => {
       challenges.push(
-        <ChallengeDescription key={i} title={chall.data.title} category={chall.data.category} id={chall.id} />
+        <ChallengeDescription key={i} title={chall.name} category={chall.category} slug={chall.slug} />
       );
       i += 1;
     })

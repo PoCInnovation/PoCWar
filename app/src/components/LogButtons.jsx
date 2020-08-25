@@ -2,9 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { loginRoute, homeRoute } from '../consts/routes';
-import { signout } from '../firebase/sign';
-import { app } from '../firebase/core';
 import { useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 // textTransform: 'none',
 
@@ -22,12 +21,11 @@ export function LoginButton() {
 }
 
 export function LogoutButton() {
-  const user = app.auth().currentUser;
+  const user = JSON.parse(Cookies.get('user'));
   const history = useHistory();
-
   return (
     <Button color='inherit' onClick={async () => {
-      await signout();
+      Cookies.remove('user');
       history.push(homeRoute);
     }}>
       {user.email}
@@ -40,7 +38,7 @@ export function LogButton() {
   if (location.pathname === loginRoute) {
     return <div></div>;
   }
-  if (app.auth().currentUser === null) {
+  if (Cookies.get('user') === undefined) {
     return <LoginButton />;
   } else {
     return <LogoutButton />;

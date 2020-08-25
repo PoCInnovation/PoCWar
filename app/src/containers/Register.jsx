@@ -7,8 +7,7 @@ import Container from '@material-ui/core/Container';
 import theme from '../consts/themes';
 import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
-import { signin } from '../hooks/auth';
-import GoogleLogoSvg from '../assets/google/google_logo.svg';
+import { register, signin } from '../hooks/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,16 +51,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export async function onSignin(history, signinMethod, params = {}) {
-  const err = await signinMethod(...(Object.values(params)));
-  if (err === null) {
-    history.push(homeRoute);
+async function onRegister(history, registerMethod, params = {}) {
+  const err = await registerMethod(...(Object.values(params)));
+  if (err !== null) {
+    alert('invalid register: ' + err.message + ' [' + err.code + ']');
   } else {
-    alert('invalid signin: ' + err.message + ' [' + err.code + ']');
+    history.push(homeRoute);
   }
+  return (err)
 }
 
-function SigninButton() {
+function RegisterButton() {
   const history = useHistory();
   const classes = useStyles(theme);
 
@@ -75,10 +75,12 @@ function SigninButton() {
       onClick={async () => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        await onSignin(history, signin, { email, password });
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const name = document.getElementById('name').value;
+        await onRegister(history, register, { email, password, confirmPassword, name });
       }}
     >
-      Sign In
+      Register
     </Button>
   );
 }
@@ -90,34 +92,62 @@ export default function SignInContainer() {
     <Container component='main' maxWidth='xs'>
       <Paper className={classes.paper}>
       <TextField
-          variant='outlined'
-          margin='normal'
-          required
-          fullWidth
-          id='email'
-          label='Email Address'
-          name='email'
-          autoComplete='email'
-          autoFocus
-          InputProps={{
-            className: classes.input
-          }}
-        />
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required
-          fullWidth
-          name='password'
-          label='Password'
-          type='password'
-          id='password'
-          autoComplete='current-password'
-          InputProps={{
-            className: classes.input
-          }}
-        />
-        <SigninButton />
+        variant='outlined'
+        margin='normal'
+        required
+        fullWidth
+        id='email'
+        label='Email Address'
+        name='email'
+        autoComplete='email'
+        autoFocus
+        InputProps={{
+          className: classes.input
+        }}
+      />
+      <TextField
+        variant='outlined'
+        margin='normal'
+        required
+        fullWidth
+        id='name'
+        label='name'
+        name='name'
+        autoComplete='name'
+        autoFocus
+        InputProps={{
+          className: classes.input
+        }}
+      />
+      <TextField
+        variant='outlined'
+        margin='normal'
+        required
+        fullWidth
+        name='password'
+        label='Password'
+        type='password'
+        id='password'
+        autoComplete='current-password'
+        InputProps={{
+          className: classes.input
+        }}
+      />
+      <TextField
+        variant='outlined'
+        margin='normal'
+        required
+        fullWidth
+        name='confirmPassword'
+        label='Confirm password'
+        type='password'
+        id='confirmPassword'
+        autoComplete='confirm-password'
+        InputProps={{
+          className: classes.input
+        }}
+      />
+      <RegisterButton />
       </Paper>
     </Container>
   );

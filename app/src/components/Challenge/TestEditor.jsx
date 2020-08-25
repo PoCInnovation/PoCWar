@@ -23,20 +23,36 @@ function getValueFromFields(className) {
 export function getTestEditorValues() {
   const inputs = getValueFromFields('testInputs');
   const outputs = getValueFromFields('testOutputs');
+  const names = getValueFromFields('testNames');
   let data = [];
 
   for (let i = 0; i < inputs.length && i < outputs.length; i += 1) {
-    data.push({input: inputs[i], output: outputs[i]});
+    data.push({name: names[i], args: inputs[i].split(' '), out: outputs[i], err: "", ret: 0});
   }
   return (data);
 }
 
 export default function TestEditor(props) {
-  const [theme, setTheme] = useState('dracula');
+  const theme = useState('dracula');
   const classes = useStyles(theme);
 
   return (
     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+      <TextField
+        variant='outlined'
+        margin='normal'
+        label='Test name'
+        name='testName'
+        autoComplete='testName'
+        multiline
+        autoFocus
+        InputProps={{
+          className: `${classes.input} testNames`
+        }}
+        style={{
+          width: '30%'
+        }}
+      />
       <TextField
         variant='outlined'
         margin='normal'
@@ -49,7 +65,7 @@ export default function TestEditor(props) {
           className: `${classes.input} testInputs`
         }}
         style={{
-          width: '45%'
+          width: '30%'
         }}
       />
       <TextField
@@ -64,7 +80,7 @@ export default function TestEditor(props) {
           className: `${classes.input} testOutputs`
         }}
         style={{
-          width: '45%'
+          width: '30%'
         }}
       />
       <Fab color="primary" aria-label="delete" style={{marginTop: '15px'}} onClick={props.deleteFunction}>

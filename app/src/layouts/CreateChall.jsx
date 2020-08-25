@@ -10,6 +10,7 @@ import BackupIcon from '@material-ui/icons/Backup';
 import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
 import Fab from '@material-ui/core/Fab';
 import { app } from '../firebase/core';
+import Cookies from 'js-cookie';
 
 const nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
@@ -20,20 +21,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function submitChallenge() {
-  const data = {
-    "challenge": {
-      "title": document.getElementById('challNameField').value,
-      "category": document.getElementById('challCategoryField').value,
-      "description": document.getElementById('challDescriptionField').value,
-      "input_example": document.getElementById('challInputExampleField').value,
-      "output_example": document.getElementById('challOutputExampleField').value,
-      "date": Date.now(),
-      "tests": getTestEditorValues(),
-      "author": app.auth().currentUser.email
+  let auth = undefined;
+  try {
+    auth = {
+      Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`
     }
+  } catch (e) {
+    alert('You must be logged in to post a challenge.');
+    return;
   }
-  axios.post(server + '/challenge', data);
+  const data = {
+    "name": document.getElementById('challNameField').value,
+    "slug": document.getElementById('slugField').value,
+    "category": document.getElementById('challCategoryField').value,
+    "description": document.getElementById('challDescriptionField').value,
+    "input_example": document.getElementById('challInputExampleField').value,
+    "output_example": document.getElementById('challOutputExampleField').value,
+    "tests": getTestEditorValues(),
+    "author": JSON.parse(Cookies.get('user')).email
+  }
   console.log(data);
+  axios.post(server + '/challenge', data, {headers: auth});
 }
 
 function addTests(list, setList) {
@@ -98,6 +106,18 @@ export default function CreateChallLayout() {
             label='Challenge category'
             name='category'
             autoComplete='category'
+            autoFocus
+            InputProps={{
+              className: classes.input
+            }}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            id='slugField'
+            label='Slug'
+            name='slug'
+            autoComplete='slug'
             autoFocus
             InputProps={{
               className: classes.input

@@ -6,3 +6,4 @@ export const editChallRoute = "/challenge/edit";
 export const editorRoute = "/editor";
 export const loginRoute = "/login";
 export const homeRoute = "/";
+export const registerRoute = "/register";

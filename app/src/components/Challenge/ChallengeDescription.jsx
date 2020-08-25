@@ -23,17 +23,17 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function challengeOnClick(history, id) {
+function challengeOnClick(history, slug) {
   history.push({
     pathname: editorRoute,
-    search: `?challengeID=${id}`,
+    search: `?challengeID=${slug}`,
   });
 }
 
-export default function ChallengeDescription({ title, category, id }) {
+export default function ChallengeDescription({ title, category, slug }) {
   const classes = useStyles();
   let history = useHistory();
-  const onClick = () => { challengeOnClick(history, id) };
+  const onClick = () => { challengeOnClick(history, slug) };
 
   return (
     <Grid container justify='space-between' alignItems='center'>

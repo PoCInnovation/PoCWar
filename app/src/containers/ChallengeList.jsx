@@ -7,7 +7,6 @@ import useChallenges from '../hooks/challenges';
 export default function ChallengeList() {
   let challenges = null
   const data = useChallenges();
-
   if (data.loading === true) {
     challenges = <CircularProgress color='secondary' />;
   } else if (data.error || data.challenges === null || data.challenges.length === 0) {
@@ -15,10 +14,9 @@ export default function ChallengeList() {
   } else {
     challenges = [];
     let i = 0;
-    data.challenges.forEach((c) => {
-      const data = c.data();
+    data.challenges.forEach((chall) => {
       challenges.push(
-        <ChallengeDescription key={i} title={data.title} category={data.category} id={c.id} />
+        <ChallengeDescription key={i} title={chall.name} category={chall.category} slug={chall.slug} />
       );
       i += 1;
     })

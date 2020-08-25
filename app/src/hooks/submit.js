@@ -2,9 +2,9 @@ import axios from 'axios';
 import { server } from './server';
 import Cookies from 'js-cookie';
 
-export async function submit(chall, lang, code) {
+export async function submitCode(chall, lang, code) {
   const auth = `Bearer ${JSON.parse(Cookies.get('user')).token}`;
-  const res = undefined;
+  let res = undefined;
   console.log({
     lang: lang,
     code: code,

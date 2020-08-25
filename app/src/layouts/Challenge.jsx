@@ -7,7 +7,7 @@ import { Grid } from '@material-ui/core';
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
-import { submit } from '../hooks/submit';
+import { submitCode } from '../hooks/submit';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -70,7 +70,7 @@ export default function ChallengeLayout() {
             editValue={editValue}
             isSubmiting={isSubmiting}
             onClickSubmit={async () => {
-              const res = await submit(c.challenge, language, editValue);
+              const res = await submitCode(c.challenge, language, editValue);
               setStderr(res.compilation.err);
               setStdout(res.compilation.out);
             }} />

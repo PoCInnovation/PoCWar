@@ -13,3 +13,17 @@ export async function signin(email, password) {
     })
   return (err);
 }
+
+export async function register(email, password, confirmPassword, name) {
+  if (password !== confirmPassword) {
+    return 'Different passwords';
+  }
+  let err = null;
+  await axios.post(server + '/register', {email: email, password: password, name: name})
+    .then((response) => {
+    }).catch((e) => {
+      console.log(e);
+      err = e
+    })
+  return (err);
+}

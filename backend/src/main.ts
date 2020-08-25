@@ -18,6 +18,7 @@ async function bootstrap() {
       scheme: 'bearer',
     })
     .build();
+  app.enableCors();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('openapi', app, document);
 

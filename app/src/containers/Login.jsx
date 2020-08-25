@@ -8,7 +8,6 @@ import theme from '../consts/themes';
 import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
 import { signin } from '../hooks/auth';
-import GoogleLogoSvg from '../assets/google/google_logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,12 +52,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export async function onSignin(history, signinMethod, params = {}) {
-  const err = await signinMethod(...(Object.values(params)));
-  if (err === null) {
-    history.push(homeRoute);
-  } else {
-    alert('invalid signin: ' + err.message + ' [' + err.code + ']');
-  }
+  return signinMethod(...(Object.values(params)))
+    .then(() => {
+      history.push(homeRoute);
+    })
+    .catch((err) => {
+      console.error(err);
+      alert('invalid signin: ' + err.message + ' [' + err.code + ']');
+    });
 }
 
 function SigninButton() {

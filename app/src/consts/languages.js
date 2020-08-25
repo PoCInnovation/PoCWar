@@ -1,7 +1,10 @@
 const languages = {
     javascript: "javascript",
     python: "python",
-    c_cpp: "clang"
+    c: "c_cpp",
+    cpp: "c_cpp",
+    ruby: "ruby",
+    rust: "rust"
 };
 
 export default languages;

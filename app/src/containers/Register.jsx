@@ -52,13 +52,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function onRegister(history, registerMethod, params = {}) {
-  const err = await registerMethod(...(Object.values(params)));
-  if (err !== null) {
-    alert('invalid register: ' + err.message + ' [' + err.code + ']');
-  } else {
-    history.push(homeRoute);
-  }
-  return (err)
+  return registerMethod(...(Object.values(params)))
+    .then(() => {
+      history.push(homeRoute);
+    })
+    .catch((err) => {
+      console.error(err);
+      alert('invalid register: ' + err.message + ' [' + err.code + ']');
+    });
 }
 
 function RegisterButton() {

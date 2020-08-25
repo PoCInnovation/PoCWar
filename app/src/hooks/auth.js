@@ -1,29 +1,16 @@
-import { server } from './server';
+import { http } from '../utils/server';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 
 export async function signin(email, password) {
-  let err = null;
-  await axios.post(server + '/login', {email: email, password: password})
+  return http.post('/login', { email, password })
     .then((response) => {
-      Cookies.set('user', {token: response.data.access_token, email: email});
-    }).catch((e) => {
-      console.log(e);
-      err = e
+      Cookies.set('user', { token: response.data.access_token, email });
     })
-  return (err);
 }
 
 export async function register(email, password, confirmPassword, name) {
   if (password !== confirmPassword) {
-    return 'Different passwords';
+    throw Error('Different passwords');
   }
-  let err = null;
-  await axios.post(server + '/register', {email: email, password: password, name: name})
-    .then((response) => {
-    }).catch((e) => {
-      console.log(e);
-      err = e
-    })
-  return (err);
+  return http.post('/register', { email, password, name });
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { server } from './server';
-import axios from 'axios';
+import { http } from '../utils/server';
 
 export default function useChallenge(slug) {
   const [error, setError] = useState(false);
@@ -11,7 +10,7 @@ export default function useChallenge(slug) {
     async function fetchData() {
       let data = null;
       try {
-        await axios.get(server + '/challenge/' + slug)
+        await http.get(`/challenge/${slug}`)
           .then((response) => {
             data = response.data;
           }).catch((e) => {

@@ -14,6 +14,7 @@ import {
   loginRoute,
   registerRoute,
 } from './consts/routes';
+import 'dotenv/config';
 
 export default function App() {
   return (

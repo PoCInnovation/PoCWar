@@ -3,13 +3,11 @@ import NavBar from '../containers/NavBar';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
-import axios from 'axios';
-import { server } from '../hooks/server';
+import { http } from '../utils/server';
 import AddIcon from '@material-ui/icons/Add';
 import BackupIcon from '@material-ui/icons/Backup';
 import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
 import Fab from '@material-ui/core/Fab';
-import { app } from '../firebase/core';
 import Cookies from 'js-cookie';
 
 const nbOfTests = [1];
@@ -41,7 +39,7 @@ function submitChallenge() {
     "author": JSON.parse(Cookies.get('user')).email
   }
   console.log(data);
-  axios.post(server + '/challenge', data, {headers: auth});
+  http.post('/challenge', data, { headers: auth });
 }
 
 function addTests(list, setList) {
@@ -58,7 +56,7 @@ function deleteTest(list, setList) {
 }
 
 function TestList(props) {
-  const items = props.tests.map((i) => 
+  const items = props.tests.map((i) =>
       <div key={i.toString()} id="testList">
         <TestEditor deleteFunction={props.deleteFunction} />
       </div>
@@ -124,7 +122,7 @@ export default function CreateChallLayout() {
             }}
           />
         </div>
-        
+
         <div style={{marginRight: '10px', width: '100%'}}>
           <TextField
             variant='outlined'

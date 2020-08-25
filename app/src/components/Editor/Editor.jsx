@@ -9,12 +9,13 @@ import { makeStyles } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
 import editorThemes from '../../consts/editorThemes';
 import autocompleteLanguages from '../../consts/autoComplete';
+import languages from '../../consts/languages';
 
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
 
 autocompleteLanguages.forEach((lang) => {
-  require(`ace-builds/src-noconflict/mode-${lang}`);
-  require(`ace-builds/src-noconflict/snippets/${lang}`);
+  require(`ace-builds/src-noconflict/mode-${languages[lang]}`);
+  require(`ace-builds/src-noconflict/snippets/${languages[lang]}`);
 });
 
 

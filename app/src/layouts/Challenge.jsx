@@ -8,6 +8,7 @@ import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
 import { submitCode } from '../hooks/submit';
+import TestResultList from '../containers/TestResultList';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -24,7 +25,6 @@ export default function ChallengeLayout() {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
   const c = useChallenge(challengeID);
-  console.log('here', challengeID, c);
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
@@ -32,6 +32,8 @@ export default function ChallengeLayout() {
   const [editValue, setEditValue] = useState('');
   const [stdout, setStdout] = useState('');
   const [stderr, setStderr] = useState('');
+  const [testsResult, setTestResult] = useState('');
+  const [testsList, setTestList] = useState(undefined);
   const [isSubmiting, setIsSubmiting] = useState(false);
 
   window.onload = () => {
@@ -59,6 +61,7 @@ export default function ChallengeLayout() {
         <Grid item xs={12} sm={4}>
           <StatingDisplay title={d.title} inputExample={d.input_example} outputExample={d.output_example} stating={d.description} />
           <StdLog stdout={stdout} stderr={stderr}></StdLog>
+          <TestResultList tests={testsList}/>
         </Grid>
         <Grid item xs={12} sm={8}>
         <Editor language={language} theme={theme} editValue={editValue} setEditValue={onEditorChange} />
@@ -71,8 +74,15 @@ export default function ChallengeLayout() {
             isSubmiting={isSubmiting}
             onClickSubmit={async () => {
               const res = await submitCode(c.challenge, language, editValue);
-              setStderr(res.compilation.err);
-              setStdout(res.compilation.out);
+              if (res === undefined) {
+                return;
+              }
+              if (res.compilation !== undefined) {
+                setStderr(res.compilation.err);
+                setStdout(res.compilation.out);
+              }
+              setTestResult({passed: res.passed, failed: res.failed});
+              setTestList(res.tests);
             }} />
         </Grid>
       </Grid>

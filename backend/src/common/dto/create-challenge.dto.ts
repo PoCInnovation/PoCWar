@@ -18,6 +18,25 @@ export class CreateChallengeDto {
   @ApiProperty()
   slug: string;
 
+  @IsString()
+  @MaxLength(500)
+  @ApiProperty()
+  description: string;
+
+  @IsString()
+  @ApiProperty()
+  input_example: string;
+
+  @IsString()
+  @ApiProperty()
+  output_example: string;
+
+  @IsString()
+  @MinLength(4)
+  @MaxLength(50)
+  @ApiProperty()
+  category: string;
+
   @IsArray()
   @ValidateNested({ each: true })
   @ArrayMinSize(1)

@@ -46,12 +46,16 @@ export class ChallengeService {
   }
 
   async createChallenge(
-    userId: string, { name, slug, tests }: CreateChallengeDto,
+    userId: string, { name, slug, tests, description, input_example, output_example, category }: CreateChallengeDto,
   ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {
         name,
         slug,
+        description,
+        input_example,
+        output_example,
+        category,
         author: {
           connect: { id: userId },
         },

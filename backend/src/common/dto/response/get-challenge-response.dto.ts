@@ -9,4 +9,16 @@ export class GetChallengeResponseDto {
 
   @ApiProperty()
   slug: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
+  input_example: string;
+
+  @ApiProperty()
+  output_example: string;
+
+  @ApiProperty()
+  category: string;
 }

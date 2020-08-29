@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ThemeProvider } from '@material-ui/core';
 import ChallengeLayout from './layouts/Challenge';
 import HomeLayout from './layouts/Home';
 import LoginLayout from './layouts/Login';
 import RegisterLayout from './layouts/Register';
 import CreateChallLayout from './layouts/CreateChall';
-import { ThemeProvider } from '@material-ui/core';
 import theme from './consts/themes';
 import {
   createChallRoute,

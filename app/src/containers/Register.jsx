@@ -4,10 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import theme from '../consts/themes';
-import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
-import { register, signin } from '../hooks/auth';
+import theme from '../consts/themes';
+import { homeRoute } from '../consts/routes';
+import { register } from '../hooks/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#757575',
     fontWeight: 500,
     textTransform: 'none',
-  }
+  },
 }));
 
 async function onRegister(history, registerMethod, params = {}) {
@@ -58,7 +58,7 @@ async function onRegister(history, registerMethod, params = {}) {
     })
     .catch((err) => {
       console.error(err);
-      alert('invalid register: ' + err.message + ' [' + err.code + ']');
+      alert(`invalid register: ${err.message} [${err.code}]`);
     });
 }
 
@@ -78,7 +78,9 @@ function RegisterButton() {
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         const name = document.getElementById('name').value;
-        await onRegister(history, register, { email, password, confirmPassword, name });
+        await onRegister(history, register, {
+          email, password, confirmPassword, name,
+        });
       }}
     >
       Register
@@ -92,63 +94,63 @@ export default function SignInContainer() {
   return (
     <Container component='main' maxWidth='xs'>
       <Paper className={classes.paper}>
-      <TextField
-        variant='outlined'
-        margin='normal'
-        required
-        fullWidth
-        id='email'
-        label='Email Address'
-        name='email'
-        autoComplete='email'
-        autoFocus
-        InputProps={{
-          className: classes.input
-        }}
-      />
-      <TextField
-        variant='outlined'
-        margin='normal'
-        required
-        fullWidth
-        id='name'
-        label='name'
-        name='name'
-        autoComplete='name'
-        autoFocus
-        InputProps={{
-          className: classes.input
-        }}
-      />
-      <TextField
-        variant='outlined'
-        margin='normal'
-        required
-        fullWidth
-        name='password'
-        label='Password'
-        type='password'
-        id='password'
-        autoComplete='current-password'
-        InputProps={{
-          className: classes.input
-        }}
-      />
-      <TextField
-        variant='outlined'
-        margin='normal'
-        required
-        fullWidth
-        name='confirmPassword'
-        label='Confirm password'
-        type='password'
-        id='confirmPassword'
-        autoComplete='confirm-password'
-        InputProps={{
-          className: classes.input
-        }}
-      />
-      <RegisterButton />
+        <TextField
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          id='email'
+          label='Email Address'
+          name='email'
+          autoComplete='email'
+          autoFocus
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <TextField
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          id='name'
+          label='name'
+          name='name'
+          autoComplete='name'
+          autoFocus
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <TextField
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          name='password'
+          label='Password'
+          type='password'
+          id='password'
+          autoComplete='current-password'
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <TextField
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          name='confirmPassword'
+          label='Confirm password'
+          type='password'
+          id='confirmPassword'
+          autoComplete='confirm-password'
+          InputProps={{
+            className: classes.input,
+          }}
+        />
+        <RegisterButton />
       </Paper>
     </Container>
   );

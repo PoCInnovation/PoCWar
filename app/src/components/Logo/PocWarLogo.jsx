@@ -1,8 +1,8 @@
 import React from 'react';
-import DarkLogo from '../../assets/dark-logo.png';
-import LightLogo from '../../assets/light-logo.png';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import DarkLogo from '../../assets/dark-logo.png';
+import LightLogo from '../../assets/light-logo.png';
 import { homeRoute } from '../../consts/routes';
 
 const useStyles = makeStyles(() => ({

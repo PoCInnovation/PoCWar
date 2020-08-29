@@ -1,43 +1,43 @@
 import React, { useState } from 'react';
-import NavBar from '../containers/NavBar';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
-import { http } from '../utils/server';
 import AddIcon from '@material-ui/icons/Add';
 import BackupIcon from '@material-ui/icons/Backup';
-import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
 import Fab from '@material-ui/core/Fab';
 import Cookies from 'js-cookie';
+import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
+import { http } from '../utils/server';
+import NavBar from '../containers/NavBar';
 
 const nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
   input: {
     color: theme.palette.primary.A100,
     borderColor: theme.palette.primary.A100,
-  }
+  },
 }));
 
 function submitChallenge() {
-  let auth = undefined;
+  let auth;
   try {
     auth = {
-      Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`
-    }
+      Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`,
+    };
   } catch (e) {
     alert('You must be logged in to post a challenge.');
     return;
   }
   const data = {
-    "name": document.getElementById('challNameField').value,
-    "slug": document.getElementById('slugField').value,
-    "category": document.getElementById('challCategoryField').value,
-    "description": document.getElementById('challDescriptionField').value,
-    "input_example": document.getElementById('challInputExampleField').value,
-    "output_example": document.getElementById('challOutputExampleField').value,
-    "tests": getTestEditorValues(),
-    "author": JSON.parse(Cookies.get('user')).email
-  }
+    name: document.getElementById('challNameField').value,
+    slug: document.getElementById('slugField').value,
+    category: document.getElementById('challCategoryField').value,
+    description: document.getElementById('challDescriptionField').value,
+    input_example: document.getElementById('challInputExampleField').value,
+    output_example: document.getElementById('challOutputExampleField').value,
+    tests: getTestEditorValues(),
+    author: JSON.parse(Cookies.get('user')).email,
+  };
   console.log(data);
   http.post('/challenge', data, { headers: auth });
 }
@@ -55,12 +55,12 @@ function deleteTest(list, setList) {
   setList(list.concat());
 }
 
-function TestList(props) {
-  const items = props.tests.map((i) =>
-      <div key={i.toString()} id="testList">
-        <TestEditor deleteFunction={props.deleteFunction} />
-      </div>
-    );
+function TestList({ tests, deleteFunction }) {
+  const items = tests.map((i) => (
+    <div key={i.toString()} id='testList'>
+      <TestEditor deleteFunction={deleteFunction} />
+    </div>
+  ));
   return (
     <div>
       <FormLabel>Tests</FormLabel>
@@ -71,19 +71,20 @@ function TestList(props) {
 
 export default function CreateChallLayout() {
   const [theme, setTheme] = useState('dracula');
-  let [list, setList] = useState(nbOfTests);
+  const [list, setList] = useState(nbOfTests);
   const classes = useStyles(theme);
 
   return (
     <div>
       <NavBar />
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           width: '35%',
           margin: '0px 10px',
-        }}>
+        }}
+        >
           <TextField
             variant='outlined'
             margin='normal'
@@ -94,7 +95,7 @@ export default function CreateChallLayout() {
             autoComplete='challName'
             autoFocus
             InputProps={{
-              className: classes.input
+              className: classes.input,
             }}
           />
           <TextField
@@ -106,7 +107,7 @@ export default function CreateChallLayout() {
             autoComplete='category'
             autoFocus
             InputProps={{
-              className: classes.input
+              className: classes.input,
             }}
           />
           <TextField
@@ -118,12 +119,12 @@ export default function CreateChallLayout() {
             autoComplete='slug'
             autoFocus
             InputProps={{
-              className: classes.input
+              className: classes.input,
             }}
           />
         </div>
 
-        <div style={{marginRight: '10px', width: '100%'}}>
+        <div style={{ marginRight: '10px', width: '100%' }}>
           <TextField
             variant='outlined'
             margin='normal'
@@ -136,11 +137,11 @@ export default function CreateChallLayout() {
             fullWidth
             rows={15}
             InputProps={{
-              className: classes.input
+              className: classes.input,
             }}
           />
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <TextField
                 variant='outlined'
                 margin='normal'
@@ -151,10 +152,10 @@ export default function CreateChallLayout() {
                 required
                 autoFocus
                 InputProps={{
-                  className: classes.input
+                  className: classes.input,
                 }}
                 style={{
-                  width: '49%'
+                  width: '49%',
                 }}
               />
               <TextField
@@ -167,24 +168,24 @@ export default function CreateChallLayout() {
                 required
                 autoFocus
                 InputProps={{
-                  className: classes.input
+                  className: classes.input,
                 }}
                 style={{
-                  width: '49%'
+                  width: '49%',
                 }}
               />
             </div>
-            <br/>
+            <br />
             <div>
               <TestList tests={list} deleteFunction={() => deleteTest(list, setList)} />
-              <Fab color="primary" aria-label="add" onClick={() => addTests(list, setList)}>
+              <Fab color='primary' aria-label='add' onClick={() => addTests(list, setList)}>
                 <AddIcon />
               </Fab>
             </div>
           </div>
         </div>
       </div>
-      <Fab color="primary" aria-label="submit" onClick={submitChallenge} style={{position: 'absolute', bottom: '15px', right: '15px'}}>
+      <Fab color='primary' aria-label='submit' onClick={submitChallenge} style={{ position: 'absolute', bottom: '15px', right: '15px' }}>
         <BackupIcon />
       </Fab>
     </div>

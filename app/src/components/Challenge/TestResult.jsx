@@ -1,6 +1,6 @@
 import React from 'react';
-import { Paper, Grid } from '@material-ui/core';
-import { makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles } from '@material-ui/core';
+
 import theme from '../../consts/themes';
 
 const useStyles = makeStyles(() => ({
@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: '2%',
     background: theme.palette.primary.main,
     alignItems: 'center',
-    margin: '2%'
+    margin: '2%',
   },
   title: {
     float: 'left',
@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   category: {
     float: 'right',
     marginRight: '5%',
-  }
+  },
 }));
 
 export default function TestResult({ name, state }) {

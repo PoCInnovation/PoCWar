@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { http } from '../utils/server';
 
 export default function useChallenge(slug) {
@@ -15,7 +15,7 @@ export default function useChallenge(slug) {
             data = response.data;
           }).catch((e) => {
             console.log(e);
-          })
+          });
       } catch (e) {
         setError(true);
       }

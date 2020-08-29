@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router-dom';
-import { registerRoute } from '../consts/routes';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { registerRoute } from '../consts/routes';
+
 
 // textTransform: 'none',
 
@@ -23,11 +23,10 @@ export function RegButton() {
 export function RegisterButton() {
   const location = useLocation();
   if (location.pathname === registerRoute) {
-    return <div></div>;
+    return <div />;
   }
   if (Cookies.get('user') === undefined) {
     return <RegButton />;
-  } else {
-    return <div></div>;
   }
+  return <div />;
 }

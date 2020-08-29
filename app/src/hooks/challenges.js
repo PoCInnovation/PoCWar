@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { http } from '../utils/server';
 
 export default function useChallenges() {
@@ -11,11 +11,11 @@ export default function useChallenges() {
       let data = null;
       try {
         await http.get('/challenge?page=1&pageSize=20')
-        .then((response) => {
-          data = response.data;
-        }).catch((e) => {
-          console.log(e);
-        })
+          .then((response) => {
+            data = response.data;
+          }).catch((e) => {
+            console.log(e);
+          });
       } catch (e) {
         setError(true);
       }

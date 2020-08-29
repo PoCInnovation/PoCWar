@@ -8,13 +8,15 @@ const useStyles = makeStyles((theme) => ({
   input: {
     color: theme.palette.primary.A100,
     borderColor: theme.palette.primary.A100,
-  }
+  },
 }));
 
 function getValueFromFields(className) {
-  let data = [];
+  const data = [];
 
-  for (let child of document.getElementsByClassName(className)) {
+  // TODO: replace by iterator
+  // eslint-disable-next-line no-restricted-syntax
+  for (const child of document.getElementsByClassName(className)) {
     data.push(child.childNodes[0].value);
   }
   return (data);
@@ -24,20 +26,22 @@ export function getTestEditorValues() {
   const inputs = getValueFromFields('testInputs');
   const outputs = getValueFromFields('testOutputs');
   const names = getValueFromFields('testNames');
-  let data = [];
+  const data = [];
 
   for (let i = 0; i < inputs.length && i < outputs.length; i += 1) {
-    data.push({name: names[i], args: inputs[i].split(' '), out: outputs[i], err: "", ret: 0});
+    data.push({
+      name: names[i], args: inputs[i].split(' '), out: outputs[i], err: '', ret: 0,
+    });
   }
   return (data);
 }
 
-export default function TestEditor(props) {
+export default function TestEditor({ deleteFunction }) {
   const theme = useState('dracula');
   const classes = useStyles(theme);
 
   return (
-    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
       <TextField
         variant='outlined'
         margin='normal'
@@ -47,10 +51,10 @@ export default function TestEditor(props) {
         multiline
         autoFocus
         InputProps={{
-          className: `${classes.input} testNames`
+          className: `${classes.input} testNames`,
         }}
         style={{
-          width: '30%'
+          width: '30%',
         }}
       />
       <TextField
@@ -62,10 +66,10 @@ export default function TestEditor(props) {
         multiline
         autoFocus
         InputProps={{
-          className: `${classes.input} testInputs`
+          className: `${classes.input} testInputs`,
         }}
         style={{
-          width: '30%'
+          width: '30%',
         }}
       />
       <TextField
@@ -77,13 +81,13 @@ export default function TestEditor(props) {
         autoFocus
         multiline
         InputProps={{
-          className: `${classes.input} testOutputs`
+          className: `${classes.input} testOutputs`,
         }}
         style={{
-          width: '30%'
+          width: '30%',
         }}
       />
-      <Fab color="primary" aria-label="delete" style={{marginTop: '15px'}} onClick={props.deleteFunction}>
+      <Fab color='primary' aria-label='delete' style={{ marginTop: '15px' }} onClick={deleteFunction}>
         <DeleteIcon />
       </Fab>
     </div>

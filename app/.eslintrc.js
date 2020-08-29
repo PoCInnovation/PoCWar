@@ -5,8 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'airbnb',
-    'plugin:prettier/recommended',
+    'airbnb'
   ],
   globals: {
     Atomics: 'readonly',
@@ -23,6 +22,8 @@ module.exports = {
     'react',
   ],
   rules: {
-    'jsx-quotes': [2, 'prefer-single'],
+    'jsx-quotes': ['error', 'prefer-single'],
+    quotes: ['error', 'single'],
+    'react/prop-types': 'off'
   },
 };

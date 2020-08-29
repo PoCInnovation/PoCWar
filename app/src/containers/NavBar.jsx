@@ -30,7 +30,7 @@ export default function NavBar() {
     <AppBar className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <PocWarLogo className={classes.pocWarLogo} />
-        <Typography variant='h6' className={classes.title}/>
+        <Typography variant='h6' className={classes.title} />
         <LogButton />
         <RegisterButton />
       </Toolbar>

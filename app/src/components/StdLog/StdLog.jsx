@@ -6,11 +6,13 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import theme from '../../consts/themes';
 import { Paper } from '@material-ui/core';
+import theme from '../../consts/themes';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {
+    children, value, index, ...other
+  } = props;
 
   return (
     <div
@@ -61,8 +63,8 @@ export default function StdLog({ stdout, stderr }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  stdout = stdout.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  stderr = stderr.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formatStdout = stdout.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formatStderr = stderr.split('\n').map((item, i) => <p key={i}>{item}</p>);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -78,15 +80,15 @@ export default function StdLog({ stdout, stderr }) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Box className={classes.textBlock} color='text.primary'>
-          <Typography component={'span'} variant={'body2'}>
-            {stdout}
+          <Typography component='span' variant='body2'>
+            {formatStdout}
           </Typography>
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Box className={classes.textBlock} color='text.accent'>
-          <Typography component={'span'} variant={'body2'}>
-            {stderr}
+          <Typography component='span' variant='body2'>
+            {formatStderr}
           </Typography>
         </Box>
       </TabPanel>

@@ -1,11 +1,11 @@
 import React from 'react';
-import ChallengeDescription from '../components/Challenge/ChallengeDescription';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Grid } from '@material-ui/core';
+import ChallengeDescription from '../components/Challenge/ChallengeDescription';
 import useChallenges from '../hooks/challenges';
 
 export default function ChallengeList() {
-  let challenges = null
+  let challenges = null;
   const data = useChallenges();
   if (data.loading === true) {
     challenges = <CircularProgress color='secondary' />;
@@ -16,10 +16,15 @@ export default function ChallengeList() {
     let i = 0;
     data.challenges.forEach((chall) => {
       challenges.push(
-        <ChallengeDescription key={i} title={chall.name} category={chall.category} slug={chall.slug} />
+        <ChallengeDescription
+          key={i}
+          title={chall.name}
+          category={chall.category}
+          slug={chall.slug}
+        />,
       );
       i += 1;
-    })
+    });
   }
 
   return (

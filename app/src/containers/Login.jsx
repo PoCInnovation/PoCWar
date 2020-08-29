@@ -4,9 +4,9 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import theme from '../consts/themes';
-import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
+import theme from '../consts/themes';
+import { homeRoute } from '../consts/routes';
 import { signin } from '../hooks/auth';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#757575',
     fontWeight: 500,
     textTransform: 'none',
-  }
+  },
 }));
 
 export async function onSignin(history, signinMethod, params = {}) {
@@ -58,7 +58,7 @@ export async function onSignin(history, signinMethod, params = {}) {
     })
     .catch((err) => {
       console.error(err);
-      alert('invalid signin: ' + err.message + ' [' + err.code + ']');
+      alert(`invalid signin: ${err.message} [${err.code}]`);
     });
 }
 
@@ -90,7 +90,7 @@ export default function SignInContainer() {
   return (
     <Container component='main' maxWidth='xs'>
       <Paper className={classes.paper}>
-      <TextField
+        <TextField
           variant='outlined'
           margin='normal'
           required
@@ -101,7 +101,7 @@ export default function SignInContainer() {
           autoComplete='email'
           autoFocus
           InputProps={{
-            className: classes.input
+            className: classes.input,
           }}
         />
         <TextField
@@ -115,7 +115,7 @@ export default function SignInContainer() {
           id='password'
           autoComplete='current-password'
           InputProps={{
-            className: classes.input
+            className: classes.input,
           }}
         />
         <SigninButton />

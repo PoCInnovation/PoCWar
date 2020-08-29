@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
 import NavBar from '../containers/NavBar';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
-import { makeStyles, CircularProgress } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
@@ -40,53 +40,69 @@ export default function ChallengeLayout() {
     if (localStorage.getItem(challengeID) !== null) {
       setEditValue(localStorage.getItem(challengeID));
     }
-  }
+  };
 
   function onEditorChange(change) {
     setEditValue(change);
     localStorage.setItem(challengeID, change);
-  };
+  }
 
   if (c.loading === true) {
-    display = <>
-      <Grid className={classes.loading} container justify='center'>
-        <CircularProgress color='secondary' />;
-      </Grid>
-    </>
+    display = (
+      <>
+        <Grid className={classes.loading} container justify='center'>
+          <CircularProgress color='secondary' />
+          ;
+        </Grid>
+      </>
+    );
   } else if (c.challenge !== null) {
     const d = c.challenge;
     console.log(d);
-    display = <>
-      <Grid className={classes.gridRoot} container spacing={0}>
-        <Grid item xs={12} sm={4}>
-          <StatingDisplay title={d.title} inputExample={d.input_example} outputExample={d.output_example} stating={d.description} />
-          <StdLog stdout={stdout} stderr={stderr}></StdLog>
-          <TestResultList tests={testsList}/>
+    display = (
+      <>
+        <Grid className={classes.gridRoot} container spacing={0}>
+          <Grid item xs={12} sm={4}>
+            <StatingDisplay
+              title={d.title}
+              inputExample={d.input_example}
+              outputExample={d.output_example}
+              stating={d.description}
+            />
+            <StdLog stdout={stdout} stderr={stderr} />
+            <TestResultList tests={testsList} />
+          </Grid>
+          <Grid item xs={12} sm={8}>
+            <Editor
+              language={language}
+              theme={theme}
+              editValue={editValue}
+              setEditValue={onEditorChange}
+            />
+            <EditorSubBar
+              theme={theme}
+              setTheme={setTheme}
+              language={language}
+              setLanguage={setLanguage}
+              editValue={editValue}
+              isSubmiting={isSubmiting}
+              onClickSubmit={async () => {
+                const res = await submitCode(c.challenge, language, editValue);
+                if (res === undefined) {
+                  return;
+                }
+                if (res.compilation !== undefined) {
+                  setStderr(res.compilation.err);
+                  setStdout(res.compilation.out);
+                }
+                setTestResult({ passed: res.passed, failed: res.failed });
+                setTestList(res.tests);
+              }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={8}>
-        <Editor language={language} theme={theme} editValue={editValue} setEditValue={onEditorChange} />
-          <EditorSubBar
-            theme={theme}
-            setTheme={setTheme}
-            language={language}
-            setLanguage={setLanguage}
-            editValue={editValue}
-            isSubmiting={isSubmiting}
-            onClickSubmit={async () => {
-              const res = await submitCode(c.challenge, language, editValue);
-              if (res === undefined) {
-                return;
-              }
-              if (res.compilation !== undefined) {
-                setStderr(res.compilation.err);
-                setStdout(res.compilation.out);
-              }
-              setTestResult({passed: res.passed, failed: res.failed});
-              setTestList(res.tests);
-            }} />
-        </Grid>
-      </Grid>
-    </>
+      </>
+    );
   }
 
   return (

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Paper, Grid } from '@material-ui/core';
-import { makeStyles } from "@material-ui/core";
-import theme from '../../consts/themes';
+import { Paper, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import theme from '../../consts/themes';
 import { editorRoute } from '../../consts/routes';
 
 const useStyles = makeStyles(() => ({
@@ -20,7 +19,7 @@ const useStyles = makeStyles(() => ({
   category: {
     float: 'right',
     marginRight: '1%',
-  }
+  },
 }));
 
 function challengeOnClick(history, slug) {
@@ -32,8 +31,8 @@ function challengeOnClick(history, slug) {
 
 export default function ChallengeDescription({ title, category, slug }) {
   const classes = useStyles();
-  let history = useHistory();
-  const onClick = () => { challengeOnClick(history, slug) };
+  const history = useHistory();
+  const onClick = () => { challengeOnClick(history, slug); };
 
   return (
     <Grid container justify='space-between' alignItems='center'>
@@ -41,7 +40,7 @@ export default function ChallengeDescription({ title, category, slug }) {
         <Paper className={classes.challenge} onClick={onClick}>
           <p className={classes.title}>{title}</p>
           <p className={classes.category}>{category}</p>
-      </Paper>
+        </Paper>
       </Grid>
     </Grid>
   );

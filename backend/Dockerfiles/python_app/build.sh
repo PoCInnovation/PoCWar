@@ -7,8 +7,8 @@ if [ "$(head -c 2 $file)" != '#!' ]; then
     (echo "$shebang" && cat $file) > bin.out
 fi
 
-chmod 755 bin.out
+chmod +x bin.out
 
-chmod 755 exec.sh
+chmod +x exec.sh
 
 timeout 10s ./exec.sh

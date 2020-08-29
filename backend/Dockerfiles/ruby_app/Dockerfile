@@ -6,4 +6,6 @@ WORKDIR /execution
 
 COPY ./build.sh /tmp
 
+RUN chmod +x /tmp/build.sh
+
 CMD /tmp/build.sh

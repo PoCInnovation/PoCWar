@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -6,6 +5,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
 
   const options = new DocumentBuilder()
     .setTitle('PocWar')
@@ -18,7 +19,6 @@ async function bootstrap() {
       scheme: 'bearer',
     })
     .build();
-  app.enableCors();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('openapi', app, document);
 

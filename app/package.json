@@ -5,24 +5,24 @@
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "ace-builds": "^1.4.11",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "firebase": "^7.14.2",
     "js-cookie": "^2.2.1",
+    "material-ui": "^0.20.2",
     "material-ui-icons": "^1.0.0-beta.36",
     "react": "^16.13.1",
     "react-ace": "^8.1.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "serve": "^11.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
+    "prod": "react-scripts build && serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src --fix"
@@ -43,6 +43,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",

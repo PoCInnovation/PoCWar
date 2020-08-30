@@ -1,0 +1,11 @@
+{
+  "name": "pocwar",
+  "version": "0.0.1",
+  "private": true,
+  "description": "pocwar repository",
+  "homepage": "https://github.com/PoCFrance/PoCWar",
+  "scripts": {
+    "dev": "docker-compose up -d --build",
+    "stop": "docker-compose down --volumes"
+  }
+}

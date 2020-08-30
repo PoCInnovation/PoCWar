@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import { Typography } from '@material-ui/core';
 import PocWarLogo from '../components/Logo/PocWarLogo';
 import { LogButton } from '../components/LogButtons';
+import { RegisterButton } from '../components/RegisterButtons';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,8 +30,9 @@ export default function NavBar() {
     <AppBar className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <PocWarLogo className={classes.pocWarLogo} />
-        <Typography variant='h6' className={classes.title}/>
+        <Typography variant='h6' className={classes.title} />
         <LogButton />
+        <RegisterButton />
       </Toolbar>
     </AppBar>
   );

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Grid, FormControl, InputLabel, makeStyles, Select, MenuItem, Button, CircularProgress } from '@material-ui/core';
+import {
+  Grid, FormControl, InputLabel, makeStyles, Select, MenuItem, Button, CircularProgress,
+} from '@material-ui/core';
 import languages from '../consts/languages';
 import editorThemes from '../consts/editorThemes';
 import autocompleteLanguages from '../consts/autoComplete';
@@ -11,7 +13,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function EditorSubBar({ theme, setTheme, language, setLanguage, onClickSubmit, isSubmiting }) {
+export default function EditorSubBar({
+  theme, setTheme, language, setLanguage, onClickSubmit, isSubmiting,
+}) {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
   const localStorageLanguage = `${challengeID}_language`;
@@ -27,25 +31,28 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
     setTheme(localStorage.getItem(localStorageTheme));
   }
 
-  function onLanguageChange(ace_language) {
-    setLanguage(ace_language);
-    localStorage.setItem(localStorageLanguage, ace_language);
-  };
+  function onLanguageChange(aceLanguage) {
+    setLanguage(aceLanguage);
+    localStorage.setItem(localStorageLanguage, aceLanguage);
+  }
 
   function onThemeChange(theme) {
     setTheme(theme);
     localStorage.setItem(localStorageTheme, theme);
-  };
+  }
 
   if (isSubmiting) {
     submitButton = <CircularProgress color='secondary' />;
   } else {
-    submitButton = <Button
-      className={classes.formControl}
-      variant='contained'
-      onClick={onClickSubmit}>
-      Submit
-    </Button>
+    submitButton = (
+      <Button
+        className={classes.formControl}
+        variant='contained'
+        onClick={onClickSubmit}
+      >
+        Submit
+      </Button>
+    );
   }
 
   return (
@@ -58,7 +65,7 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
               labelId='change_label'
               id='change_form'
               value={theme}
-              onChange={(event) => { onThemeChange(event.target.value) }}
+              onChange={(event) => { onThemeChange(event.target.value); }}
             >
               {editorThemes.map((newthemes) => (
                 <MenuItem key={newthemes} value={newthemes}>
@@ -74,7 +81,7 @@ export default function EditorSubBar({ theme, setTheme, language, setLanguage, o
             <InputLabel>Language</InputLabel>
             <Select
               value={language}
-              onChange={(event) => { onLanguageChange(event.target.value) }}
+              onChange={(event) => { onLanguageChange(event.target.value); }}
             >
               {autocompleteLanguages.map((lang) => (
                 <MenuItem key={lang} value={lang}>

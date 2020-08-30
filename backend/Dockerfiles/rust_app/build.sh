@@ -1,13 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-USER='user' cargo init
+rustc code.rs -o bin.out
 
-mv code.rs src/main.rs
-
-cargo build --release
-
-mv ./target/release/execution ./bin.out
-
-chmod 755 exec.sh
+chmod +x exec.sh
 
 timeout 10s ./exec.sh

@@ -1,9 +1,7 @@
-FROM golang
+FROM c_app
 
-WORKDIR /execution
+RUN apk add --no-cache go
 
-COPY ./build.sh /tmp/
+COPY ./build.sh /tmp
 
-RUN chmod 755 /tmp/build.sh
-
-CMD /tmp/build.sh
+RUN chmod +x /tmp/build.sh

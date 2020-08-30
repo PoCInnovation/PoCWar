@@ -4,11 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import theme from '../consts/themes';
-import { homeRoute } from "../consts/routes";
 import { useHistory } from 'react-router-dom';
-import { signin, signinGmail } from '../firebase/sign';
-import GoogleLogoSvg from '../assets/google/google_logo.svg';
+import theme from '../consts/themes';
+import { homeRoute } from '../consts/routes';
+import { signin } from '../hooks/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,17 +48,18 @@ const useStyles = makeStyles((theme) => ({
     color: '#757575',
     fontWeight: 500,
     textTransform: 'none',
-  }
+  },
 }));
 
-async function onSignin(history, signinMethod, params = {}) {
-  const err = await signinMethod(...(Object.values(params)));
-
-  if (err === null) {
-    history.push(homeRoute);
-  } else {
-    alert('invalid signin: ' + err.message + ' [' + err.code + ']');
-  }
+export async function onSignin(history, signinMethod, params = {}) {
+  return signinMethod(...(Object.values(params)))
+    .then(() => {
+      history.push(homeRoute);
+    })
+    .catch((err) => {
+      console.error(err);
+      alert(`invalid signin: ${err.message} [${err.code}]`);
+    });
 }
 
 function SigninButton() {
@@ -84,28 +84,6 @@ function SigninButton() {
   );
 }
 
-function GmailSigninButton() {
-  const history = useHistory();
-  const classes = useStyles(theme);
-
-  return (
-    <Button
-      type='submit'
-      fullWidth
-      variant='contained'
-      className={classes.googleSignin}
-      onClick={async () => {
-        await onSignin(history, signinGmail);
-      }}
-    >
-      <img src={GoogleLogoSvg} alt='GoogleLogoSvg' className={classes.googleLogo} />
-      <div className={classes.googleSigninText}>
-        Sign in with Google
-      </div>
-    </Button>
-  );
-}
-
 export default function SignInContainer() {
   const classes = useStyles(theme);
 
@@ -123,7 +101,7 @@ export default function SignInContainer() {
           autoComplete='email'
           autoFocus
           InputProps={{
-            className: classes.input
+            className: classes.input,
           }}
         />
         <TextField
@@ -137,11 +115,10 @@ export default function SignInContainer() {
           id='password'
           autoComplete='current-password'
           InputProps={{
-            className: classes.input
+            className: classes.input,
           }}
         />
         <SigninButton />
-        <GmailSigninButton />
       </Paper>
     </Container>
   );

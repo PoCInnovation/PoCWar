@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { store } from "../firebase/core";
+import { useState, useEffect } from 'react';
+import { http } from '../utils/server';
 
 export default function useChallenges() {
   const [error, setError] = useState(false);
@@ -10,7 +10,12 @@ export default function useChallenges() {
     async function fetchData() {
       let data = null;
       try {
-        data = await store.collection("challenges").limit(20).get();
+        await http.get('/challenge?page=1&pageSize=20')
+          .then((response) => {
+            data = response.data;
+          }).catch((e) => {
+            console.log(e);
+          });
       } catch (e) {
         setError(true);
       }

@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    expose:
+      - 5432
+
+  webapp:
+    image: $BASE_NODE_IMAGE_NAME
+    command: ["npm", "run", $START_ENVIRONMENT]
+    working_dir: $REPO_MOUNT_POINT
+    stdin_open: true
+    environment:
+      - BACKEND_BASE_URL=$BACKEND_BASE_URL
+      - PORT=3051
+    ports:
+      - 3051:3051
+    expose:
+      - 3051
+    volumes:
+      - ./app:$REPO_MOUNT_POINT:delegated
+
+  backend:
+    image: $BASE_NODE_IMAGE_NAME
+    working_dir: $REPO_MOUNT_POINT
+    command: ["npm", "run", $START_ENVIRONMENT]
+    ports:
+      - 8081:8081
+    environment:
+      - DATABASE_URL=$POSTGRES_URL
+      - POSTGRES_URL=$POSTGRES_URL
+      - JWT_SECRET=$JWT_SECRET
+      - PORT=8081
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes:
+      - ./backend:$REPO_MOUNT_POINT:delegated
+    depends_on:
+      - db
+    links:
+      - db

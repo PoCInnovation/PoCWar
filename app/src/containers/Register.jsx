@@ -5,9 +5,11 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import theme from '../consts/themes';
 import { homeRoute } from '../consts/routes';
 import { register } from '../hooks/auth';
+import { showSnackbar } from '../reducers/actions/snackBarAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,20 +53,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function onRegister(history, registerMethod, params = {}) {
-  return registerMethod(...(Object.values(params)))
-    .then(() => {
-      history.push(homeRoute);
-    })
-    .catch((err) => {
-      console.error(err);
-      alert(`invalid register: ${err.message} [${err.code}]`);
-    });
-}
-
 function RegisterButton() {
   const history = useHistory();
   const classes = useStyles(theme);
+  const dispatch = useDispatch();
+
+  async function onRegister() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const name = document.getElementById('name').value;
+    return register(email, password, confirmPassword, name)
+      .then(() => { history.push(homeRoute); })
+      .catch((err) => {
+        dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to register.'));
+      });
+  }
 
   return (
     <Button
@@ -73,15 +77,7 @@ function RegisterButton() {
       variant='contained'
       color='primary'
       className={classes.submit}
-      onClick={async () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const name = document.getElementById('name').value;
-        await onRegister(history, register, {
-          email, password, confirmPassword, name,
-        });
-      }}
+      onClick={onRegister}
     >
       Register
     </Button>

@@ -6,9 +6,11 @@ import AddIcon from '@material-ui/icons/Add';
 import BackupIcon from '@material-ui/icons/Backup';
 import Fab from '@material-ui/core/Fab';
 import Cookies from 'js-cookie';
+import { withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
 import { http } from '../utils/server';
-import NavBar from '../containers/NavBar';
+import { showSnackbar } from '../reducers/actions/snackBarAction';
 
 const nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
@@ -17,43 +19,6 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.primary.A100,
   },
 }));
-
-function submitChallenge() {
-  let auth;
-  try {
-    auth = {
-      Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`,
-    };
-  } catch (e) {
-    alert('You must be logged in to post a challenge.');
-    return;
-  }
-  const data = {
-    name: document.getElementById('challNameField').value,
-    slug: document.getElementById('slugField').value,
-    category: document.getElementById('challCategoryField').value,
-    description: document.getElementById('challDescriptionField').value,
-    input_example: document.getElementById('challInputExampleField').value,
-    output_example: document.getElementById('challOutputExampleField').value,
-    tests: getTestEditorValues(),
-    author: JSON.parse(Cookies.get('user')).email,
-  };
-  console.log(data);
-  http.post('/challenge', data, { headers: auth });
-}
-
-function addTests(list, setList) {
-  if (list.length === 0) {
-    setList(list.concat(1));
-  } else {
-    setList(list.concat(list[list.length - 1] + 1));
-  }
-}
-
-function deleteTest(list, setList) {
-  list.pop();
-  setList(list.concat());
-}
 
 function TestList({ tests, deleteFunction }) {
   const items = tests.map((i) => (
@@ -69,14 +34,52 @@ function TestList({ tests, deleteFunction }) {
   );
 }
 
-export default function CreateChallLayout() {
+const CreateChallenge = withRouter(({ history }) => {
+  const dispatch = useDispatch();
   const [theme, setTheme] = useState('dracula');
   const [list, setList] = useState(nbOfTests);
   const classes = useStyles(theme);
 
+  async function submitChallenge() {
+    let auth;
+    try {
+      auth = {
+        Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`,
+      };
+    } catch (e) {
+      dispatch(showSnackbar('You must be logged in to post a challenge.'));
+      return;
+    }
+    const data = {
+      name: document.getElementById('challNameField').value,
+      slug: document.getElementById('slugField').value,
+      category: document.getElementById('challCategoryField').value,
+      description: document.getElementById('challDescriptionField').value,
+      input_example: document.getElementById('challInputExampleField').value,
+      output_example: document.getElementById('challOutputExampleField').value,
+      tests: getTestEditorValues(),
+      author: JSON.parse(Cookies.get('user')).email,
+    };
+    await http.post('/challenge', data, { headers: auth })
+      .catch((e) => console.log(e));
+    history.push(`/editor?challengeID=${data.slug}`);
+  }
+
+  function addTests() {
+    if (list.length === 0) {
+      setList(list.concat(1));
+    } else {
+      setList(list.concat(list[list.length - 1] + 1));
+    }
+  }
+
+  function deleteTest() {
+    list.pop();
+    setList(list.concat());
+  }
+
   return (
     <div>
-      <NavBar />
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{
           display: 'flex',
@@ -177,7 +180,7 @@ export default function CreateChallLayout() {
             </div>
             <br />
             <div>
-              <TestList tests={list} deleteFunction={() => deleteTest(list, setList)} />
+              <TestList tests={list} deleteFunction={deleteTest} />
               <Fab color='primary' aria-label='add' onClick={() => addTests(list, setList)}>
                 <AddIcon />
               </Fab>
@@ -190,4 +193,6 @@ export default function CreateChallLayout() {
       </Fab>
     </div>
   );
-}
+});
+
+export default CreateChallenge;

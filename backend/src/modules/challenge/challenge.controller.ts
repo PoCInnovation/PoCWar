@@ -11,7 +11,6 @@ import {
   Put,
   ForbiddenException,
 } from '@nestjs/common';
-import { Challenge as ChallengeModel } from '@prisma/client';
 import {
   ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags,
 } from '@nestjs/swagger';
@@ -37,19 +36,15 @@ export class ChallengeController {
   async getChallenges(
     @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,
-  ): Promise<ChallengeModel[]> {
-    return this.challengeService.challenges({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
+  ): Promise<GetChallengeResponseDto[]> {
+    return this.challengeService.paginateChallenge(page, pageSize);
   }
 
   @ApiOperation({ summary: 'Get a challenge by slug.' })
   @ApiResponse({ type: GetChallengeResponseDto })
   @Get('challenge/:slug')
   async getChallenge(@Param('slug') slug: string): Promise<GetChallengeResponseDto> {
-    const { authorId, ...challenge } = await this.challengeService.challenge({ slug });
-    return challenge;
+    return this.challengeService.challenge(slug);
   }
 
   @ApiOperation({ summary: 'Create a new challenge.' })

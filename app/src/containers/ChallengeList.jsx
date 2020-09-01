@@ -7,26 +7,21 @@ import useChallenges from '../hooks/challenges';
 export default function ChallengeList() {
   let challenges = null;
   const data = useChallenges();
-  if (data.loading === true) {
+  if (data.isLoading) {
     challenges = <CircularProgress color='secondary' />;
   } else if (data.error || data.challenges === null || data.challenges.length === 0) {
     challenges = <ChallengeDescription title='__NOCHALL__' category='__NOCATEGORY__' id='-1' />;
   } else {
-    challenges = [];
-    let i = 0;
-    data.challenges.forEach((chall) => {
-      challenges.push(
-        <ChallengeDescription
-          key={i}
-          title={chall.name}
-          category={chall.category}
-          slug={chall.slug}
-        />,
-      );
-      i += 1;
-    });
+    challenges = data.challenges.map((challenge) => (
+      <ChallengeDescription
+        key={challenge.id}
+        title={challenge.name}
+        category={challenge.category}
+        slug={challenge.slug}
+        validated={challenge.passAllTests}
+      />
+    ));
   }
-
   return (
     <Grid container justify='center'>
       {challenges}

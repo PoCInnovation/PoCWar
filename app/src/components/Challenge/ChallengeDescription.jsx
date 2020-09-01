@@ -1,6 +1,8 @@
 import React from 'react';
 import { Paper, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 import theme from '../../consts/themes';
 import { editorRoute } from '../../consts/routes';
 
@@ -29,7 +31,9 @@ function challengeOnClick(history, slug) {
   });
 }
 
-export default function ChallengeDescription({ title, category, slug }) {
+export default function ChallengeDescription({
+  title, category, slug, validated,
+}) {
   const classes = useStyles();
   const history = useHistory();
   const onClick = () => { challengeOnClick(history, slug); };
@@ -38,7 +42,10 @@ export default function ChallengeDescription({ title, category, slug }) {
     <Grid container justify='space-between' alignItems='center'>
       <Grid item xs={12}>
         <Paper className={classes.challenge} onClick={onClick}>
-          <p className={classes.title}>{title}</p>
+          {validated ? (<DoneIcon />) : (<CloseIcon />)}
+          <p className={classes.title}>
+            {title}
+          </p>
           <p className={classes.category}>{category}</p>
         </Paper>
       </Grid>

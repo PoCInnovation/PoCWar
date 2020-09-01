@@ -1,9 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import {
   Challenge as ChallengeModel,
-  ChallengeWhereUniqueInput,
-  ChallengeWhereInput,
-  ChallengeOrderByInput,
   TestUpdateWithWhereUniqueWithoutChallengeInput,
   TestCreateWithoutChallengeInput,
   Enumerable,
@@ -11,29 +8,53 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
+import { GetChallengeResponseDto } from '../../common/dto/response/get-challenge-response.dto';
 
 @Injectable()
 export class ChallengeService {
   constructor(private prisma: PrismaService) {}
 
-  async challenge(
-    challengeWhereUniqueInput: ChallengeWhereUniqueInput,
-  ): Promise<ChallengeModel | null> {
-    return this.prisma.challenge.findOne({
-      where: challengeWhereUniqueInput,
-    });
+  private static formatChallenge(
+    {
+      codeSources: [{ passAllTests } = { passAllTests: false }], ...challenge
+    }: ChallengeModel & {codeSources?: {passAllTests: boolean}[]},
+  ): GetChallengeResponseDto {
+    return {
+      passAllTests,
+      ...challenge,
+    };
   }
 
-  async challenges(params: {
-    skip?: number;
-    take?: number;
-    cursor?: ChallengeWhereUniqueInput;
-    where?: ChallengeWhereInput;
-    orderBy?: ChallengeOrderByInput;
-  }): Promise<ChallengeModel[]> {
-    return this.prisma.challenge.findMany({
-      ...params,
+  async challenge(slug): Promise<GetChallengeResponseDto | null> {
+    const challenge = await this.prisma.challenge.findOne({
+      where: { slug },
+      include: {
+        codeSources: {
+          take: 1,
+          select: {
+            passAllTests: true,
+          },
+        },
+      },
     });
+    if (!challenge) {
+      throw new NotFoundException(`Challenge ${slug} not found`);
+    }
+    return ChallengeService.formatChallenge(challenge);
+  }
+
+  async paginateChallenge(page: number, pageSize: number): Promise<GetChallengeResponseDto[]> {
+    return (await this.prisma.challenge.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: {
+        codeSources: {
+          select: {
+            passAllTests: true,
+          },
+        },
+      },
+    })).map((challenge) => ChallengeService.formatChallenge(challenge));
   }
 
   async challengeByIdWithTests(challengeId: string): Promise<ChallengeModel[]> {
@@ -46,7 +67,9 @@ export class ChallengeService {
   }
 
   async createChallenge(
-    userId: string, { name, slug, tests, description, input_example, output_example, category }: CreateChallengeDto,
+    userId: string, {
+      name, slug, tests, description, input_example, output_example, category,
+    }: CreateChallengeDto,
   ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {

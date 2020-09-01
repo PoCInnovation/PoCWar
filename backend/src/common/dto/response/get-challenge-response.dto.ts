@@ -21,4 +21,7 @@ export class GetChallengeResponseDto {
 
   @ApiProperty()
   category: string;
+
+  @ApiProperty()
+  passAllTests: boolean;
 }

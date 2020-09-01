@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function EditorSubBar({
-  theme, setTheme, language, setLanguage, onClickSubmit, isSubmiting,
+  theme, setTheme, language, setLanguage, onClickSubmit, isSubmitting,
 }) {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
@@ -41,7 +41,7 @@ export default function EditorSubBar({
     localStorage.setItem(localStorageTheme, theme);
   }
 
-  if (isSubmiting) {
+  if (isSubmitting) {
     submitButton = <CircularProgress color='secondary' />;
   } else {
     submitButton = (

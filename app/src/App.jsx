@@ -14,13 +14,16 @@ import {
   loginRoute,
   registerRoute,
 } from './consts/routes';
-import 'dotenv/config';
+import NavBar from './containers/NavBar';
+import GlobalSnackbar from './containers/SnackBar';
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <style>{`body { background-color: ${theme.palette.primary.dark}; }`}</style>
+      <GlobalSnackbar />
       <Router>
+        <NavBar />
         <Switch>
           <Route path={createChallRoute}>
             <CreateChallLayout />

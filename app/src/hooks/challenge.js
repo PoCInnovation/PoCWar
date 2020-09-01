@@ -3,7 +3,7 @@ import { http } from '../utils/server';
 
 export default function useChallenge(slug) {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [challenge, setChallenge] = useState(null);
 
   useEffect(() => {
@@ -13,13 +13,12 @@ export default function useChallenge(slug) {
         await http.get(`/challenge/${slug}`)
           .then((response) => {
             data = response.data;
-          }).catch((e) => {
-            console.log(e);
           });
       } catch (e) {
+        console.log(e);
         setError(true);
       }
-      setLoading(false);
+      setIsLoading(false);
       setChallenge(data);
     }
     fetchData();
@@ -27,7 +26,7 @@ export default function useChallenge(slug) {
 
   return {
     error,
-    loading,
+    isLoading,
     challenge,
   };
 }

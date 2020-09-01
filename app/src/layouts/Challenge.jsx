@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
-import NavBar from '../containers/NavBar';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
 
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
-import { submitCode } from '../hooks/submit';
+import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 
 const useStyles = makeStyles(() => ({
@@ -24,7 +23,7 @@ export default function ChallengeLayout() {
   const classes = useStyles();
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
-  const c = useChallenge(challengeID);
+  const { isLoading, challenge } = useChallenge(challengeID);
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
@@ -32,9 +31,9 @@ export default function ChallengeLayout() {
   const [editValue, setEditValue] = useState('');
   const [stdout, setStdout] = useState('');
   const [stderr, setStderr] = useState('');
-  const [testsResult, setTestResult] = useState('');
+  const [testsResult, setTestResult] = useState({ passed: null, failed: null });
   const [testsList, setTestList] = useState(undefined);
-  const [isSubmiting, setIsSubmiting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   window.onload = () => {
     if (localStorage.getItem(challengeID) !== null) {
@@ -47,7 +46,7 @@ export default function ChallengeLayout() {
     localStorage.setItem(challengeID, change);
   }
 
-  if (c.loading === true) {
+  if (isLoading) {
     display = (
       <>
         <Grid className={classes.loading} container justify='center'>
@@ -56,18 +55,16 @@ export default function ChallengeLayout() {
         </Grid>
       </>
     );
-  } else if (c.challenge !== null) {
-    const d = c.challenge;
-    console.log(d);
+  } else if (challenge !== null) {
     display = (
       <>
         <Grid className={classes.gridRoot} container spacing={0}>
           <Grid item xs={12} sm={4}>
             <StatingDisplay
-              title={d.title}
-              inputExample={d.input_example}
-              outputExample={d.output_example}
-              stating={d.description}
+              title={challenge.title}
+              inputExample={challenge.input_example}
+              outputExample={challenge.output_example}
+              stating={challenge.description}
             />
             <StdLog stdout={stdout} stderr={stderr} />
             <TestResultList tests={testsList} />
@@ -85,9 +82,9 @@ export default function ChallengeLayout() {
               language={language}
               setLanguage={setLanguage}
               editValue={editValue}
-              isSubmiting={isSubmiting}
+              isSubmitting={isSubmitting}
               onClickSubmit={async () => {
-                const res = await submitCode(c.challenge, language, editValue);
+                const res = await submitCode(challenge.id, language, editValue);
                 if (res === undefined) {
                   return;
                 }
@@ -107,7 +104,6 @@ export default function ChallengeLayout() {
 
   return (
     <div>
-      <NavBar />
       {display}
     </div>
   );

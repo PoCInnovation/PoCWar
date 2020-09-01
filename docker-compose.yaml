@@ -46,6 +46,7 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes:
       - ./backend:$REPO_MOUNT_POINT:delegated
+    restart: always
     depends_on:
       - db
     links:

@@ -1,7 +1,5 @@
 FROM c_app
 
-RUN apk add --no-cache rust
+RUN apk add --no-cache rust bash
 
-COPY ./build.sh /tmp
-
-RUN chmod +x /tmp/build.sh
+CMD ./exec.sh

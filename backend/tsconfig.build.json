@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": ["execution", "Dockerfiles", "seeds", "node_modules", "dist", "test", "**/*spec.ts"]
 }

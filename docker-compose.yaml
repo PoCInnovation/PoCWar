@@ -1,4 +1,4 @@
-version: '3'
+version: '2.4'
 
 services:
   db:
@@ -44,10 +44,13 @@ services:
       - PORT=8081
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - PATH_HOST=$PATH_HOST
     volumes:
       - ./backend:$REPO_MOUNT_POINT:delegated
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     links:
       - db

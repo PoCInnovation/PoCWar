@@ -1,0 +1,29 @@
+{
+  "role": "user",
+  "name": "user",
+  "email": "username@mail.com",
+  "password": "123Abc!?",
+  "challenges": {
+    "create": [
+      {
+        "name": "Simple Post",
+        "slug": "Simple-Post",
+        "description": "A simple post about life",
+        "input_example": "",
+        "output_example": "",
+        "category": "",
+        "tests": {
+          "create": [
+            {
+              "args": "",
+              "name": "simple test",
+              "ret": 0,
+              "out": "hello world",
+              "err": ""
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

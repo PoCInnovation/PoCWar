@@ -11,7 +11,11 @@ export default function SuccessSnackbar() {
     (state) => state.ui,
   );
 
-  function handleClose() {
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
     dispatch(clearSnackbar());
   }
 

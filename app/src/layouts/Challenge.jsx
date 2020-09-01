@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
 
@@ -8,6 +9,7 @@ import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/editorSubBar';
 import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
+import { showSnackbar } from '../reducers/actions/snackBarAction';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -24,6 +26,7 @@ export default function ChallengeLayout() {
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
   const { isLoading, challenge } = useChallenge(challengeID);
+  const dispatch = useDispatch();
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
@@ -84,16 +87,17 @@ export default function ChallengeLayout() {
               editValue={editValue}
               isSubmitting={isSubmitting}
               onClickSubmit={async () => {
-                const res = await submitCode(challenge.id, language, editValue);
-                if (res === undefined) {
-                  return;
+                try {
+                  const res = await submitCode(challenge.id, language, editValue);
+                  if (res.compilation !== undefined) {
+                    setStderr(res.compilation.err);
+                    setStdout(res.compilation.out);
+                  }
+                  setTestResult({ passed: res.passed, failed: res.failed });
+                  setTestList(res.tests);
+                } catch (e) {
+                  dispatch(showSnackbar(e.response ? e.response.data.message : 'Fail to submit code'));
                 }
-                if (res.compilation !== undefined) {
-                  setStderr(res.compilation.err);
-                  setStdout(res.compilation.out);
-                }
-                setTestResult({ passed: res.passed, failed: res.failed });
-                setTestList(res.tests);
               }}
             />
           </Grid>

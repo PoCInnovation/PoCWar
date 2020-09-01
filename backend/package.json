@@ -8,7 +8,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "dev": "prisma migrate save --experimental --create-db && prisma migrate up --experimental --create-db && prisma generate && nest start --watch",
+    "dev": "prisma migrate save --experimental --create-db && prisma migrate up --experimental --create-db && prisma generate && nest start --watch 'src/**/*.ts'",
     "prod": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -22,7 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:schema": "prisma studio --experimental",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate save --experimental && prisma migrate up --experimental"
+    "prisma:migrate": "prisma migrate save --experimental && prisma migrate up --experimental",
+    "seed": "ts-node seeds/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.1.1",

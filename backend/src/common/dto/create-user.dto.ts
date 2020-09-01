@@ -12,7 +12,7 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @MinLength(2)
+  @MinLength(4)
   @MaxLength(30)
   @ApiProperty()
   name: string;

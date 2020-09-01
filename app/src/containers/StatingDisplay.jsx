@@ -2,9 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Typography, Paper } from '@material-ui/core';
-import theme from '../consts/themes';
+import defaultTheme from '../consts/themes';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
   },
@@ -35,14 +35,16 @@ const useStyles = makeStyles(() => ({
     paddingBottom: '2px',
     margin: '2%',
     background: theme.palette.primary.light,
-  }
+  },
 }));
 
-export default function StatingDisplay({ title, stating, inputExample, outputExample }) {
-  const classes = useStyles();
-  stating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  inputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  outputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+export default function StatingDisplay({
+  title, stating, inputExample, outputExample,
+}) {
+  const classes = useStyles(defaultTheme);
+  const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
 
   return (
     <div className={classes.root}>
@@ -53,20 +55,20 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
           </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left' component={'span'} variant={'body2'}>
-            {stating}
+          <Typography align='left' component='span' variant='body2'>
+            {formattedStating}
           </Typography>
         </Box>
 
         <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             Input example
-        </Typography>
+          </Typography>
         </Box>
         <Paper className={classes.inputPaper}>
           <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component={'span'} variant={'body2'}>
-              {inputExample}
+            <Typography align='left' component='span' variant='body2'>
+              {formattedInputExample}
             </Typography>
           </Box>
         </Paper>
@@ -74,12 +76,12 @@ export default function StatingDisplay({ title, stating, inputExample, outputExa
         <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='h1' variant='h5'>
             Expected output
-        </Typography>
+          </Typography>
         </Box>
         <Paper className={classes.inputPaper}>
           <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component={'span'} variant={'body2'}>
-              {outputExample}
+            <Typography align='left' component='span' variant='body2'>
+              {formattedOutputExample}
             </Typography>
           </Box>
         </Paper>

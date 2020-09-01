@@ -8,9 +8,7 @@ export async function signin(email, password) {
     });
 }
 
-export async function register(email, password, confirmPassword, name) {
-  if (password !== confirmPassword) {
-    throw Error('Different passwords');
-  }
-  return http.post('/register', { email, password, name });
+export async function register(email, password, name) {
+  return http.post('/register', { email, password, name })
+    .then(() => signin(email, password));
 }

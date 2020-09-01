@@ -9,11 +9,9 @@ import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import theme from '../../consts/themes';
 
-function TabPanel(props) {
-  const {
-    children, value, index, ...other
-  } = props;
-
+function TabPanel({
+  children, value, index, ...other
+}) {
   return (
     <div
       role='tabpanel'

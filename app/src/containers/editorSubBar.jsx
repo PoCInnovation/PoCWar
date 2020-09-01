@@ -36,9 +36,9 @@ export default function EditorSubBar({
     localStorage.setItem(localStorageLanguage, aceLanguage);
   }
 
-  function onThemeChange(theme) {
-    setTheme(theme);
-    localStorage.setItem(localStorageTheme, theme);
+  function onThemeChange(newTheme) {
+    setTheme(newTheme);
+    localStorage.setItem(localStorageTheme, newTheme);
   }
 
   if (isSubmitting) {
@@ -67,9 +67,9 @@ export default function EditorSubBar({
               value={theme}
               onChange={(event) => { onThemeChange(event.target.value); }}
             >
-              {editorThemes.map((newthemes) => (
-                <MenuItem key={newthemes} value={newthemes}>
-                  {newthemes}
+              {editorThemes.map((newThemes) => (
+                <MenuItem key={newThemes} value={newThemes}>
+                  {newThemes}
                 </MenuItem>
               ))}
             </Select>

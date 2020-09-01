@@ -32,6 +32,6 @@ export class CodeSourceController {
     const tests = await this.testService.tests({
       where: { challengeId: codeSourceDto.challengeId },
     });
-    return this.codeSourceService.executeTests(codeSource, tests);
+    return this.codeSourceService.executeTests(user.id, codeSource, tests);
   }
 }

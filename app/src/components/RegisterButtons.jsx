@@ -4,9 +4,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { registerRoute } from '../consts/routes';
 
-
-// textTransform: 'none',
-
 export function RegButton() {
   const history = useHistory();
   const redirectRegister = () => {

@@ -8,19 +8,15 @@ export default function useChallenges() {
 
   useEffect(() => {
     async function fetchData() {
-      let data = null;
-      try {
-        await http.get('/challenge?page=1&pageSize=20')
-          .then((response) => {
-            data = response.data;
-          }).catch((e) => {
-            console.log(e);
-          });
-      } catch (e) {
-        setError(true);
-      }
-      setIsLoading(false);
-      setChallenges(data);
+      await http.get('/challenge?page=1&pageSize=20')
+        .then((response) => {
+          setIsLoading(false);
+          setChallenges(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          setError(true);
+        });
     }
     fetchData();
   }, []);

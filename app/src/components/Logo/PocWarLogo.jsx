@@ -30,7 +30,7 @@ export default function PocWarLogo({ className }) {
   const src = String(darkMode ? DarkLogo : LightLogo);
 
   return (
-    <div className='pocWarLogoContainer' onClick={redirectHome}>
+    <div role='presentation' className='pocWarLogoContainer' onClick={redirectHome}>
       <img
         alt='PocWarLogo'
         className={`${className} ${classes.pocWarLogo}`}

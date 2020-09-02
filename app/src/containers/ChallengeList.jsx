@@ -9,7 +9,7 @@ export default function ChallengeList() {
   const data = useChallenges();
   if (data.isLoading) {
     challenges = <CircularProgress color='secondary' />;
-  } else if (data.error || data.challenges === null || data.challenges.length === 0) {
+  } else if (data.error || !data.challenges || !data.challenges.length) {
     challenges = <ChallengeDescription title='__NOCHALL__' category='__NOCATEGORY__' id='-1' />;
   } else {
     challenges = data.challenges.map((challenge) => (

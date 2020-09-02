@@ -4,10 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { loginRoute, homeRoute } from '../consts/routes';
 
-
-// textTransform: 'none',
-
-export function LoginButton() {
+function LoginButton() {
   const history = useHistory();
   const redirectLogin = () => {
     history.push(loginRoute);
@@ -20,8 +17,7 @@ export function LoginButton() {
   );
 }
 
-export function LogoutButton() {
-  const user = JSON.parse(Cookies.get('user'));
+function LogoutButton({ email }) {
   const history = useHistory();
   return (
     <Button
@@ -31,18 +27,19 @@ export function LogoutButton() {
         history.push(homeRoute);
       }}
     >
-      {user.email}
+      {email}
     </Button>
   );
 }
 
-export function LogButton() {
+export default function LogButton() {
   const location = useLocation();
   if (location.pathname === loginRoute) {
     return <div />;
   }
-  if (Cookies.get('user') === undefined) {
+  const user = Cookies.get('user');
+  if (!user) {
     return <LoginButton />;
   }
-  return <LogoutButton />;
+  return <LogoutButton email={JSON.parse(user).email} />;
 }

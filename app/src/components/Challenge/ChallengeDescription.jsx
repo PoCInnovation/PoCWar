@@ -24,24 +24,23 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function challengeOnClick(history, slug) {
-  history.push({
-    pathname: editorRoute,
-    search: `?challengeID=${slug}`,
-  });
-}
-
 export default function ChallengeDescription({
   title, category, slug, validated,
 }) {
   const classes = useStyles();
   const history = useHistory();
-  const onClick = () => { challengeOnClick(history, slug); };
+
+  const challengeOnClick = () => {
+    history.push({
+      pathname: editorRoute,
+      search: `?challengeID=${slug}`,
+    });
+  };
 
   return (
     <Grid container justify='space-between' alignItems='center'>
       <Grid item xs={12}>
-        <Paper className={classes.challenge} onClick={onClick}>
+        <Paper className={classes.challenge} onClick={challengeOnClick}>
           {validated ? (<DoneIcon />) : (<CloseIcon />)}
           <p className={classes.title}>
             {title}

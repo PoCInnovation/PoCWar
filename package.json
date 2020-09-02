@@ -6,7 +6,7 @@
   "homepage": "https://github.com/PoCFrance/PoCWar",
   "scripts": {
     "dev": "PATH_HOST=$(pwd) docker-compose up -d --build",
-    "restart": "docker-compose down --volumes && PATH_HOST=$(pwd) docker-compose up -d --build",
-    "stop": "docker-compose down --volumes"
+    "restart": "PATH_HOST=$(pwd) docker-compose down --volumes && PATH_HOST=$(pwd) docker-compose up -d --build",
+    "stop": "PATH_HOST=$(pwd) docker-compose down --volumes"
   }
 }

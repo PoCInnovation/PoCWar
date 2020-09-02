@@ -11,11 +11,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// TODO: Refacto
 function getValueFromFields(className) {
   const data = [];
 
-  // TODO: replace by iterator
-  // eslint-disable-next-line no-restricted-syntax
   for (const child of document.getElementsByClassName(className)) {
     data.push(child.childNodes[0].value);
   }

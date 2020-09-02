@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import theme from '../../consts/themes';
 
+// TODO: no prop spreading
 function TabPanel({
   children, value, index, ...other
 }) {
@@ -61,6 +62,7 @@ export default function StdLog({ stdout, stderr }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
+  // TODO: valid key={}
   const formatStdout = stdout.split('\n').map((item, i) => <p key={i}>{item}</p>);
   const formatStderr = stderr.split('\n').map((item, i) => <p key={i}>{item}</p>);
 

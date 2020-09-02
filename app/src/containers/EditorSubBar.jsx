@@ -21,14 +21,15 @@ export default function EditorSubBar({
   const localStorageLanguage = `${challengeID}_language`;
   const localStorageTheme = `${challengeID}_theme`;
   const classes = useStyles();
-  let submitButton = null;
 
-  if (localStorage.getItem(localStorageLanguage) !== null) {
-    setLanguage(localStorage.getItem(localStorageLanguage));
+  const editorLanguage = localStorage.getItem(localStorageLanguage);
+  if (editorLanguage) {
+    setLanguage(editorLanguage);
   }
 
-  if (localStorage.getItem(localStorageTheme) !== null) {
-    setTheme(localStorage.getItem(localStorageTheme));
+  const editorTheme = localStorage.getItem(localStorageTheme);
+  if (editorTheme) {
+    setTheme(editorTheme);
   }
 
   function onLanguageChange(aceLanguage) {
@@ -41,6 +42,7 @@ export default function EditorSubBar({
     localStorage.setItem(localStorageTheme, newTheme);
   }
 
+  let submitButton = null;
   if (isSubmitting) {
     submitButton = <CircularProgress color='secondary' />;
   } else {

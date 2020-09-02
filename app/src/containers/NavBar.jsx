@@ -4,8 +4,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Typography } from '@material-ui/core';
 import PocWarLogo from '../components/Logo/PocWarLogo';
-import { LogButton } from '../components/LogButtons';
-import { RegisterButton } from '../components/RegisterButtons';
+import LogButton from '../components/LogButtons';
+import RegisterButton from '../components/RegisterButtons';
 
 const useStyles = makeStyles(() => ({
   root: {

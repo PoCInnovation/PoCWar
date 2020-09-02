@@ -23,9 +23,6 @@ autocompleteLanguages.forEach((lang) => {
 
 
 const useStyles = makeStyles(() => ({
-  root: {
-    position: 'relative',
-  },
   paperBlock: {
     margin: '1%',
   },
@@ -40,25 +37,24 @@ export default function Editor({
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paperBlock}>
-        <AceEditor
-          className={classes.editor}
-          mode={language}
-          theme={theme}
-          width='100%'
-          height='800px'
-          fontSize={16}
-          enableBasicAutocompletion
-          enableLiveAutocompletion
-          showGutter
-          name='MainEditor'
-          showPrintMargin={false}
-          editorProps={{ $blockScrolling: true }}
-          value={editValue}
-          onChange={(newValue) => { setEditValue(newValue); }}
-        />
-      </Paper>
-    </div>
+    <Paper className={classes.paperBlock}>
+      <AceEditor
+        className={classes.editor}
+        mode={language}
+        theme={theme}
+        fontSize={16}
+        width='100%'
+        height='750px'
+        enableBasicAutocompletion
+        enableLiveAutocompletion
+        showGutter
+        name='MainEditor'
+        showPrintMargin={false}
+        editorProps={{ $blockScrolling: true }}
+        value={editValue}
+        onChange={(newValue) => { setEditValue(newValue); }}
+
+      />
+    </Paper>
   );
 }

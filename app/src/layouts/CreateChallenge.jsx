@@ -53,7 +53,6 @@ const CreateChallenge = withRouter(({ history }) => {
           history.push(`/editor?challengeID=${data.slug}`);
         })
         .catch((err) => {
-          console.log(err.response.data);
           dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to create challenge.'));
         });
     } catch (e) {

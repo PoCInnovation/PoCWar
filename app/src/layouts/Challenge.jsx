@@ -6,7 +6,7 @@ import StatingDisplay from '../containers/StatingDisplay';
 
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
-import EditorSubBar from '../containers/editorSubBar';
+import EditorSubBar from '../containers/EditorSubBar';
 import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 import { showSnackbar } from '../reducers/actions/snackBarAction';

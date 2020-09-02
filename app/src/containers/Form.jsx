@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -36,7 +36,7 @@ const FormContainer = ({ formFields, onSubmit }) => {
   const classes = useStyles(defaultTheme);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const onSubmitError = () => {
     Object.values(errors).some((value) => {
       if (value.message) {
         dispatch(showSnackbar(value.message));
@@ -44,12 +44,12 @@ const FormContainer = ({ formFields, onSubmit }) => {
       }
       return false;
     });
-  }, [errors]);
+  };
 
   return (
     <Container component='main' maxWidth='xs'>
       <Paper className={classes.paper}>
-        <form onSubmit={handleSubmit(onSubmit)} className={classes.container}>
+        <form onSubmit={handleSubmit(onSubmit, onSubmitError)} className={classes.container}>
           {formFields.map(({
             id, label, autoComplete, inputRef, autoFocus, type,
           }) => (

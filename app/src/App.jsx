@@ -5,7 +5,7 @@ import ChallengeLayout from './layouts/Challenge';
 import HomeLayout from './layouts/Home';
 import LoginLayout from './layouts/Login';
 import RegisterLayout from './layouts/Register';
-import CreateChallLayout from './layouts/CreateChall';
+import CreateChallLayout from './layouts/CreateChallenge';
 import theme from './consts/themes';
 import {
   createChallRoute,

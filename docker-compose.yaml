@@ -1,4 +1,4 @@
-version: '2.4'
+version: '3.7'
 
 services:
   db:
@@ -6,51 +6,46 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=$POSTGRES_USER
-      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
-    expose:
-      - 5432
 
   webapp:
     image: $BASE_NODE_IMAGE_NAME
-    command: ["npm", "run", $START_ENVIRONMENT]
+    command: /bin/bash -c "npm install && npm run $START_ENVIRONMENT"
     working_dir: $REPO_MOUNT_POINT
     stdin_open: true
     environment:
-      - BACKEND_BASE_URL=$BACKEND_BASE_URL
+      - BACKEND_BASE_URL
       - PORT=3051
     ports:
       - 3051:3051
-    expose:
-      - 3051
     volumes:
       - ./app:$REPO_MOUNT_POINT:delegated
 
   backend:
     image: $BASE_NODE_IMAGE_NAME
     working_dir: $REPO_MOUNT_POINT
-    command: ["npm", "run", $START_ENVIRONMENT]
+    command: /bin/bash startup.sh
     ports:
       - 8081:8081
     environment:
+      - START_ENVIRONMENT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
       - DATABASE_URL=$POSTGRES_URL
-      - POSTGRES_URL=$POSTGRES_URL
-      - JWT_SECRET=$JWT_SECRET
+      - JWT_SECRET
+      - PATH_HOST
       - PORT=8081
-      - POSTGRES_USER=$POSTGRES_USER
-      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      - PATH_HOST=$PATH_HOST
     volumes:
       - ./backend:$REPO_MOUNT_POINT:delegated
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     links:
       - db

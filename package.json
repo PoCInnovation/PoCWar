@@ -5,8 +5,9 @@
   "description": "pocwar repository",
   "homepage": "https://github.com/PoCFrance/PoCWar",
   "scripts": {
-    "dev": "PATH_HOST=$(pwd) docker-compose up -d --build",
-    "restart": "PATH_HOST=$(pwd) docker-compose down --volumes && PATH_HOST=$(pwd) docker-compose up -d --build",
-    "stop": "PATH_HOST=$(pwd) docker-compose down --volumes"
+    "dev": "echo \"Building docker images...\" && ./dockerfiles/build_all.sh > /dev/null && PATH_HOST=$(pwd) docker-compose up -d --build",
+    "restart": "PATH_HOST=$(pwd) docker-compose down --volumes && ./dockerfiles/build_all.sh > /dev/null && PATH_HOST=$(pwd) docker-compose up -d --build",
+    "stop": "PATH_HOST=$(pwd) docker-compose down --volumes",
+    "clean": "rm -rf app/node_modules app/build backend/node_modules app/build"
   }
 }

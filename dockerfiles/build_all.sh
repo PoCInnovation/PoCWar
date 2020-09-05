@@ -3,14 +3,16 @@
 declare -a images=(
 	"c_app"
 	"cpp_app"
-  "go_app"
+	"go_app"
 	"javascript_app"
 	"python_app"
 	"ruby_app"
 	"rust_app"
 )
 
+cd "$(git rev-parse --show-toplevel)/dockerfiles/"
+
 for image in "${images[@]}"
 do
-	(cd "$(git rev-parse --show-toplevel)/backend/Dockerfiles/$image" && docker build . -t $image)
+	docker build -f "$image.Dockerfile" . -t $image
 done

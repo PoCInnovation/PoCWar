@@ -1,10 +1,8 @@
-version: '3.7'
+version: '3'
 
 services:
   db:
     image: 'postgres'
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -13,6 +11,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - pocwar
 
   webapp:
     image: $BASE_NODE_IMAGE_NAME
@@ -23,9 +23,11 @@ services:
       - BACKEND_BASE_URL
       - PORT=3051
     ports:
-      - 3051:3051
+      - 80:3051
     volumes:
       - ./app:$REPO_MOUNT_POINT:delegated
+    networks:
+      - pocwar
 
   backend:
     image: $BASE_NODE_IMAGE_NAME
@@ -47,5 +49,8 @@ services:
     restart: always
     depends_on:
       - db
-    links:
-      - db
+    networks:
+      - pocwar
+
+networks:
+  pocwar:

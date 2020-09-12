@@ -21,7 +21,7 @@ import { AuthUserDto } from '../../common/dto/auth-user.dto';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { CreateChallengeResponseDto } from '../../common/dto/response/create-challenge-response.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
-import { GetChallengeResponseDto } from '../../common/dto/response/get-challenge-response.dto';
+import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
 
 @ApiTags('Challenge')
 @Controller()
@@ -36,7 +36,7 @@ export class ChallengeController {
   async getChallenges(
     @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,
-  ): Promise<GetChallengeResponseDto[]> {
+  ): Promise<GetChallengesDto> {
     return this.challengeService.paginateChallenge(page, pageSize);
   }
 

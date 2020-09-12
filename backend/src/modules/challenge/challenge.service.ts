@@ -44,8 +44,17 @@ export class ChallengeService {
   }
 
   async paginateChallenge(page: number, pageSize: number): Promise<GetChallengesDto> {
+    const challengeCount = await this.prisma.challenge.count();
+    const toSkip = (page - 1) * pageSize;
+    if (toSkip >= challengeCount) {
+      return {
+        challenges: [],
+        pageCount: Math.ceil(challengeCount / pageSize),
+        pageSize,
+      };
+    }
     const challenges: GetChallengeResponseDto[] = (await this.prisma.challenge.findMany({
-      skip: (page - 1) * pageSize,
+      skip: toSkip,
       take: pageSize,
       include: {
         codeSources: {
@@ -57,7 +66,7 @@ export class ChallengeService {
     })).map((challenge) => ChallengeService.formatChallenge(challenge));
     return {
       challenges,
-      pageCount: (await this.prisma.challenge.count()) / pageSize,
+      pageCount: Math.ceil(challengeCount / pageSize),
       pageSize,
     };
   }

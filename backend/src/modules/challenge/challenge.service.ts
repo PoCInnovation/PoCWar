@@ -8,7 +8,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
-import { GetChallengeResponseDto } from '../../common/dto/response/get-challenge-response.dto';
+import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -43,8 +43,8 @@ export class ChallengeService {
     return ChallengeService.formatChallenge(challenge);
   }
 
-  async paginateChallenge(page: number, pageSize: number): Promise<GetChallengeResponseDto[]> {
-    return (await this.prisma.challenge.findMany({
+  async paginateChallenge(page: number, pageSize: number): Promise<GetChallengesDto> {
+    const challenges: GetChallengeResponseDto[] = (await this.prisma.challenge.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
       include: {
@@ -55,6 +55,11 @@ export class ChallengeService {
         },
       },
     })).map((challenge) => ChallengeService.formatChallenge(challenge));
+    return {
+      challenges,
+      pageCount: (await this.prisma.challenge.count()) / pageSize,
+      pageSize,
+    };
   }
 
   async challengeByIdWithTests(challengeId: string): Promise<ChallengeModel[]> {

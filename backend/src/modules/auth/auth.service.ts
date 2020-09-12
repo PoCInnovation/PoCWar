@@ -67,7 +67,7 @@ export class AuthService {
       ...user,
       challenges: codeSources.map((codeSource) => ({
         name: codeSource.challenge.name,
-        slug: codeSource.challenge.name,
+        slug: codeSource.challenge.slug,
         solved: codeSource.passAllTests,
       })),
     };

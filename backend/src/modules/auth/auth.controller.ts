@@ -71,7 +71,9 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Delete connected user.' })
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'User successfully deleted.' })
+  @UseGuards(JwtAuthGuard)
   @Delete('user')
   async delete(@AuthUser() { id }: AuthUserDto): Promise<UserModel> {
     return this.authService.deleteUser(id);

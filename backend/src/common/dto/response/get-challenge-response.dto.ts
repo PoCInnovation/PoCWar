@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, ValidateNested } from 'class-validator';
 
 export class GetChallengeResponseDto {
   @ApiProperty()
@@ -24,4 +25,17 @@ export class GetChallengeResponseDto {
 
   @ApiProperty()
   passAllTests: boolean;
+}
+
+export class GetChallengesDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ApiProperty({ isArray: true, type: GetChallengeResponseDto })
+  challenges: GetChallengeResponseDto[];
+
+  @ApiProperty()
+  pageCount: number;
+
+  @ApiProperty()
+  pageSize: number;
 }

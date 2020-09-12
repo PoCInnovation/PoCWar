@@ -17,6 +17,9 @@ export class ProfileResponseDto {
   @ApiProperty()
   email: string;
 
+  @ApiProperty()
+  name: string;
+
   @ApiProperty({ examples: ['user', 'admin'] })
   role: Role;
 

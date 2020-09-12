@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
 import { PrismaModule } from '../prisma/prisma.module';
 // eslint-disable-next-line import/no-cycle
 import { AuthModule } from '../auth/auth.module';
@@ -10,8 +10,8 @@ import { AuthModule } from '../auth/auth.module';
     forwardRef(() => AuthModule),
     PrismaModule,
   ],
-  controllers: [UserController],
-  providers: [UserService],
-  exports: [UserService],
+  controllers: [AdminController],
+  providers: [AdminService],
+  exports: [AdminService],
 })
-export class UserModule {}
+export class AdminModule {}

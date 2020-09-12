@@ -5,11 +5,13 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const { password, ...seeds }: UserCreateInput = JSON.parse(readFileSync('./seeds/default.json').toString());
+  const { password, email, ...seeds }: UserCreateInput = JSON.parse(readFileSync('./seeds/default.json').toString());
 
   await prisma.user.create({
     data: {
-      password: await bcrypt.hash(password, 10),
+      role: process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD ? 'admin' : 'user',
+      email: process.env.ADMIN_EMAIL || email,
+      password: await bcrypt.hash(process.env.ADMIN_PASSWORD || password, 10),
       ...seeds,
     },
   });

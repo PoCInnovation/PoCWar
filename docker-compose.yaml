@@ -42,6 +42,8 @@ services:
       - DATABASE_URL=$POSTGRES_URL
       - JWT_SECRET
       - PATH_HOST
+      - ADMIN_EMAIL
+      - ADMIN_PASSWORD
       - PORT=8081
     volumes:
       - ./backend:$REPO_MOUNT_POINT:delegated

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import {
   Test as TestModel,
   TestWhereUniqueInput,
@@ -6,6 +6,7 @@ import {
   TestOrderByInput,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { PutTestAdminDto, PutTestDto } from '../../common/dto/put-test.dto';
 
 @Injectable()
 export class TestService {
@@ -33,5 +34,27 @@ export class TestService {
     return this.prisma.test.delete({
       where,
     });
+  }
+
+  async putTests(userId: string, challengeSlug: string, tests: PutTestDto[]): Promise<TestModel[]> {
+    const { count } = await this.prisma.test.deleteMany({
+      where: { challenge: { slug: challengeSlug, authorId: userId } },
+    });
+
+    if (count === 0) {
+      throw new ForbiddenException('forbidden');
+    }
+
+    return Promise.all(tests.map(({ args, ...test }) => this.prisma.test.create({
+      data: {
+        ...test,
+        args: args.join(' '),
+        challenge: {
+          connect: {
+            slug: challengeSlug,
+          },
+        },
+      },
+    })));
   }
 }

@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard, OptionalJwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AuthUserDto } from '../../common/dto/auth-user.dto';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { CreateChallengeResponseDto } from '../../common/dto/response/create-challenge-response.dto';
@@ -33,6 +33,7 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Get a paginated array of challenge.' })
   @Get('challenge')
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiOkResponse({ type: GetChallengesDto })
   async getChallenges(
     @AuthUser() user: AuthUserDto,
@@ -44,6 +45,7 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Get a challenge by slug.' })
   @ApiResponse({ type: GetChallengeResponseDto })
+  @UseGuards(JwtAuthGuard)
   @Get('challenge/:slug')
   async getChallenge(
     @AuthUser() user: AuthUserDto, @Param('slug') slug: string,

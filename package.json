@@ -5,7 +5,7 @@
   "description": "pocwar repository",
   "homepage": "https://github.com/PoCFrance/PoCWar",
   "scripts": {
-    "dev": "echo \"Building docker images...\" && ./dockerfiles/build_all.sh > /dev/null 2>&1 && PATH_HOST=$(pwd) docker-compose up -d --build",
+    "dev": "echo \"Building docker images...\" && ./dockerfiles/build_all.sh > /dev/null && echo Done ! && 2>&1 && PATH_HOST=$(pwd) docker-compose up -d --build && echo \"Webapp listening on port 80 by default\nBackend listening on port 8081 by default\"",
     "restart": "PATH_HOST=$(pwd) docker-compose down --volumes && ./dockerfiles/build_all.sh > /dev/null && PATH_HOST=$(pwd) docker-compose up -d --build",
     "stop": "PATH_HOST=$(pwd) docker-compose down --volumes",
     "clean": "rm -rf app/node_modules app/build backend/node_modules app/build"

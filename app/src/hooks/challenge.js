@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { http } from '../utils/server';
+import { getOptionalHeaders, http } from '../utils/server';
 
 export default function useChallenge(slug, setEditValue) {
   const [error, setError] = useState(false);
@@ -8,7 +8,7 @@ export default function useChallenge(slug, setEditValue) {
 
   useEffect(() => {
     async function fetchData() {
-      await http.get(`/challenge/${slug}`)
+      await http.get(`/challenge/${slug}`, getOptionalHeaders())
         .then(({ data: { codeSource, ...data } }) => {
           setEditValue(codeSource);
           setChallenge(data);

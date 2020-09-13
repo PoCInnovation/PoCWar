@@ -32,7 +32,7 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Get a paginated array of challenge.' })
   @Get('challenge')
-  @ApiOkResponse({ isArray: true, type: GetChallengeResponseDto })
+  @ApiOkResponse({ type: GetChallengesDto })
   async getChallenges(
     @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,

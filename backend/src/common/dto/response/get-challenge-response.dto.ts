@@ -25,6 +25,9 @@ export class GetChallengeResponseDto {
 
   @ApiProperty()
   passAllTests: boolean;
+
+  @ApiProperty({ description: 'only if has already submitted once and not for pagination' })
+  codeSource?: string;
 }
 
 export class GetChallengesDto {

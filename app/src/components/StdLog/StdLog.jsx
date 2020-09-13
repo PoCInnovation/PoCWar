@@ -63,13 +63,14 @@ export default function StdLog({ stdout, stderr }) {
   const [value, setValue] = React.useState(0);
 
   // TODO: valid key={}
-  const formatStdout = stdout.split('\n').map((item, i) => <span key={i}>{item}</span>);
-  const formatStderr = stderr.split('\n').map((item, i) => <span key={i}>{item}</span>);
+  const formatStdout = stdout.split('\n').map((item, i) => (<span key={i}>{item}</span>));
+  const formatStderr = stderr.split('\n').map((item, i) => (<span key={i}>{item}</span>));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  // TODO: fix div in p
   return (
     <Paper className={classes.root}>
       <AppBar position='static'>

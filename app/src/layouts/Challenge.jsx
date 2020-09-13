@@ -9,7 +9,7 @@ import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/EditorSubBar';
 import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
-import { showSnackbar } from '../reducers/actions/snackBarAction';
+import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -25,7 +25,7 @@ export default function ChallengeLayout() {
   const classes = useStyles();
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
-  const { isLoading, challenge } = useChallenge(challengeID);
+  // const { isLoading, challenge } = useChallenge(challengeID);
   const dispatch = useDispatch();
   let display = null;
 
@@ -37,6 +37,7 @@ export default function ChallengeLayout() {
   const [testsResult, setTestResult] = useState({ passed: null, failed: null });
   const [testsList, setTestList] = useState(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLoading, challenge } = useChallenge(challengeID, setEditValue);
 
   window.onload = () => {
     if (localStorage.getItem(challengeID) !== null) {
@@ -88,6 +89,8 @@ export default function ChallengeLayout() {
               isSubmitting={isSubmitting}
               onClickSubmit={async () => {
                 try {
+                  setIsSubmitting(true);
+                  dispatch(showSnackbar('Challenge submitted, executing code...', 'info'));
                   const res = await submitCode(challenge.id, language, editValue);
                   if (res.compilation !== undefined) {
                     setStderr(res.compilation.err);
@@ -95,8 +98,10 @@ export default function ChallengeLayout() {
                   }
                   setTestResult({ passed: res.passed, failed: res.failed });
                   setTestList(res.tests);
+                  setIsSubmitting(false);
                   if (res.failed === 0) {
-                    alert('Challenge réussi');
+                    dispatch(clearSnackbar());
+                    dispatch(showSnackbar('All tests passed !', 'success'));
                   }
                 } catch (e) {
                   dispatch(showSnackbar(e.response ? e.response.data.message : 'Fail to submit code'));

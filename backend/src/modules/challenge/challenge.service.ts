@@ -16,11 +16,12 @@ export class ChallengeService {
 
   private static formatChallenge(
     {
-      codeSources: [{ passAllTests } = { passAllTests: false }], ...challenge
-    }: ChallengeModel & {codeSources?: {passAllTests: boolean}[]},
+      codeSources: [{ passAllTests, code } = { passAllTests: false, code: undefined }], ...challenge
+    }: ChallengeModel & {codeSources?: {passAllTests: boolean, code?: string}[]},
   ): GetChallengeResponseDto {
     return {
       passAllTests,
+      codeSource: code,
       ...challenge,
     };
   }
@@ -33,6 +34,7 @@ export class ChallengeService {
           take: 1,
           select: {
             passAllTests: true,
+            code: true,
           },
         },
       },

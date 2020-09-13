@@ -33,7 +33,7 @@ console.log(data);
   return (
     <Grid container justify='center'>
       {challenges}
-      <Pagination count={pageCount} page={page} onChange={handleChange} color="primary"/>
+      <Pagination count={pageCount} page={page} onChange={handleChange} color='primary'/>
     </Grid>
   );
 }

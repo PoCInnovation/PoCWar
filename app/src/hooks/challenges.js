@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { http } from '../utils/server';
+import { getOptionalHeaders, http } from '../utils/server';
 
 export default function useChallenges(page) {
   const [error, setError] = useState(false);
@@ -7,7 +7,7 @@ export default function useChallenges(page) {
   const [challengesList, setChallenges] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      await http.get(`/challenge?page=${page}&pageSize=10`)
+      await http.get(`/challenge?page=${page}&pageSize=10`, getOptionalHeaders())
         .then((response) => {
           setIsLoading(false);
           setChallenges(response.data);

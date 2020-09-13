@@ -11,3 +11,14 @@ export const getHeaders = () => {
   };
   return { headers };
 };
+
+export const getOptionalHeaders = () => {
+  const cookie = Cookies.get('user');
+  if (!cookie) {
+    return {};
+  }
+  const headers = {
+    Authorization: `Bearer ${JSON.parse(cookie).token}`,
+  };
+  return { headers };
+};

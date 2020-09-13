@@ -8,6 +8,8 @@ import { withRouter } from 'react-router-dom';
 import { LogoutButton } from '../components/LogButtons';
 import useProfile from '../hooks/profile';
 import { getHeaders, http } from '../utils/server';
+import Fab from '@material-ui/core/Fab';
+import CreateIcon from '@material-ui/icons/Create';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,6 +36,7 @@ const ProfileLayout = withRouter(({ history }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [prof, setProfile] = useState({});
+  const [isEditing, setEditing] = useState(false);
 
   const user = {
     error, prof, isLoading,
@@ -82,7 +85,7 @@ const ProfileLayout = withRouter(({ history }) => {
               float: 'right', color: 'black', textAlign: 'right', listStyleType: 'none', paddingRight: 20, fontWeight: 'bold',
             }}
             >
-              <li>{user.prof.name}</li>
+              {/* <li>{user.prof.name}</li> */}
               <li>{user.prof.email}</li>
               <li>{user.prof.role}</li>
               <li>{challengeSolved(user.prof.challenges)}</li>
@@ -91,6 +94,15 @@ const ProfileLayout = withRouter(({ history }) => {
           </Paper>
         </div>
         <LogoutButton email='Disconnect' />
+        <Fab
+          color='primary'
+          aria-label='create'
+          style={{float: 'right'}}
+          size="small"
+          onClick={() => {console.log('hello')}}
+        >
+          <CreateIcon />
+        </Fab>
       </div>
     );
   }

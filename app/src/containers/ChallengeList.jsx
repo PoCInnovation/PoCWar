@@ -13,7 +13,7 @@ export default function ChallengeList() {
   const handleChange = (event, value) => {
     setPage(value);
   };
-
+console.log(data);
   if (data.isLoading) {
     challenges = <CircularProgress color='secondary' />;
   } else if (data.error || !data?.challengesList?.challenges || !data.challengesList?.challenges.length) {

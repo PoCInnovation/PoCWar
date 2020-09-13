@@ -42,12 +42,12 @@ export default function StatingDisplay({
   title, stating, inputExample, outputExample,
 }) {
   const classes = useStyles(defaultTheme);
-  const formattedStating = stating.split('\n').map((item, i) => <span key={i}>{item}</span>);
-  const formattedInputExample = inputExample.split('\n').map((item, i) => <span key={i}>{item}</span>);
-  const formattedOutputExample = outputExample.split('\n').map((item, i) => <span key={i}>{item}</span>);
+  const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{height:300, overflowY:'scroll'}}>
       <Paper className={classes.paperBlock}>
         <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='span' variant='body2'>

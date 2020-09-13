@@ -48,8 +48,7 @@ const useStyles = makeStyles(() => ({
     margin: '2%',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.text.primary,
-    height: '190px',
-    overflow: 'auto',
+    overflow: 'hidden',
   },
   textBlock: {
     fontFamily: 'Roboto, sans-serif',
@@ -79,15 +78,15 @@ export default function StdLog({ stdout, stderr }) {
           <Tab label='stderr' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={0} style={{height: 170, overflowY: 'scroll'}}>
         <Box className={classes.textBlock} color='text.primary'>
-          <Typography component='div' variant='body2'>
+          <Typography component='div' variant='body2' style={{marginLeft: 10}}>
             {formatStdout}
           </Typography>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Box className={classes.textBlock} color='text.accent'>
+      <TabPanel value={value} index={1} style={{height: 170, overflowY: 'scroll'}}>
+        <Box className={classes.textBlock} color='text.accent' style={{marginLeft: 10}}>
           <Typography component='div' variant='body2'>
             {formatStderr}
           </Typography>

@@ -89,7 +89,7 @@ export default function ChallengeLayout() {
               outputExample={challenge.output_example}
               stating={challenge.description}
             />
-            <StdLog stdout={stdout} stderr={stderr} />
+            <StdLog stdout={stdout} stderr={stderr}/>
             <TestResultList tests={testsList} />
             <Paper className={classes.paper} elevation={3}>
               <p style={{textAlign: 'left'}}>Tests passed: {testsResult.passed}</p>

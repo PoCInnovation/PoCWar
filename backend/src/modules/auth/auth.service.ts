@@ -27,9 +27,7 @@ export class AuthService {
   }
 
   login(payload: AuthUserDto): LoginResponseDto {
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return { access_token: this.jwtService.sign(payload) };
   }
 
   async register(userData: CreateUserDto): Promise<User> {
@@ -47,6 +45,7 @@ export class AuthService {
         email: true,
         role: true,
         codeSources: {
+          where: { authorId: userId },
           select: {
             challenge: {
               select: {
@@ -58,9 +57,7 @@ export class AuthService {
           },
         },
       },
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       take: 1,
     });
     return {
@@ -85,9 +82,7 @@ export class AuthService {
       password = await bcrypt.hash(user.password, 10);
     }
     return this.prisma.user.update({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       data: {
         name: user.name || undefined,
         email: user.email || undefined,

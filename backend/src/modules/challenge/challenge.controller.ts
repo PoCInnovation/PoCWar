@@ -35,11 +35,11 @@ export class ChallengeController {
   @Get('challenge')
   @ApiOkResponse({ type: GetChallengesDto })
   async getChallenges(
-    @AuthUser() { id }: AuthUserDto,
+    @AuthUser() user: AuthUserDto,
       @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,
   ): Promise<GetChallengesDto> {
-    return this.challengeService.paginateChallenge(id, page, pageSize);
+    return this.challengeService.paginateChallenge(page, pageSize, user?.id);
   }
 
   @ApiOperation({ summary: 'Get a challenge by slug.' })

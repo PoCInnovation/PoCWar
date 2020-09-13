@@ -32,7 +32,7 @@ export class ChallengeService {
       include: {
         codeSources: {
           take: 1,
-          where: {authorId: userId},
+          where: { authorId: userId },
           select: {
             passAllTests: true,
             code: true,
@@ -47,7 +47,7 @@ export class ChallengeService {
   }
 
   async paginateChallenge(
-    userId: string, page: number, pageSize: number,
+    page: number, pageSize: number, userId?: string,
   ): Promise<GetChallengesDto> {
     const challengeCount = await this.prisma.challenge.count();
     const toSkip = (page - 1) * pageSize;

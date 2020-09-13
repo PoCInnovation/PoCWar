@@ -80,16 +80,20 @@ export class CodeSourceService {
     let passed: number = 0;
     let failed: number = 0;
     const formattedResult: TestResultClass[] = result.tests.map((test, index) => {
-      const pass = tests[index].out === test.out
-        && tests[index].err === test.err
-        && tests[index].ret === test.ret;
+      const pass = tests[index].out === test.out && test.ret === 0;
       if (pass) {
         passed += 1;
-      } else {
-        failed += 1;
+        return {
+          name: tests[index].name,
+          pass,
+        };
       }
+      failed += 1;
       return {
         name: tests[index].name,
+        stderr: test.err,
+        stdout: test.out,
+        exitStatus: Number(test.ret),
         pass,
       };
     });

@@ -10,23 +10,14 @@ import EditorSubBar from '../containers/EditorSubBar';
 import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
-import { langsForSubmit } from '../consts/languages';
-import Paper from '@material-ui/core/Paper';
-//import ProgressBar from '@bit/react-bootstrap.react-bootstrap.progress-bar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   gridRoot: {
     position: 'relative',
   },
   loading: {
     paddingTop: '20%',
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    background: theme.palette.primary.main,
-    margin: '2%',
-  }
 }));
 
 
@@ -39,7 +30,7 @@ export default function ChallengeLayout() {
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
-  const [language, setLanguage] = useState('python3');
+  const [language, setLanguage] = useState('python');
   const [editValue, setEditValue] = useState('');
   const [stdout, setStdout] = useState('');
   const [stderr, setStderr] = useState('');
@@ -60,14 +51,8 @@ export default function ChallengeLayout() {
   };
 
   const formatTestsErrOutput = (tests) => tests
-    .filter((test) => !test.pass)
-    .map((test) => `\n\n** ${test.name} **\nExit status: ${test.exitStatus}\nOutput:\n-- START --\n${test.stderr}\n-- END --\n`)
-    .join('\n\n');
-
-  const formatTestsStdOutput = (tests) => tests
-    .filter((test) => !test.pass)
-    .map((test) => `\n\n** ${test.name} **\nOutput:\n-- START --\n${test.stdout}\n-- END --\n`)
-    .join('\n\n');
+    .filter((test) => test.exitStatus !== 0 || !!test.stderr)
+    .map((test) => `\n\n** ${test.name} **\nExit status: ${test.exitStatus}\n${test.stderr}\n`).join('\n\n');
 
   if (isLoading) {
     display = (
@@ -91,10 +76,6 @@ export default function ChallengeLayout() {
             />
             <StdLog stdout={stdout} stderr={stderr} />
             <TestResultList tests={testsList} />
-            <Paper className={classes.paper} elevation={3}>
-              <p style={{textAlign: 'left'}}>Tests passed: {testsResult.passed}</p>
-              <p style={{textAlign: 'left'}}>Tests Failed: {testsResult.failed}</p>
-            </Paper>
           </Grid>
           <Grid item xs={12} sm={8}>
             <Editor
@@ -114,19 +95,17 @@ export default function ChallengeLayout() {
                 try {
                   setIsSubmitting(true);
                   dispatch(showSnackbar('Challenge submitted, executing code...', 'info'));
-                  const res = await submitCode(challenge.id, langsForSubmit[language], editValue);
+                  const res = await submitCode(challenge.id, language, editValue);
                   if (res.compilation) {
-                    setStderr(`${res.compilation.err}${formatTestsErrOutput(res.tests)}`);
-                    setStdout(`${res.compilation.out}${formatTestsStdOutput(res.tests)}`);
+                    setStderr(`${res.compilation.err}\n\n${formatTestsErrOutput(res.tests)}\n\n`);
+                    setStdout(res.compilation.out);
                   }
                   setTestResult({ passed: res.passed, failed: res.failed });
                   setTestList(res.tests);
                   setIsSubmitting(false);
-                  dispatch(clearSnackbar());
                   if (res.failed === 0) {
+                    dispatch(clearSnackbar());
                     dispatch(showSnackbar('All tests passed !', 'success'));
-                  } else {
-                    dispatch(showSnackbar('You didnt pass all the tests :\'(', 'error'));
                   }
                 } catch (e) {
                   setIsSubmitting(false);

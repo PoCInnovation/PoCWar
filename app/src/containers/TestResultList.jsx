@@ -3,15 +3,12 @@ import { Grid } from '@material-ui/core';
 import TestResult from '../components/Challenge/TestResult';
 
 export default function TestResultList({ tests }) {
-  const challenges = [];
-  if (tests === undefined) {
+  if (!tests) {
     return (<div />);
   }
-  for (let i = 0; i < tests.length; i += 1) {
-    challenges.push(
-      <TestResult name={tests[i].name} state={tests[i].pass ? 'Passed' : 'Failed'} key={i} />,
-    );
-  }
+  const challenges = tests.map((test) => (
+    <TestResult name={test.name} state={test.pass ? 'Passed' : 'Failed'} key={test.name} />
+  ));
   return (
     <Grid
       container

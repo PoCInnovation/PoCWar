@@ -48,6 +48,7 @@ const SignInContainer = withRouter(({ history }) => {
     return signin(email, password)
       .then(() => {
         history.push(homeRoute);
+        window.location.reload(false);
       })
       .catch((err) => {
         dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to log in.'));

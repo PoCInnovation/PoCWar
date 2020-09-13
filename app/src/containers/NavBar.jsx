@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
     minHeight: 60,
   },
   pocWarLogo: {
-    width: 100,
+    width: 250,
   },
 }));
 

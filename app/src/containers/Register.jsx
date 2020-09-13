@@ -93,7 +93,10 @@ const SignInContainer = withRouter(({ history }) => {
       return;
     }
     await register(email, password, name)
-      .then(() => { history.push(homeRoute); })
+      .then(() => {
+        history.push(homeRoute);
+        window.location.reload(false);
+      })
       .catch((err) => {
         dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to register.'));
       });

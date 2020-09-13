@@ -28,8 +28,8 @@ export default function TestResult({ name, state }) {
     <Grid container justify='space-between' alignItems='center'>
       <Grid item xs={12}>
         <Paper className={classes.challenge}>
-          <p className={classes.title}>{name}</p>
-          <p className={classes.category}>{state}</p>
+          <span className={classes.title}>{name}</span>
+          <span className={classes.category}>{state}</span>
         </Paper>
       </Grid>
     </Grid>

@@ -12,7 +12,6 @@ import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEdi
 import { getHeaders, http } from '../utils/server';
 import { showSnackbar } from '../reducers/actions/snackBarAction';
 
-const nbOfTests = [1];
 const useStyles = makeStyles((theme) => ({
   input: {
     color: theme.palette.primary.A100,
@@ -29,7 +28,7 @@ const CreateChallenge = withRouter(({ history }) => {
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const [theme, setTheme] = useState('dracula');
-  const [list, setList] = useState(nbOfTests);
+  const [testList, setList] = useState([{name: '', args: [''], out: ''}]);
   const classes = useStyles(theme);
 
   const submitChallengeError = (localErrors) => {
@@ -61,25 +60,23 @@ const CreateChallenge = withRouter(({ history }) => {
   };
 
   const addTests = () => {
-    if (list.length === 0) {
-      setList(list.concat(1));
-    } else {
-      setList(list.concat(list[list.length - 1] + 1));
-    }
+    const r = getTestEditorValues();
+    r.push({name: '', args: [''], out: ''});
+    setList(r);
   };
-
-  const deleteTest = () => {
-    list.pop();
-    setList(list.concat());
-  };
-
+  const deleteTest = (i) => {
+    let r = getTestEditorValues();
+    r.splice(i,1);
+    console.log(r, i)
+    setList(r);
+  }
   const TestList = () => {
-    // Include these fields in hook forms
-    const items = list.map((i) => (
-      <div key={i} id='testList'>
-        <TestEditor deleteFunction={deleteTest} />
-      </div>
-    ));
+    let items = []; 
+    for (let i = 0; i < testList.length; i+=1) {
+      items.push(<div key={i} id='testList'>
+        <TestEditor deleteFunction={(i) => {deleteTest(i)}} index={i} value={testList[i]} />
+      </div>)
+    }
     return (
       <div>
         <FormLabel>Tests</FormLabel>
@@ -90,7 +87,14 @@ const CreateChallenge = withRouter(({ history }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(submitChallenge, submitChallengeError)} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <form
+        onSubmit={handleSubmit(submitChallenge, submitChallengeError)}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -250,8 +254,8 @@ const CreateChallenge = withRouter(({ history }) => {
             </div>
             <br />
             <div>
-              <TestList />
-              <Fab color='primary' aria-label='add' onClick={() => addTests(list, setList)}>
+              <TestList values={testList} />
+              <Fab color='primary' aria-label='add' onClick={() => addTests()}>
                 <AddIcon />
               </Fab>
             </div>

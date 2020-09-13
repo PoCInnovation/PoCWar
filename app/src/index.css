@@ -12,3 +12,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'aAtmospheric';
+  font-style: normal;
+  src: url('./assets/aAtmospheric.ttf');
+}

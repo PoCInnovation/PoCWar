@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { http } from '../utils/server';
 
-export default function useChallenges() {
+export default function useChallenges(page) {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [challenges, setChallenges] = useState(null);
-
+  const [challengesList, setChallenges] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      await http.get('/challenge?page=1&pageSize=20')
+      await http.get(`/challenge?page=${page}&pageSize=10`)
         .then((response) => {
           setIsLoading(false);
           setChallenges(response.data);
@@ -19,11 +18,11 @@ export default function useChallenges() {
         });
     }
     fetchData();
-  }, []);
+  }, [page]);
 
   return {
     error,
     isLoading,
-    challenges,
+    challengesList,
   };
 }

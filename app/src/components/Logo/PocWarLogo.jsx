@@ -2,21 +2,19 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import DarkLogo from '../../assets/dark-logo.png';
-import LightLogo from '../../assets/light-logo.png';
+import LightLogo from '../../assets/pocwar-logo2.png';
 import { homeRoute } from '../../consts/routes';
 
 const useStyles = makeStyles(() => ({
   pocWarLogo: {
-    paddingLeft: 17,
-    paddingRight: 17,
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginBottom: 5,
+    marginTop: 5,
     display: 'flex',
     alignItems: 'center',
     height: '100%',
     cursor: 'pointer',
-    maxWidth: 100,
-    maxHeight: 100,
   },
 }));
 

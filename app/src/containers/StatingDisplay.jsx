@@ -42,15 +42,15 @@ export default function StatingDisplay({
   title, stating, inputExample, outputExample,
 }) {
   const classes = useStyles(defaultTheme);
-  const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedStating = stating.split('\n').map((item, i) => <span key={i}>{item}</span>);
+  const formattedInputExample = inputExample.split('\n').map((item, i) => <span key={i}>{item}</span>);
+  const formattedOutputExample = outputExample.split('\n').map((item, i) => <span key={i}>{item}</span>);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paperBlock}>
         <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
+          <Typography align='justify' component='span' variant='body2'>
             {title}
           </Typography>
         </Box>
@@ -61,7 +61,7 @@ export default function StatingDisplay({
         </Box>
 
         <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
+          <Typography align='justify' component='span' variant='body2'>
             Input example
           </Typography>
         </Box>
@@ -74,7 +74,7 @@ export default function StatingDisplay({
         </Paper>
 
         <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
+          <Typography align='justify' component='span' variant='body2'>
             Expected output
           </Typography>
         </Box>

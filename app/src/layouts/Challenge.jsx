@@ -51,16 +51,16 @@ export default function ChallengeLayout() {
 
   if (isLoading) {
     display = (
-      <>
+      <div>
         <Grid className={classes.loading} container justify='center'>
           <CircularProgress color='secondary' />
           ;
         </Grid>
-      </>
+      </div>
     );
   } else if (challenge !== null) {
     display = (
-      <>
+      <div>
         <Grid className={classes.gridRoot} container spacing={0}>
           <Grid item xs={12} sm={4}>
             <StatingDisplay
@@ -95,6 +95,9 @@ export default function ChallengeLayout() {
                   }
                   setTestResult({ passed: res.passed, failed: res.failed });
                   setTestList(res.tests);
+                  if (res.failed === 0) {
+                    alert('Challenge réussi');
+                  }
                 } catch (e) {
                   dispatch(showSnackbar(e.response ? e.response.data.message : 'Fail to submit code'));
                 }
@@ -102,7 +105,7 @@ export default function ChallengeLayout() {
             />
           </Grid>
         </Grid>
-      </>
+      </div>
     );
   }
 

@@ -87,7 +87,7 @@ export default function EditorSubBar({
             >
               {autocompleteLanguages.map((lang) => (
                 <MenuItem key={lang} value={lang}>
-                  {languages[lang]}
+                  {lang}
                 </MenuItem>
               ))}
             </Select>

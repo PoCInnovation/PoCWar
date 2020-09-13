@@ -10,6 +10,7 @@ import EditorSubBar from '../containers/EditorSubBar';
 import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
+import { langsForSubmit } from '../consts/languages';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
@@ -30,7 +31,7 @@ export default function ChallengeLayout() {
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
-  const [language, setLanguage] = useState('python');
+  const [language, setLanguage] = useState('python3');
   const [editValue, setEditValue] = useState('');
   const [stdout, setStdout] = useState('');
   const [stderr, setStderr] = useState('');
@@ -91,7 +92,8 @@ export default function ChallengeLayout() {
                 try {
                   setIsSubmitting(true);
                   dispatch(showSnackbar('Challenge submitted, executing code...', 'info'));
-                  const res = await submitCode(challenge.id, language, editValue);
+                  
+                  const res = await submitCode(challenge.id, langsForSubmit[language], editValue);
                   if (res.compilation !== undefined) {
                     setStderr(res.compilation.err);
                     setStdout(res.compilation.out);
@@ -102,6 +104,9 @@ export default function ChallengeLayout() {
                   if (res.failed === 0) {
                     dispatch(clearSnackbar());
                     dispatch(showSnackbar('All tests passed !', 'success'));
+                  } else {
+                    dispatch(clearSnackbar());
+                    dispatch(showSnackbar('You didnt pass all the tests :\'(', 'error'));
                   }
                 } catch (e) {
                   dispatch(showSnackbar(e.response ? e.response.data.message : 'Fail to submit code'));

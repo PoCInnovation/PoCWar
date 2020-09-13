@@ -1,8 +1,6 @@
 import React from 'react';
 import { Paper, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
 import theme from '../../consts/themes';
 import { editorRoute } from '../../consts/routes';
 

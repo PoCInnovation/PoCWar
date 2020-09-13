@@ -7,10 +7,12 @@ import BackupIcon from '@material-ui/icons/Backup';
 import Fab from '@material-ui/core/Fab';
 import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import 'ace-builds/src-noconflict/mode-json';
 import { useForm } from 'react-hook-form';
 import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEditor';
 import { getHeaders, http } from '../utils/server';
 import { showSnackbar } from '../reducers/actions/snackBarAction';
+import AceEditor from 'react-ace';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -28,7 +30,7 @@ const CreateChallenge = withRouter(({ history }) => {
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const [theme, setTheme] = useState('dracula');
-  const [testList, setList] = useState([{name: '', args: [''], out: ''}]);
+  const [testList, setList] = useState('[\n\t{\n\t\t"name": "Test 1",\n\t\t"args": [\n\t\t\t"Arg1",\n\t\t\t"Arg2"\n\t\t],\n\t\t"out": "Arg1Arg2",\n\t\t"err": "",\n\t\t"ret": 0\n\t}\n]');
   const classes = useStyles(theme);
 
   const submitChallengeError = (localErrors) => {
@@ -44,9 +46,10 @@ const CreateChallenge = withRouter(({ history }) => {
   const submitChallenge = async (data) => {
     try {
       const headers = getHeaders();
+      console.log(JSON.parse(testList));
       await http.post('/challenge', {
         ...data,
-        tests: getTestEditorValues(),
+        tests: JSON.parse(testList),
       }, headers)
         .then(() => {
           history.push(`/editor?challengeID=${data.slug}`);
@@ -55,7 +58,7 @@ const CreateChallenge = withRouter(({ history }) => {
           dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to create challenge.'));
         });
     } catch (e) {
-      dispatch(showSnackbar('You must be logged in to post a challenge.'));
+       dispatch(showSnackbar('You must be logged in to post a challenge.'));
     }
   };
 
@@ -253,12 +256,28 @@ const CreateChallenge = withRouter(({ history }) => {
               />
             </div>
             <br />
-            <div>
-              <TestList values={testList} />
+              {/* <TestList values={testList} />
               <Fab color='primary' aria-label='add' onClick={() => addTests()}>
                 <AddIcon />
-              </Fab>
-            </div>
+              </Fab> */}
+            <AceEditor
+              style={{
+                borderRadius: '3px',
+              }}
+              mode="json"
+              theme={theme}
+              fontSize={16}
+              width='100%'
+              height='450px'
+              enableBasicAutocompletion
+              enableLiveAutocompletion
+              showGutter
+              name='MainEditor'
+              showPrintMargin={true}
+              editorProps={{ $blockScrolling: true }}
+              value={testList}
+              onChange={(newValue) => { setList(newValue) }}
+            />
           </div>
         </div>
         <Fab type='submit' color='primary' aria-label='submit' className={classes.submitChallenge}>

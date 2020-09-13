@@ -9,7 +9,7 @@ import { makeStyles, Paper } from '@material-ui/core';
 
 import editorThemes from '../../consts/editorThemes';
 import autocompleteLanguages from '../../consts/autoComplete';
-import languages from '../../consts/languages';
+import { languages, langsForSubmit } from '../../consts/languages';
 
 // eslint-disable-next-line global-require,import/no-dynamic-require
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
@@ -31,16 +31,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+
 export default function Editor({
   editValue, setEditValue, language, theme,
 }) {
   const classes = useStyles();
-
   return (
     <Paper className={classes.paperBlock}>
       <AceEditor
         className={classes.editor}
-        mode={language}
+        mode={langsForSubmit[language]}
         theme={theme}
         fontSize={16}
         width='100%'

@@ -1,10 +1,21 @@
 const languages = {
   javascript: 'javascript',
-  python: 'python',
-  c: 'c_cpp',
-  cpp: 'c_cpp',
+  python3: 'python',
+  'C': 'c_cpp',
+  'C++': 'c_cpp',
   ruby: 'ruby',
   rust: 'rust',
+  go: 'golang'
 };
 
-export default languages;
+const langsForSubmit = {
+  C: 'c_cpp',
+  'C++': 'c_cpp',
+  python3: 'python',
+  javascript: 'javascript',
+  go: 'golang',
+  ruby: 'ruby',
+  rust: 'rust'
+};
+
+export { languages, langsForSubmit };

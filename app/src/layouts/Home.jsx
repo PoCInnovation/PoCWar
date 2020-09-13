@@ -9,7 +9,8 @@ const useStyles = makeStyles(() => ({
   span: {
     fontFamily: 'aAtmospheric',
     marginTop: '5%',
-    marginBottom: '5%'
+    marginBottom: '5%',
+    color: "#a8a8a8"
   }
 }));
 

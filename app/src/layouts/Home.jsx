@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { challengeRoute } from '../consts/routes'

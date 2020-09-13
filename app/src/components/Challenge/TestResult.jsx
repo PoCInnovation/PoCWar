@@ -10,14 +10,20 @@ const useStyles = makeStyles(() => ({
     background: theme.palette.primary.main,
     alignItems: 'center',
     margin: '2%',
+    position: 'relative'
   },
   title: {
-    float: 'left',
     marginLeft: '5%',
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)'
   },
   category: {
-    float: 'right',
+    right: 0,
     marginRight: '5%',
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)'
   },
 }));
 

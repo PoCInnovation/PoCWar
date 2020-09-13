@@ -9,8 +9,8 @@ const languages = {
 };
 
 const langsForSubmit = {
-  C: 'c_cpp',
-  'C++': 'c_cpp',
+  C: 'c',
+  'C++': 'cpp',
   python3: 'python',
   javascript: 'javascript',
   go: 'golang',

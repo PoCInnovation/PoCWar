@@ -273,7 +273,7 @@ const CreateChallenge = withRouter(({ history }) => {
               enableLiveAutocompletion
               showGutter
               name='MainEditor'
-              showPrintMargin={true}
+              showPrintMargin={false}
               editorProps={{ $blockScrolling: true }}
               value={testList}
               onChange={(newValue) => { setList(newValue) }}

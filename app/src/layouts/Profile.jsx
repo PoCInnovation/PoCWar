@@ -67,7 +67,7 @@ const ProfileLayout = withRouter(({ history }) => {
     profile = (
       <div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Paper className={classes.paper} elevation={3}>
+        <Paper className={classes.paper} elevation={3}>
             <ul style={{
               float: 'left', color: 'black', textAlign: 'left', listStyleType: 'none',
             }}

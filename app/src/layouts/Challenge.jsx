@@ -11,14 +11,22 @@ import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
 import { langsForSubmit } from '../consts/languages';
+import Paper from '@material-ui/core/Paper';
+//import ProgressBar from '@bit/react-bootstrap.react-bootstrap.progress-bar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   gridRoot: {
     position: 'relative',
   },
   loading: {
     paddingTop: '20%',
   },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    background: theme.palette.primary.main,
+    margin: '2%',
+  }
 }));
 
 
@@ -73,6 +81,10 @@ export default function ChallengeLayout() {
             />
             <StdLog stdout={stdout} stderr={stderr} />
             <TestResultList tests={testsList} />
+            <Paper className={classes.paper} elevation={3}>
+              <p style={{textAlign: 'left'}}>Tests passed: {testsResult.passed}</p>
+              <p style={{textAlign: 'left'}}>Tests Failed: {testsResult.failed}</p>
+            </Paper>
           </Grid>
           <Grid item xs={12} sm={8}>
             <Editor

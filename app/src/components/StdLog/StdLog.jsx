@@ -22,9 +22,9 @@ function TabPanel({
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
+        <div>
+          {children}
+        </div>
       )}
     </div>
   );
@@ -63,8 +63,8 @@ export default function StdLog({ stdout, stderr }) {
   const [value, setValue] = React.useState(0);
 
   // TODO: valid key={}
-  const formatStdout = stdout.split('\n').map((item, i) => (<span key={i}>{item}</span>));
-  const formatStderr = stderr.split('\n').map((item, i) => (<span key={i}>{item}</span>));
+  const formatStdout = stdout.split('\n').map((item, i) => (<p key={i}>{item}</p>));
+  const formatStderr = stderr.split('\n').map((item, i) => (<p key={i}>{item}</p>));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -81,14 +81,14 @@ export default function StdLog({ stdout, stderr }) {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Box className={classes.textBlock} color='text.primary'>
-          <Typography component='span' variant='body2'>
+          <Typography component='div' variant='body2'>
             {formatStdout}
           </Typography>
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Box className={classes.textBlock} color='text.accent'>
-          <Typography component='span' variant='body2'>
+          <Typography component='div' variant='body2'>
             {formatStderr}
           </Typography>
         </Box>

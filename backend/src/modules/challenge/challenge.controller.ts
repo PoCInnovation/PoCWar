@@ -46,9 +46,9 @@ export class ChallengeController {
   @ApiResponse({ type: GetChallengeResponseDto })
   @Get('challenge/:slug')
   async getChallenge(
-    @AuthUser() { id }:AuthUserDto, @Param('slug') slug: string,
+    @AuthUser() user: AuthUserDto, @Param('slug') slug: string,
   ): Promise<GetChallengeResponseDto> {
-    return this.challengeService.challenge(id, slug);
+    return this.challengeService.challenge(slug, user?.id);
   }
 
   @ApiOperation({ summary: 'Create a new challenge.' })

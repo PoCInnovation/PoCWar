@@ -26,12 +26,12 @@ export class ChallengeService {
     };
   }
 
-  async challenge(userId: string, slug: string): Promise<GetChallengeResponseDto | null> {
+  async challenge(slug: string, userId?: string): Promise<GetChallengeResponseDto | null> {
     const challenge = await this.prisma.challenge.findOne({
       where: { slug },
       include: {
         codeSources: {
-          take: 1,
+          take: userId ? 1 : 0,
           where: { authorId: userId },
           select: {
             passAllTests: true,
@@ -63,6 +63,7 @@ export class ChallengeService {
       take: pageSize,
       include: {
         codeSources: {
+          take: userId ? 1 : 0,
           where: { authorId: userId },
           select: {
             passAllTests: true,

@@ -53,7 +53,7 @@ const ProfileLayout = withRouter(({ history }) => {
   const user = {
     error, profileData, isLoading,
   };
-
+  console.log(user);
   useEffect(() => {
     async function fetchData() {
       await http.get('/profile', getHeaders())
@@ -98,7 +98,7 @@ const ProfileLayout = withRouter(({ history }) => {
                           className: classes.input,
                         }}
                       />
-                    : <p>{user.prof.name}</p>}
+                    : <p>{user.profileData.name}</p>}
                 </li>
                 <li className={classes.li}>
                   <p>Email</p>
@@ -111,19 +111,19 @@ const ProfileLayout = withRouter(({ history }) => {
                           className: classes.input,
                         }}
                       />
-                    : <p>{user.prof.email}</p>}
+                    : <p>{user.profileData.email}</p>}
                 </li>
                 <li className={classes.li}>
                   <p>Role</p>
-                  <p>{user.prof.role}</p>
+                  <p>{user.profileData.role}</p>
                 </li>
                 <li className={classes.li}>
                   <p>Challenges solved</p>
-                  <p>{challengeSolved(user.prof.challenges)}</p>
+                  <p>{challengeSolved(user.profileData.challenges)}</p>
                 </li>
                 <li className={classes.li}>
                   <p>Challenges started</p>
-                  <p>{user.prof.challenges.length}</p>
+                  <p>{user.profileData.challenges.length}</p>
                 </li>
               </ul>
             </form>

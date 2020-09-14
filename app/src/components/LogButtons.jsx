@@ -56,5 +56,5 @@ export default function LogButton() {
   if (!user) {
     return <LoginButton />;
   }
-  return <ProfileButton email={JSON.parse(user).email} />;
+  return <ProfileButton email={JSON.parse(user).infos.email} />;
 }

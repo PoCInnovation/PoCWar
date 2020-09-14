@@ -3,7 +3,7 @@ import {
   Get,
   Param,
   Delete,
-  UseGuards, Patch, Body, Put,
+  UseGuards, Patch, Body, Put, Query, ParseIntPipe,
 } from '@nestjs/common';
 import {
   User as UserModel, Role as RoleType, Challenge as ChallengeModel, Test as TestModel,
@@ -12,12 +12,16 @@ import {
   ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags,
 } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard, OptionalJwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { PatchUserAdminDto } from '../../common/dto/patch-user.dto';
 import { PatchChallengeAdminDto } from '../../common/dto/patch-challenge.dto';
 import { PutTestAdminDto } from '../../common/dto/put-test.dto';
+import { GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
+import { AuthUser } from '../../common/decorators/auth-user.decorator';
+import { AuthUserDto } from '../../common/dto/auth-user.dto';
+import { GetUsersResponseDto } from '../../common/dto/response/get-users-response.dto';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -29,10 +33,19 @@ export class AdminController {
     private readonly adminService: AdminService,
   ) {}
 
+  @ApiOperation({ summary: 'Get a paginated array of user.' })
+  @Get('admin/users')
+  async getChallenges(
+    @Query('page', ParseIntPipe) page: number,
+      @Query('pageSize', ParseIntPipe) pageSize: number,
+  ): Promise<GetUsersResponseDto> {
+    return this.adminService.paginateUser(page, pageSize);
+  }
+
   @ApiOperation({ summary: 'Get user by id.' })
   @ApiOkResponse({})
   @ApiNotFoundResponse({ description: 'User not found.' })
-  @Get('admin/user/:id')
+  @Get('admin/users/:id')
   async getUserById(@Param('id') id: string): Promise<UserModel> {
     return this.adminService.user({ id });
   }
@@ -40,14 +53,14 @@ export class AdminController {
   @ApiOperation({ summary: 'Get user by id.' })
   @ApiOkResponse({})
   @ApiNotFoundResponse({ description: 'User not found.' })
-  @Patch('admin/user/:id')
+  @Patch('admin/users/:id')
   async patchUserById(@Param('id') id: string, @Body() user: PatchUserAdminDto): Promise<UserModel> {
     return this.adminService.patchUser(id, user);
   }
 
   @ApiOperation({ summary: 'Delete user by id.' })
   @ApiOkResponse({ description: 'User successfully deleted.' })
-  @Delete('admin/user/:id')
+  @Delete('admin/users/:id')
   async deleteUser(@Param('id') id: string): Promise<UserModel> {
     return this.adminService.deleteUser({ id });
   }

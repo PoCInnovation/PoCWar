@@ -10,7 +10,6 @@ import { Paper } from '@material-ui/core';
 import theme from '../../consts/themes';
 import TestResultList from '../../containers/TestResultList';
 
-// TODO: no prop spreading
 function TabPanel({
   children, value, index, ...other
 }) {
@@ -62,7 +61,6 @@ export default function StdLog({ stdout, stderr, tests }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  // TODO: valid key={}
   const formatStdout = stdout.split('\n').map((item, i) => (<p key={i}>{item}</p>));
   const formatStderr = stderr.split('\n').map((item, i) => (<p key={i}>{item}</p>));
 
@@ -70,7 +68,6 @@ export default function StdLog({ stdout, stderr, tests }) {
     setValue(newValue);
   };
 
-  // TODO: fix div in p
   return (
     <Paper className={classes.root}>
       <AppBar position='static'>
@@ -80,15 +77,15 @@ export default function StdLog({ stdout, stderr, tests }) {
           <Tab label='results' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} style={{height: 170, overflowY: 'scroll'}}>
+      <TabPanel value={value} index={0} style={{ height: 170, overflowY: 'scroll' }}>
         <Box className={classes.textBlock} color='text.primary'>
-          <Typography component='div' variant='body2' style={{marginLeft: 10}}>
+          <Typography component='div' variant='body2' style={{ marginLeft: 10 }}>
             {formatStdout}
           </Typography>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={1} style={{height: 170, overflowY: 'scroll'}}>
-        <Box className={classes.textBlock} color='text.accent' style={{marginLeft: 10}}>
+      <TabPanel value={value} index={1} style={{ height: 170, overflowY: 'scroll' }}>
+        <Box className={classes.textBlock} color='text.accent' style={{ marginLeft: 10 }}>
           <Typography component='div' variant='body2'>
             {formatStderr}
           </Typography>

@@ -48,6 +48,7 @@ const SignInContainer = withRouter(({ history }) => {
     return signin(email, password)
       .then(() => {
         history.push(homeRoute);
+        // TODO: deprecated
         window.location.reload(false);
       })
       .catch((err) => {

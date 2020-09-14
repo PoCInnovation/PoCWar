@@ -1,11 +1,11 @@
 const languages = {
   javascript: 'javascript',
   python3: 'python',
-  'C': 'c_cpp',
+  C: 'c_cpp',
   'C++': 'c_cpp',
   ruby: 'ruby',
   rust: 'rust',
-  go: 'golang'
+  go: 'golang',
 };
 
 const langsForSubmit = {
@@ -15,7 +15,7 @@ const langsForSubmit = {
   javascript: 'javascript',
   go: 'golang',
   ruby: 'ruby',
-  rust: 'rust'
+  rust: 'rust',
 };
 
 export { languages, langsForSubmit };

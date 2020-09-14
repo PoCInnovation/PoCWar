@@ -5,15 +5,14 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
 import { withRouter } from 'react-router-dom';
-import { LogoutButton } from '../components/LogButtons';
-import useProfile from '../hooks/profile';
-import { getHeaders, http } from '../utils/server';
 import Fab from '@material-ui/core/Fab';
 import CreateIcon from '@material-ui/icons/Create';
 import TextField from '@material-ui/core/TextField';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
+import { LogoutButton } from '../components/LogButtons';
+import { getHeaders, http } from '../utils/server';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,11 +47,11 @@ function challengeSolved(challenges) {
 const ProfileLayout = withRouter(({ history }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [prof, setProfile] = useState({});
-  const [isEditing, setEditing] = useState(false);
+  const [profileData, setProfile] = useState({});
+  // const [isEditing, setEditing] = useState(false);
 
   const user = {
-    error, prof, isLoading,
+    error, profileData, isLoading,
   };
 
   useEffect(() => {
@@ -63,7 +62,6 @@ const ProfileLayout = withRouter(({ history }) => {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           if (err.response && err.response.status === 401) {
             Cookies.remove('user');
             history.push('/login');
@@ -72,11 +70,11 @@ const ProfileLayout = withRouter(({ history }) => {
         });
     }
     fetchData();
-  }, []);
+  }, [history]);
   const classes = useStyles();
   let profile;
   if (user.error) {
-    profile = <div>try reconnecting</div>;
+    profile = '';
   } else if (user.isLoading) {
     profile = <CircularProgress color='secondary' />;
   } else {

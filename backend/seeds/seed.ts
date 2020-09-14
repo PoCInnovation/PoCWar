@@ -9,10 +9,10 @@ async function main() {
 
   await prisma.user.create({
     data: {
+      ...seeds,
       role: process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD ? 'admin' : 'user',
       email: process.env.ADMIN_EMAIL || email,
       password: await bcrypt.hash(process.env.ADMIN_PASSWORD || password, 10),
-      ...seeds,
     },
   });
 

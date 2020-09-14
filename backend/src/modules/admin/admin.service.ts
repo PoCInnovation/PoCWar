@@ -14,10 +14,39 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PatchUserAdminDto } from '../../common/dto/patch-user.dto';
 import { PatchChallengeAdminDto } from '../../common/dto/patch-challenge.dto';
 import { PutTestAdminDto } from '../../common/dto/put-test.dto';
+import { GetUserDto, GetUsersResponseDto } from '../../common/dto/response/get-users-response.dto';
 
 @Injectable()
 export class AdminService {
   constructor(private prisma: PrismaService) {}
+
+  async paginateUser(
+    page: number, pageSize: number
+  ): Promise<GetUsersResponseDto> {
+    const userCount = await this.prisma.user.count();
+    const toSkip = (page - 1) * pageSize;
+    if (toSkip >= userCount) {
+      return {
+        users: [],
+        pageCount: Math.ceil(userCount / pageSize),
+        pageSize,
+      };
+    }
+    const users: GetUserDto[] = (await this.prisma.user.findMany({
+      skip: toSkip,
+      take: pageSize,
+      select: {
+        name: true,
+        email: true,
+        role: true,
+      },
+    }));
+    return {
+      users,
+      pageCount: Math.ceil(userCount / pageSize),
+      pageSize,
+    };
+  }
 
   async user(userWhereUniqueInput: UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findOne({

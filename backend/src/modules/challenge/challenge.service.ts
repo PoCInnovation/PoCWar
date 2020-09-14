@@ -62,12 +62,13 @@ export class ChallengeService {
       skip: toSkip,
       take: pageSize,
       include: {
+        author: {
+          select: { name: true },
+        },
         codeSources: {
           take: userId ? 1 : 0,
           where: { authorId: userId },
-          select: {
-            passAllTests: true,
-          },
+          select: { passAllTests: true },
         },
       },
     })).map((challenge) => ChallengeService.formatChallenge(challenge));

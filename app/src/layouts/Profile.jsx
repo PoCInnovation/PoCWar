@@ -48,7 +48,7 @@ const ProfileLayout = withRouter(({ history }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfile] = useState({});
-  // const [isEditing, setEditing] = useState(false);
+  const [isEditing, setEditing] = useState(false);
 
   const user = {
     error, profileData, isLoading,

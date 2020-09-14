@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
 import ChallengeList from '../containers/ChallengeList';
 import { createChallRoute } from '../consts/routes';
+import { userIsAdmin } from '../utils/auth';
 
 const useStyles = makeStyles(() => ({
   challengesList: {
@@ -25,19 +26,22 @@ const ChallengeHome = withRouter(({ history }) => {
     history.push(createChallRoute);
   };
 
+  const fab = userIsAdmin() ? (
+    <Fab
+      color='primary'
+      aria-label='create'
+      onClick={redirectCreateChall}
+      className={classes.redirectCreateChallenge}
+    >
+      <CreateIcon />
+    </Fab>
+  ) : '';
   return (
     <div>
       <div className={classes.challengesList}>
         <ChallengeList />
       </div>
-      <Fab
-        color='primary'
-        aria-label='create'
-        onClick={redirectCreateChall}
-        className={classes.redirectCreateChallenge}
-      >
-        <CreateIcon />
-      </Fab>
+      {fab}
     </div>
   );
 });

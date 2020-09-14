@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router, Switch, Route, Redirect,
 } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
-import Cookies from 'js-cookie';
 import ChallengeLayout from './layouts/Challenge';
 import ChallengeHomeLayout from './layouts/ChallengeHome';
 import ProfileLayout from './layouts/Profile';
@@ -20,27 +19,27 @@ import {
   profileRoute,
   loginRoute,
   registerRoute,
+  adminRoute,
 } from './consts/routes';
+import AdminLayout from './layouts/Admin';
 import NavBar from './containers/NavBar';
 import GlobalSnackbar from './containers/SnackBar';
+import { userIsAdmin, userIsLoggedIn } from './utils/auth';
 
-function AuthenticatedRoute({ component: Component, path }) {
+function AuthenticatedRoute({ component: Component, path, auth }) {
   return (
     <Route
       path={path}
-      render={(props) => {
-        const isAuthenticated = Cookies.get('user');
-        return (isAuthenticated ? <Component {...props} /> : (
-          <Redirect
-            to={`${loginRoute}?redirect=${props.location.pathname}${props.location.search}`}
-          />
-        ));
-      }}
+      render={(props) => (auth
+        ? (<Component {...props} />)
+        : (<Redirect to={`${loginRoute}?redirect=${props.location.pathname}${props.location.search}`} />))}
     />
   );
 }
 
 export default function App() {
+  const isAuth = userIsLoggedIn();
+  const isAdmin = userIsAdmin();
   return (
     <ThemeProvider theme={theme}>
       <style>{`body { background-color: ${theme.palette.primary.dark}; }`}</style>
@@ -48,8 +47,8 @@ export default function App() {
       <Router>
         <NavBar />
         <Switch>
-          <AuthenticatedRoute path={createChallRoute} component={CreateChallLayout} />
-          <AuthenticatedRoute path={editorRoute} component={ChallengeLayout} />
+          <AuthenticatedRoute path={createChallRoute} component={CreateChallLayout} auth={isAuth} />
+          <AuthenticatedRoute path={editorRoute} component={ChallengeLayout} auth={isAuth} />
           <Route path={loginRoute}>
             <LoginLayout />
           </Route>
@@ -59,7 +58,8 @@ export default function App() {
           <Route path={challengeRoute}>
             <ChallengeHomeLayout />
           </Route>
-          <AuthenticatedRoute path={profileRoute} component={ProfileLayout} />
+          <AuthenticatedRoute path={profileRoute} component={ProfileLayout} auth={isAuth} />
+          <AuthenticatedRoute path={adminRoute} component={AdminLayout} auth={isAdmin} />
           <Route path={homeRoute}>
             <HomeLayout />
           </Route>

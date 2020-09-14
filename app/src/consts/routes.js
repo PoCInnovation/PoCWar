@@ -9,3 +9,4 @@ export const challengeRoute = '/challenge';
 export const homeRoute = '/';
 export const registerRoute = '/register';
 export const profileRoute = '/profile';
+export const adminRoute = '/admin';

@@ -5,11 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
 import { withRouter } from 'react-router-dom';
-import { LogoutButton } from '../components/LogButtons';
-import useProfile from '../hooks/profile';
-import { getHeaders, http } from '../utils/server';
 import Fab from '@material-ui/core/Fab';
 import CreateIcon from '@material-ui/icons/Create';
+import { LogoutButton } from '../components/LogButtons';
+import { getHeaders, http } from '../utils/server';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,11 +34,11 @@ function challengeSolved(challenges) {
 const ProfileLayout = withRouter(({ history }) => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [prof, setProfile] = useState({});
-  const [isEditing, setEditing] = useState(false);
+  const [profileData, setProfile] = useState({});
+  // const [isEditing, setEditing] = useState(false);
 
   const user = {
-    error, prof, isLoading,
+    error, profileData, isLoading,
   };
 
   useEffect(() => {
@@ -50,7 +49,6 @@ const ProfileLayout = withRouter(({ history }) => {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           if (err.response && err.response.status === 401) {
             Cookies.remove('user');
             history.push('/login');
@@ -59,18 +57,18 @@ const ProfileLayout = withRouter(({ history }) => {
         });
     }
     fetchData();
-  }, []);
+  }, [history]);
   const classes = useStyles();
   let profile;
   if (user.error) {
-    profile = <div>try reconnecting</div>;
+    profile = '';
   } else if (user.isLoading) {
     profile = <CircularProgress color='secondary' />;
   } else {
     profile = (
       <div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Paper className={classes.paper} elevation={3}>
+          <Paper className={classes.paper} elevation={3}>
             <ul style={{
               float: 'left', color: 'black', textAlign: 'left', listStyleType: 'none',
             }}
@@ -85,11 +83,11 @@ const ProfileLayout = withRouter(({ history }) => {
               float: 'right', color: 'black', textAlign: 'right', listStyleType: 'none', paddingRight: 20, fontWeight: 'bold',
             }}
             >
-              {/* <li>{user.prof.name}</li> */}
-              <li>{user.prof.email}</li>
-              <li>{user.prof.role}</li>
-              <li>{challengeSolved(user.prof.challenges)}</li>
-              <li>{user.prof.challenges.length}</li>
+              <li>{user.profileData.name}</li>
+              <li>{user.profileData.email}</li>
+              <li>{user.profileData.role}</li>
+              <li>{challengeSolved(user.profileData.challenges)}</li>
+              <li>{user.profileData.challenges.length}</li>
             </ul>
           </Paper>
         </div>
@@ -97,9 +95,9 @@ const ProfileLayout = withRouter(({ history }) => {
         <Fab
           color='primary'
           aria-label='create'
-          style={{float: 'right'}}
-          size="small"
-          onClick={() => {console.log('hello')}}
+          style={{ float: 'right' }}
+          size='small'
+          onClick={() => { console.log('hello'); }}
         >
           <CreateIcon />
         </Fab>

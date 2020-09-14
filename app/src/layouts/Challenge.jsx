@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+import Paper from '@material-ui/core/Paper';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
 
@@ -11,8 +12,7 @@ import submitCode from '../hooks/submit';
 import TestResultList from '../containers/TestResultList';
 import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
 import { langsForSubmit } from '../consts/languages';
-import Paper from '@material-ui/core/Paper';
-//import ProgressBar from '@bit/react-bootstrap.react-bootstrap.progress-bar';
+// import ProgressBar from '@bit/react-bootstrap.react-bootstrap.progress-bar';
 
 const useStyles = makeStyles((theme) => ({
   gridRoot: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     background: theme.palette.primary.main,
     margin: '2%',
-  }
+  },
 }));
 
 
@@ -60,7 +60,7 @@ export default function ChallengeLayout() {
   };
 
   const formatTestsErrOutput = (tests) => tests
-    .filter((test) => !test.pass)
+    .filter((test) => !test.pass && (test.exitStatus !== 0 || test.stderr !== ''))
     .map((test) => `\n\n** ${test.name} **\nExit status: ${test.exitStatus}\nOutput:\n-- START --\n${test.stderr}\n-- END --\n`)
     .join('\n\n');
 
@@ -74,7 +74,6 @@ export default function ChallengeLayout() {
       <div>
         <Grid className={classes.loading} container justify='center'>
           <CircularProgress color='secondary' />
-          ;
         </Grid>
       </div>
     );
@@ -89,11 +88,17 @@ export default function ChallengeLayout() {
               outputExample={challenge.output_example}
               stating={challenge.description}
             />
-            <StdLog stdout={stdout} stderr={stderr}/>
+            <StdLog stdout={stdout} stderr={stderr} />
             <TestResultList tests={testsList} />
             <Paper className={classes.paper} elevation={3}>
-              <p style={{textAlign: 'left'}}>Tests passed: {testsResult.passed}</p>
-              <p style={{textAlign: 'left'}}>Tests Failed: {testsResult.failed}</p>
+              <p style={{ textAlign: 'left' }}>
+                Tests passed:
+                {testsResult.passed}
+              </p>
+              <p style={{ textAlign: 'left' }}>
+                Tests Failed:
+                {testsResult.failed}
+              </p>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={8}>

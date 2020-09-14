@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Typography, Paper } from '@material-ui/core';
 import defaultTheme from '../consts/themes';
+import ReactMarkdown from "react-markdown";
+import htmlParser from 'react-markdown/plugins/html-parser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   paperBlock: {
     margin: '2%',
     background: theme.palette.primary.main,
-    overflow: 'auto',
   },
   inputPaper: {
     paddingTop: '5px',
@@ -45,47 +46,26 @@ export default function StatingDisplay({
   const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
   const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
   const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-
+  const parseHtml = htmlParser({
+    isValidNode: node => node.type !== 'script',
+    processingInstructions: [/* ... */]
+  });
   return (
-    <div className={classes.root} style={{height:300, overflowY:'scroll'}}>
-      <Paper className={classes.paperBlock}>
+    <div className={classes.root} style={{height:400, overflowY:'auto'}}>
+      <div className={classes.paperBlock}>
         <Box className={classes.titleBlock} color='text.primary'>
           <Typography align='justify' component='span' variant='body2'>
             {title}
           </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left' component='span' variant='body2'>
-            {formattedStating}
-          </Typography>
+        <ReactMarkdown
+          source={stating}
+          escapeHtml={false} 
+          astPlugins={[parseHtml]}
+        />
         </Box>
-
-        <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='span' variant='body2'>
-            Input example
-          </Typography>
-        </Box>
-        <Paper className={classes.inputPaper}>
-          <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component='span' variant='body2'>
-              {formattedInputExample}
-            </Typography>
-          </Box>
-        </Paper>
-
-        <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='span' variant='body2'>
-            Expected output
-          </Typography>
-        </Box>
-        <Paper className={classes.inputPaper}>
-          <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component='span' variant='body2'>
-              {formattedOutputExample}
-            </Typography>
-          </Box>
-        </Paper>
-      </Paper>
+      </div>
     </div>
   );
 }

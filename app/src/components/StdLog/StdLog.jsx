@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import theme from '../../consts/themes';
+import TestResultList from '../../containers/TestResultList';
 
 // TODO: no prop spreading
 function TabPanel({
@@ -57,7 +58,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function StdLog({ stdout, stderr }) {
+export default function StdLog({ stdout, stderr, tests }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -76,6 +77,7 @@ export default function StdLog({ stdout, stderr }) {
         <Tabs value={value} onChange={handleChange} aria-label='Output of program'>
           <Tab label='stdout' {...a11yProps(0)} />
           <Tab label='stderr' {...a11yProps(1)} />
+          <Tab label='results' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} style={{height: 170, overflowY: 'scroll'}}>
@@ -90,6 +92,11 @@ export default function StdLog({ stdout, stderr }) {
           <Typography component='div' variant='body2'>
             {formatStderr}
           </Typography>
+        </Box>
+      </TabPanel>
+      <TabPanel value={value} index={2} style={{height: 170, overflowY: 'scroll'}}>
+        <Box className={classes.textBlock} color='text.accent' style={{marginLeft: 10}}>
+          <TestResultList tests={tests} />
         </Box>
       </TabPanel>
     </Paper>

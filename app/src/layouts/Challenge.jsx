@@ -3,12 +3,10 @@ import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
-
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
 import EditorSubBar from '../containers/EditorSubBar';
 import submitCode from '../hooks/submit';
-import TestResultList from '../containers/TestResultList';
 import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
 import { langsForSubmit } from '../consts/languages';
 import Paper from '@material-ui/core/Paper';
@@ -89,8 +87,7 @@ export default function ChallengeLayout() {
               outputExample={challenge.output_example}
               stating={challenge.description}
             />
-            <StdLog stdout={stdout} stderr={stderr}/>
-            <TestResultList tests={testsList} />
+            <StdLog stdout={stdout} stderr={stderr} tests={testsList} />
             <Paper className={classes.paper} elevation={3}>
               <p style={{textAlign: 'left'}}>Tests passed: {testsResult.passed}</p>
               <p style={{textAlign: 'left'}}>Tests Failed: {testsResult.failed}</p>

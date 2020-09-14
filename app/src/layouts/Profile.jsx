@@ -10,14 +10,27 @@ import useProfile from '../hooks/profile';
 import { getHeaders, http } from '../utils/server';
 import Fab from '@material-ui/core/Fab';
 import CreateIcon from '@material-ui/icons/Create';
+import TextField from '@material-ui/core/TextField';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
     background: theme.palette.primary.A100,
+    width: '100%',
     marginTop: '5%',
     marginBottom: '5%',
+  },
+  li: {
+    display: 'flex',
+    flexDirection: 'linum',
+    justifyContent: 'space-between'
+  },
+  input: {
+    color: 'black',
   },
 }));
 
@@ -68,41 +81,89 @@ const ProfileLayout = withRouter(({ history }) => {
     profile = <CircularProgress color='secondary' />;
   } else {
     profile = (
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Paper className={classes.paper} elevation={3}>
-            <ul style={{
-              float: 'left', color: 'black', textAlign: 'left', listStyleType: 'none',
-            }}
-            >
-              <li>Name</li>
-              <li>Email</li>
-              <li>Role</li>
-              <li>Challenges solved</li>
-              <li>Challenges started</li>
-            </ul>
-            <ul style={{
-              float: 'right', color: 'black', textAlign: 'right', listStyleType: 'none', paddingRight: 20, fontWeight: 'bold',
-            }}
-            >
-              {/* <li>{user.prof.name}</li> */}
-              <li>{user.prof.email}</li>
-              <li>{user.prof.role}</li>
-              <li>{challengeSolved(user.prof.challenges)}</li>
-              <li>{user.prof.challenges.length}</li>
-            </ul>
+      <div style={{width: '25%'}}>
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <Paper className={classes.paper} elevation={3}>
+          <form onSubmit={(onSubmit, onSubmitError) => {console.log(onSubmit, onSubmitError)}}>
+              <ul style={{
+                 color: 'black', listStyleType: 'none', width: '80%'
+              }}
+              >
+                <li className={classes.li}>
+                  <p>Name</p>
+                  {isEditing
+                    ? <TextField
+                        id="newName"
+                        label="New name"
+                        required
+                        InputProps={{
+                          className: classes.input,
+                        }}
+                      />
+                    : <p>{user.prof.name}</p>}
+                </li>
+                <li className={classes.li}>
+                  <p>Email</p>
+                  {isEditing
+                    ? <TextField
+                        id="newMail"
+                        label="New mail"
+                        required
+                        InputProps={{
+                          className: classes.input,
+                        }}
+                      />
+                    : <p>{user.prof.email}</p>}
+                </li>
+                <li className={classes.li}>
+                  <p>Role</p>
+                  <p>{user.prof.role}</p>
+                </li>
+                <li className={classes.li}>
+                  <p>Challenges solved</p>
+                  <p>{challengeSolved(user.prof.challenges)}</p>
+                </li>
+                <li className={classes.li}>
+                  <p>Challenges started</p>
+                  <p>{user.prof.challenges.length}</p>
+                </li>
+              </ul>
+            </form>
           </Paper>
         </div>
-        <LogoutButton email='Disconnect' />
-        <Fab
-          color='primary'
-          aria-label='create'
-          style={{float: 'right'}}
-          size="small"
-          onClick={() => {console.log('hello')}}
-        >
-          <CreateIcon />
-        </Fab>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <LogoutButton email='Disconnect' />
+          {isEditing
+              ? <div>
+                  <Fab
+                    color='primary'
+                    aria-label='create'
+                    style={{float: 'right'}}
+                    size="small"
+                    onClick={() => {setEditing(!isEditing)}}
+                  >
+                    <CloseIcon />
+                  </Fab>
+                  <Button
+                    color='primary'
+                    aria-label='create'
+                    style={{float: 'right'}}
+                    size="small"
+                    type='submit'
+                  >
+                    <CheckIcon />
+                  </Button>
+                </div>
+              : <Fab
+                  color='primary'
+                  aria-label='create'
+                  style={{float: 'right'}}
+                  size="small"
+                  onClick={() => {setEditing(!isEditing)}}
+                >
+                  <CreateIcon />
+                </Fab>}
+        </div>
       </div>
     );
   }

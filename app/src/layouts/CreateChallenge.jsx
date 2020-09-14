@@ -13,11 +13,13 @@ import TestEditor, { getTestEditorValues } from '../components/Challenge/TestEdi
 import { getHeaders, http } from '../utils/server';
 import { showSnackbar } from '../reducers/actions/snackBarAction';
 import AceEditor from 'react-ace';
+import ReactMarkdown from "react-markdown";
+import htmlParser from 'react-markdown/plugins/html-parser';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    color: theme.palette.primary.A100,
-    borderColor: theme.palette.primary.A100,
+    background: '#272A35',
   },
   submitChallenge: {
     position: 'absolute',
@@ -30,6 +32,7 @@ const CreateChallenge = withRouter(({ history }) => {
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const [theme, setTheme] = useState('dracula');
+  const [description, setDescription] = useState('');
   const [testList, setList] = useState('[\n\t{\n\t\t"name": "Test 1",\n\t\t"args": [\n\t\t\t"Arg1",\n\t\t\t"Arg2"\n\t\t],\n\t\t"out": "Arg1Arg2",\n\t\t"err": "",\n\t\t"ret": 0\n\t}\n]');
   const classes = useStyles(theme);
 
@@ -46,7 +49,8 @@ const CreateChallenge = withRouter(({ history }) => {
   const submitChallenge = async (data) => {
     try {
       const headers = getHeaders();
-      console.log(JSON.parse(testList));
+      data.input_example='----';
+      data.output_example='----';
       await http.post('/challenge', {
         ...data,
         tests: JSON.parse(testList),
@@ -73,6 +77,10 @@ const CreateChallenge = withRouter(({ history }) => {
     console.log(r, i)
     setList(r);
   }
+  const parseHtml = htmlParser({
+    isValidNode: node => node.type !== 'script',
+    processingInstructions: [/* ... */]
+  });
   const TestList = () => {
     let items = []; 
     for (let i = 0; i < testList.length; i+=1) {
@@ -178,9 +186,27 @@ const CreateChallenge = withRouter(({ history }) => {
             })}
             error={!!errors.slug}
           />
+          <div
+            style={{
+              background: '#272A35',
+              borderRadius: 5,
+              overflow: 'auto',
+              color: 'white',
+              height: 600
+            }}
+          >
+          <ReactMarkdown
+            source={document.getElementById('challengeDescription')?.value}
+            escapeHtml={false}
+            astPlugins={[parseHtml]}
+            style={{
+              height: 200,
+            }}
+          />
+          </div>
         </div>
 
-        <div style={{ marginRight: '10px', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px', width: '100%' }}>
           <TextField
             variant='outlined'
             margin='normal'
@@ -191,7 +217,7 @@ const CreateChallenge = withRouter(({ history }) => {
             autoFocus
             multiline
             fullWidth
-            rows={15}
+            rows={19}
             InputProps={{
               className: classes.input,
             }}
@@ -202,83 +228,27 @@ const CreateChallenge = withRouter(({ history }) => {
                 message: 'Should not exceed 500 character',
               },
             })}
+            onChange={(event) => {setDescription(event)}}
             error={!!errors.description}
           />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                id='challengeInputExample'
-                label='Challenge input example'
-                name='input_example'
-                autoComplete='challenge-input-example'
-                required
-                autoFocus
-                InputProps={{
-                  className: classes.input,
-                }}
-                style={{
-                  width: '49%',
-                }}
-                inputRef={register({
-                  required: true,
-                  maxLength: {
-                    value: 500,
-                    message: 'Should not exceed 500 character',
-                  },
-                })}
-                error={!!errors.input_example}
-              />
-              <TextField
-                variant='outlined'
-                margin='normal'
-                id='challengeOutputExample'
-                label='Challenge output example'
-                name='output_example'
-                autoComplete='challenge-output-example'
-                required
-                autoFocus
-                InputProps={{
-                  className: classes.input,
-                }}
-                style={{
-                  width: '49%',
-                }}
-                inputRef={register({
-                  required: true,
-                  maxLength: {
-                    value: 500,
-                    message: 'Should not exceed 500 character',
-                  },
-                })}
-                error={!!errors.output_example}
-              />
-            </div>
-            <br />
-              {/* <TestList values={testList} />
-              <Fab color='primary' aria-label='add' onClick={() => addTests()}>
-                <AddIcon />
-              </Fab> */}
-            <AceEditor
-              style={{
-                borderRadius: '3px',
-              }}
-              mode="json"
-              theme={theme}
-              fontSize={16}
-              width='100%'
-              height='450px'
-              enableBasicAutocompletion
-              enableLiveAutocompletion
-              showGutter
-              name='MainEditor'
-              showPrintMargin={false}
-              editorProps={{ $blockScrolling: true }}
-              value={testList}
-              onChange={(newValue) => { setList(newValue) }}
-            />
-          </div>
+          <AceEditor
+            style={{
+              borderRadius: '3px',
+            }}
+            mode="json"
+            theme={theme}
+            fontSize={16}
+            width='100%'
+            height='100%'
+            enableBasicAutocompletion
+            enableLiveAutocompletion
+            showGutter
+            name='MainEditor'
+            showPrintMargin={false}
+            editorProps={{ $blockScrolling: true }}
+            value={testList}
+            onChange={(newValue) => { setList(newValue) }}
+          />
         </div>
         <Fab type='submit' color='primary' aria-label='submit' className={classes.submitChallenge}>
           <BackupIcon />

@@ -15,7 +15,7 @@ export default function TestResultList({ tests }) {
       justify='center'
       style={{
         height: '20%',
-        overflowY: 'scroll',
+        overflowY: 'auto',
       }}
     >
       {challenges}

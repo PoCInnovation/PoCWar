@@ -36,3 +36,29 @@ code {
   font-style: normal;
   src: url('./assets/aAtmospheric.ttf');
 }
+
+
+pre {
+  border: 1px solid #404452;
+  color: white;
+}
+
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 3em;
+  padding-top: 0.1px;
+  padding-bottom: 0.1px;
+  border-left: 0.5em #404452 solid;
+  background: #26272C;
+}
+
+tr {
+  border-top: 1px solid #c6cbd1;
+}
+
+th,
+td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}

@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import AdminUserTable from '../containers/AdminUser';
+import { AdminUserTable, AdminChallsTable } from '../containers/AdminUser';
 
 function TabPanel(props) {
   const {
@@ -23,7 +23,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -72,10 +72,10 @@ export default function AdminLayout() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <AdminUserTable />
+      <AdminUserTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Page Two
+        <AdminChallsTable />
       </TabPanel>
     </div>
   );

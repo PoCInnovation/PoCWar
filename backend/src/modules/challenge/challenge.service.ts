@@ -14,6 +14,8 @@ import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/resp
 export class ChallengeService {
   constructor(private prisma: PrismaService) {}
 
+  private static formatTestArgs = (args) => `${args.map((arg) => JSON.stringify(arg)).join(' ')}`;
+
   private static formatChallenge(
     {
       codeSources: [{ passAllTests, code } = { passAllTests: false, code: undefined }], ...challenge
@@ -105,7 +107,9 @@ export class ChallengeService {
           connect: { id: userId },
         },
         tests: {
-          create: tests.map(({ args, ...test }) => ({ ...test, args: args.join(' ') })),
+          create: tests.map(({ args, ...test }) => (
+            { ...test, args: ChallengeService.formatTestArgs(args) }
+          )),
         },
       },
     });
@@ -148,11 +152,11 @@ export class ChallengeService {
     const toUpdate: Enumerable<TestUpdateWithWhereUniqueWithoutChallengeInput> = [];
     challengeDto.tests.forEach(({ id, args, ...testModel }) => {
       if (!id) {
-        toCreate.push({ args: args.join(' '), ...testModel });
+        toCreate.push({ args: ChallengeService.formatTestArgs(args), ...testModel });
       } else if (challenge.tests.find((test) => id === test.id)) {
         toUpdate.push({
           where: { id },
-          data: { args: args.join(' '), ...testModel },
+          data: { args: ChallengeService.formatTestArgs(args), ...testModel },
         });
       }
     });

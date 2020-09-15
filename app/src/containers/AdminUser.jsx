@@ -1,10 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAdminGetUsers, useAdminDeleteUsers } from '../hooks/admin';
-import useChallenges from '../hooks/challenges'
-import { showSnackbar } from '../reducers/actions/snackBarAction';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,7 +11,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import MaterialTable from 'material-table';
+import { showSnackbar } from '../reducers/actions/snackBarAction';
+import useChallenges from '../hooks/challenges';
+import { useAdminGetUsers, useAdminDeleteUsers } from '../hooks/admin';
 import { http, getHeaders } from '../utils/server';
+import {getUserFromCookie} from "../utils/auth";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     background: '#272A35',
     borderColor: 'gray',
     color: 'white',
-    fontStyle: 'bold'
+    fontStyle: 'bold',
   },
   table: {
     minWidth: 650,
@@ -38,18 +39,66 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function AdminUserTable() {
-  const [state, setState] = React.useState({
+  const user = getUserFromCookie();
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const [gridData, setGridData] = useState({
     columns: [
-      { title: 'Email', field: 'email' },
-      { title: 'Name', field: 'name' },
-      { title: 'Role', field: 'role' },
+      { title: 'Email', field: 'email', editable: 'never' },
+      { title: 'Name', field: 'name', editable: 'never' },
+      { title: 'Role', field: 'role', lookup: { admin: 'Admin', user: 'User' } },
     ],
     data: [],
   });
-  const classes = useStyles();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const rows = useAdminGetUsers('1');
-  if (rows.isLoading) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    async function fetchData() {
+      await http.get(`/admin/users?page=${page}&pageSize=100`, getHeaders())
+        .then((res) => {
+          console.log(user.id, res.data)
+          const users = user ? res.data.users.filter(u => u.id !== user.id) : res.data.users;
+          setGridData({ ...gridData, data: users });
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    fetchData();
+  }, [page]);
+
+  // const onRowAdd = (newData) => new Promise((resolve) => {});
+
+  const onRowUpdate = (newData, oldData) => new Promise((resolve) => {
+    http.patch(`/admin/users/${newData.id}`, {role: newData.role }, getHeaders())
+      .then(() => {
+        const data = [...gridData.data];
+        data[data.indexOf(oldData)] = newData;
+        setGridData({ ...gridData, data });
+      })
+      .catch(() => {
+        dispatch(showSnackbar('failed to update user'));
+      })
+      .finally(() => resolve());
+  });
+
+  const onRowDelete = (oldData) => new Promise((resolve) => {
+    http.delete(`/admin/users/${oldData.id}`, getHeaders())
+      .then(() => {
+        const data = [...gridData.data];
+        const index = data.indexOf(oldData);
+        data.splice(index, 1);
+        setGridData({ ...gridData, data });
+      })
+      .catch(() => {
+        dispatch(showSnackbar('failed to update user'));
+      })
+      .finally(() => resolve());
+  });
+
+  if (isLoading) {
     return (
       <div>
         <Grid container justify='center'>
@@ -58,60 +107,21 @@ export function AdminUserTable() {
       </div>
     );
   }
-  state.data = rows.data.users;
-  console.log('users:',rows.data.users)
+
   return (
     <div className={classes.main}>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
       <MaterialTable
-        title="List of users"
-        columns={state.columns}
-        data={state.data}
+        title='Users'
+        columns={gridData.columns}
+        data={gridData.data}
         style={{backgroundColor: '#272A35'}}
-        components={{
-          Column: props => (
-              <div style={{ backgroundColor: '#e8eaf5' }}>
-                  hello
-              </div>
-          )
+        options={{
+          headerStyle: {backgroundColor: '#272A35'}
         }}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                if (oldData) {
-                  setState((prevState) => {
-                    const data = [...prevState.data];
-                    data[data.indexOf(oldData)] = newData;
-                    return { ...prevState, data };
-                  });
-                }
-              }, 600);
-            }),
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  http.delete(`/admin/users/${oldData.tableData.id}`, getHeaders());
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
+          onRowUpdate,
+          onRowDelete,
         }}
       />
     </div>

@@ -1,7 +1,7 @@
 export default function generateTests(compilation: string, tests: { args: string}[]): string {
   let array = '';
   tests.forEach((test) => {
-    array += `eval_test '${test.args}'\n`;
+    array += `eval_test ${test.args}\n`;
   });
   return `#!/bin/bash
 bout=$(${compilation} 2> stderr)
@@ -14,7 +14,7 @@ then
     exit 1
 fi
 eval_test() {
-    bout=$(./bin.out $1 2> stderr)
+    bout=$(./bin.out "$@" 2> stderr)
     bret=$?
     berr=$(cat < stderr)
     json_output=$(echo $json_output | jq -c --arg out "$bout" --arg err "$berr" --arg ret "$bret" '.tests += [{"out":$out, "err":$err,"ret":$ret | tonumber}]')

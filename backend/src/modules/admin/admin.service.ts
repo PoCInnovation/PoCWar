@@ -21,7 +21,7 @@ export class AdminService {
   constructor(private prisma: PrismaService) {}
 
   async paginateUser(
-    page: number, pageSize: number
+    page: number, pageSize: number,
   ): Promise<GetUsersResponseDto> {
     const userCount = await this.prisma.user.count();
     const toSkip = (page - 1) * pageSize;
@@ -36,6 +36,7 @@ export class AdminService {
       skip: toSkip,
       take: pageSize,
       select: {
+        id: true,
         name: true,
         email: true,
         role: true,

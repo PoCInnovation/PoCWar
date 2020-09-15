@@ -12,3 +12,8 @@ export function userIsAdmin() {
   }
   return false;
 }
+
+export function getUserFromCookie() {
+  const user = Cookies.get('user');
+  return user ? JSON.parse(user).infos : null;
+}

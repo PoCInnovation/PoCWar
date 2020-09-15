@@ -58,13 +58,5 @@ export class PatchUserAdminDto {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])(?=.{8,40})/,
     { message: 'password too weak' },
   )
-  oldPassword?: string;
-
-  @IsOptional()
-  @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])(?=.{8,40})/,
-    { message: 'password too weak' },
-  )
   password?: string;
 }

@@ -4,6 +4,9 @@ import { IsArray, ValidateNested } from 'class-validator';
 
 export class GetUserDto {
   @ApiProperty()
+  id: string;
+
+  @ApiProperty()
   email: string;
 
   @ApiProperty()

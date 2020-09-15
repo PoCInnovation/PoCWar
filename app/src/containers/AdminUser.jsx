@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import adminGetUsers from '../hooks/admin';
+import { useAdminGetUsers, useAdminDeleteUsers } from '../hooks/admin';
 import useChallenges from '../hooks/challenges'
 import { showSnackbar } from '../reducers/actions/snackBarAction';
 import Table from '@material-ui/core/Table';
@@ -13,6 +13,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import MaterialTable from 'material-table';
+import { http, getHeaders } from '../utils/server';
+
 const useStyles = makeStyles((theme) => ({
   main: {
     flexGrow: 1,
@@ -20,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.dark,
   },
   rows: {
-    background: '#272A35',
+    background: '',
     borderColor: 'gray',
   },
   head: {
@@ -35,9 +38,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function AdminUserTable() {
+  const [state, setState] = React.useState({
+    columns: [
+      { title: 'Email', field: 'email' },
+      { title: 'Name', field: 'name' },
+      { title: 'Role', field: 'role' },
+    ],
+    data: [],
+  });
   const classes = useStyles();
   const [isLoading, setIsLoading] = React.useState(true);
-  const rows = adminGetUsers('1');
+  const rows = useAdminGetUsers('1');
   if (rows.isLoading) {
     return (
       <div>
@@ -47,31 +58,62 @@ export function AdminUserTable() {
       </div>
     );
   }
-  console.log(rows);
+  state.data = rows.data.users;
+  console.log('users:',rows.data.users)
   return (
     <div className={classes.main}>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.head}></TableCell>
-              <TableCell className={classes.head}>Email</TableCell>
-              <TableCell className={classes.head}>Name</TableCell>
-              <TableCell className={classes.head}>Role</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.data.users.map((row, index) => (
-              <TableRow key={row.name}>
-                <TableCell className={classes.rows}>{index+1}</TableCell>
-                <TableCell className={classes.rows}>{row.email}</TableCell>
-                <TableCell className={classes.rows}>{row.name}</TableCell>
-                <TableCell className={classes.rows}>{row.role}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
+      <MaterialTable
+        title="List of users"
+        columns={state.columns}
+        data={state.data}
+        style={{backgroundColor: '#272A35'}}
+        components={{
+          Column: props => (
+              <div style={{ backgroundColor: '#e8eaf5' }}>
+                  hello
+              </div>
+          )
+        }}
+        editable={{
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                setState((prevState) => {
+                  const data = [...prevState.data];
+                  data.push(newData);
+                  return { ...prevState, data };
+                });
+              }, 600);
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                if (oldData) {
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    data[data.indexOf(oldData)] = newData;
+                    return { ...prevState, data };
+                  });
+                }
+              }, 600);
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                setState((prevState) => {
+                  const data = [...prevState.data];
+                  http.delete(`/admin/users/${oldData.tableData.id}`, getHeaders());
+                  data.splice(data.indexOf(oldData), 1);
+                  return { ...prevState, data };
+                });
+              }, 600);
+            }),
+        }}
+      />
     </div>
   );
 }
@@ -95,7 +137,7 @@ export function AdminChallsTable() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.head}>Index</TableCell>
+              <TableCell className={classes.head}></TableCell>
               <TableCell className={classes.head}>Name</TableCell>
               <TableCell className={classes.head}>Category</TableCell>
               <TableCell className={classes.head}>Author</TableCell>

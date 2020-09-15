@@ -19,16 +19,12 @@ export class CreateUserDto {
 
   @IsString()
   @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])(?=.{8,40})/,
+    /(?=.{4,40})/,
     { message: 'password too weak' },
   )
   @ApiProperty({
     description: `Password should contain at least:
-  1 lowercase letter,
-  1 uppercase letter,
-  1 digit,
-  1 special character ('?!@#$%^&*.-_)
-  8 characters
+  4 characters
 and at most:
   40 characters
 `,

@@ -9,7 +9,7 @@ import { makeStyles, Paper } from '@material-ui/core';
 
 import editorThemes from '../../consts/editorThemes';
 import autocompleteLanguages from '../../consts/autoComplete';
-import languages from '../../consts/languages';
+import { languages, langsForSubmit } from '../../consts/languages';
 
 // eslint-disable-next-line global-require,import/no-dynamic-require
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
@@ -23,9 +23,6 @@ autocompleteLanguages.forEach((lang) => {
 
 
 const useStyles = makeStyles(() => ({
-  root: {
-    position: 'relative',
-  },
   paperBlock: {
     margin: '1%',
   },
@@ -34,31 +31,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+
 export default function Editor({
   editValue, setEditValue, language, theme,
 }) {
   const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paperBlock}>
-        <AceEditor
-          className={classes.editor}
-          mode={language}
-          theme={theme}
-          width='100%'
-          height='800px'
-          fontSize={16}
-          enableBasicAutocompletion
-          enableLiveAutocompletion
-          showGutter
-          name='MainEditor'
-          showPrintMargin={false}
-          editorProps={{ $blockScrolling: true }}
-          value={editValue}
-          onChange={(newValue) => { setEditValue(newValue); }}
-        />
-      </Paper>
-    </div>
+    <Paper className={classes.paperBlock}>
+      <AceEditor
+        className={classes.editor}
+        mode={langsForSubmit[language]}
+        theme={theme}
+        fontSize={16}
+        width='100%'
+        height='750px'
+        enableBasicAutocompletion
+        enableLiveAutocompletion
+        showGutter
+        name='MainEditor'
+        showPrintMargin={false}
+        editorProps={{ $blockScrolling: true }}
+        value={editValue}
+        onChange={(newValue) => { setEditValue(newValue); }}
+
+      />
+    </Paper>
   );
 }

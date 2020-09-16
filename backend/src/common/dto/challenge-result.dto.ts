@@ -3,6 +3,15 @@ import { ApiProperty } from '@nestjs/swagger';
 export class TestResultClass {
   name: string;
 
+  @ApiProperty({ description: 'only if test fail' })
+  stderr?: string;
+
+  @ApiProperty({ description: 'only if test fail' })
+  stdout?: string;
+
+  @ApiProperty({ description: 'only if test fail' })
+  exitStatus?: number;
+
   pass: boolean;
 }
 

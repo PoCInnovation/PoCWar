@@ -8,12 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Paper } from '@material-ui/core';
 import theme from '../../consts/themes';
+import TestResultList from '../../containers/TestResultList';
 
-function TabPanel(props) {
-  const {
-    children, value, index, ...other
-  } = props;
-
+function TabPanel({
+  children, value, index, ...other
+}) {
   return (
     <div
       role='tabpanel'
@@ -23,9 +22,9 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
+        <div>
+          {children}
+        </div>
       )}
     </div>
   );
@@ -49,8 +48,7 @@ const useStyles = makeStyles(() => ({
     margin: '2%',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.text.primary,
-    height: '190px',
-    overflow: 'auto',
+    overflow: 'hidden',
   },
   textBlock: {
     fontFamily: 'Roboto, sans-serif',
@@ -59,12 +57,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function StdLog({ stdout, stderr }) {
+export default function StdLog({ stdout, stderr, tests }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const formatStdout = stdout.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  const formatStderr = stderr.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formatStdout = stdout.split('\n').map((item, i) => (<p key={i}>{item}</p>));
+  const formatStderr = stderr.split('\n').map((item, i) => (<p key={i}>{item}</p>));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,20 +74,26 @@ export default function StdLog({ stdout, stderr }) {
         <Tabs value={value} onChange={handleChange} aria-label='Output of program'>
           <Tab label='stdout' {...a11yProps(0)} />
           <Tab label='stderr' {...a11yProps(1)} />
+          <Tab label='results' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={0} style={{ height: 170, overflowY: 'scroll' }}>
         <Box className={classes.textBlock} color='text.primary'>
-          <Typography component='span' variant='body2'>
+          <Typography component='div' variant='body2' style={{ marginLeft: 10 }}>
             {formatStdout}
           </Typography>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Box className={classes.textBlock} color='text.accent'>
-          <Typography component='span' variant='body2'>
+      <TabPanel value={value} index={1} style={{ height: 170, overflowY: 'scroll' }}>
+        <Box className={classes.textBlock} color='text.accent' style={{ marginLeft: 10 }}>
+          <Typography component='div' variant='body2'>
             {formatStderr}
           </Typography>
+        </Box>
+      </TabPanel>
+      <TabPanel value={value} index={2} style={{height: 170, overflowY: 'scroll'}}>
+        <Box className={classes.textBlock} color='text.accent' style={{marginLeft: 10}}>
+          <TestResultList tests={tests} />
         </Box>
       </TabPanel>
     </Paper>

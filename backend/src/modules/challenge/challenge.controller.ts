@@ -11,18 +11,18 @@ import {
   Put,
   ForbiddenException,
 } from '@nestjs/common';
-import { Challenge as ChallengeModel } from '@prisma/client';
 import {
-  ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags,
+  ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse,
+  ApiOkResponse, ApiOperation, ApiResponse, ApiTags,
 } from '@nestjs/swagger';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard, OptionalJwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AuthUserDto } from '../../common/dto/auth-user.dto';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { CreateChallengeResponseDto } from '../../common/dto/response/create-challenge-response.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
-import { GetChallengeResponseDto } from '../../common/dto/response/get-challenge-response.dto';
+import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
 
 @ApiTags('Challenge')
 @Controller()
@@ -33,23 +33,24 @@ export class ChallengeController {
 
   @ApiOperation({ summary: 'Get a paginated array of challenge.' })
   @Get('challenge')
-  @ApiOkResponse({ isArray: true, type: GetChallengeResponseDto })
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiOkResponse({ type: GetChallengesDto })
   async getChallenges(
-    @Query('page', ParseIntPipe) page: number,
+    @AuthUser() user: AuthUserDto,
+      @Query('page', ParseIntPipe) page: number,
       @Query('pageSize', ParseIntPipe) pageSize: number,
-  ): Promise<ChallengeModel[]> {
-    return this.challengeService.challenges({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-    });
+  ): Promise<GetChallengesDto> {
+    return this.challengeService.paginateChallenge(page, pageSize, user?.id);
   }
 
   @ApiOperation({ summary: 'Get a challenge by slug.' })
   @ApiResponse({ type: GetChallengeResponseDto })
+  @UseGuards(JwtAuthGuard)
   @Get('challenge/:slug')
-  async getChallenge(@Param('slug') slug: string): Promise<GetChallengeResponseDto> {
-    const { authorId, ...challenge } = await this.challengeService.challenge({ slug });
-    return challenge;
+  async getChallenge(
+    @AuthUser() user: AuthUserDto, @Param('slug') slug: string,
+  ): Promise<GetChallengeResponseDto> {
+    return this.challengeService.challenge(slug, user?.id);
   }
 
   @ApiOperation({ summary: 'Create a new challenge.' })
@@ -57,19 +58,13 @@ export class ChallengeController {
   @UseGuards(JwtAuthGuard)
   @Post('challenge')
   @ApiCreatedResponse({ description: 'Challenge successfully created.', type: CreateChallengeResponseDto })
-  @ApiResponse({
-    description: 'Forbidden. Slug is already taken.',
-    status: 403,
-  })
+  @ApiForbiddenResponse({ description: 'Forbidden. Slug is already taken.' })
   async createChallenge(
     @AuthUser() user: AuthUserDto, @Body() challenge: CreateChallengeDto,
   ): Promise<CreateChallengeResponseDto> {
     try {
       const { id, slug } = await this.challengeService.createChallenge(user.id, challenge);
-      return {
-        id,
-        slug,
-      };
+      return { id, slug };
     } catch (e) {
       throw new ForbiddenException('Slug is already taken');
     }

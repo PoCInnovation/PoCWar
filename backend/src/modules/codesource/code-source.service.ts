@@ -71,8 +71,8 @@ export class CodeSourceService {
     });
   }
 
-  async executeTests({
-    lang, code, challengeId, authorId,
+  async executeTests(userId: string, {
+    lang, code, challengeId,
   }: CodeSourceModel, tests: TestModel[]): Promise<ChallengeResultResponse> {
     const result = await execLang(
       supportedLangs[lang], code, tests,
@@ -80,16 +80,20 @@ export class CodeSourceService {
     let passed: number = 0;
     let failed: number = 0;
     const formattedResult: TestResultClass[] = result.tests.map((test, index) => {
-      const pass = tests[index].out === test.out
-        && tests[index].err === test.err
-        && tests[index].ret === test.ret;
+      const pass = tests[index].out === test.out && test.ret === 0;
       if (pass) {
         passed += 1;
-      } else {
-        failed += 1;
+        return {
+          name: tests[index].name,
+          pass,
+        };
       }
+      failed += 1;
       return {
         name: tests[index].name,
+        stderr: test.err,
+        stdout: test.out,
+        exitStatus: Number(test.ret),
         pass,
       };
     });
@@ -99,8 +103,8 @@ export class CodeSourceService {
       compilation: result.compilation,
       tests: formattedResult,
     };
-    this.prisma.codeSource.update({
-      where: { ux_codesource_author_challenge: { challengeId, authorId } },
+    await this.prisma.codeSource.update({
+      where: { ux_codesource_author_challenge: { challengeId, authorId: userId } },
       data: {
         code, lang, lastResult: testResult.toString(), passAllTests: failed === 0,
       },

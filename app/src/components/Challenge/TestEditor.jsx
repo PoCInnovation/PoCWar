@@ -11,11 +11,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// TODO: Refacto
 function getValueFromFields(className) {
   const data = [];
 
-  // TODO: replace by iterator
-  // eslint-disable-next-line no-restricted-syntax
   for (const child of document.getElementsByClassName(className)) {
     data.push(child.childNodes[0].value);
   }
@@ -36,7 +35,7 @@ export function getTestEditorValues() {
   return (data);
 }
 
-export default function TestEditor({ deleteFunction }) {
+export default function TestEditor({ deleteFunction, index, value }) {
   const theme = useState('dracula');
   const classes = useStyles(theme);
 
@@ -56,6 +55,7 @@ export default function TestEditor({ deleteFunction }) {
         style={{
           width: '30%',
         }}
+        defaultValue={value.name}
       />
       <TextField
         variant='outlined'
@@ -71,6 +71,7 @@ export default function TestEditor({ deleteFunction }) {
         style={{
           width: '30%',
         }}
+        defaultValue={value.args.join(' ')}
       />
       <TextField
         variant='outlined'
@@ -86,8 +87,9 @@ export default function TestEditor({ deleteFunction }) {
         style={{
           width: '30%',
         }}
+        defaultValue={value.out}
       />
-      <Fab color='primary' aria-label='delete' style={{ marginTop: '15px' }} onClick={deleteFunction}>
+      <Fab color='primary' aria-label='delete' style={{ marginTop: '15px' }} onClick={() => deleteFunction(index)}>
         <DeleteIcon />
       </Fab>
     </div>

@@ -3,5 +3,6 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "plugins": ["@nestjs/swagger/plugin"]
-  }
+  },
+  "exclude": ["pocwar-execution-*", "Dockerfiles", "seeds"]
 }

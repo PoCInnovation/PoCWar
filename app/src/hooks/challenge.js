@@ -1,33 +1,30 @@
 import { useState, useEffect } from 'react';
-import { http } from '../utils/server';
+import { getOptionalHeaders, http } from '../utils/server';
 
-export default function useChallenge(slug) {
+export default function useChallenge(slug, setEditValue) {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [challenge, setChallenge] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      let data = null;
-      try {
-        await http.get(`/challenge/${slug}`)
-          .then((response) => {
-            data = response.data;
-          }).catch((e) => {
-            console.log(e);
-          });
-      } catch (e) {
-        setError(true);
-      }
-      setLoading(false);
-      setChallenge(data);
+      await http.get(`/challenge/${slug}`, getOptionalHeaders())
+        .then(({ data: { codeSource, ...data } }) => {
+          setEditValue(codeSource);
+          setChallenge(data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setError(true);
+        });
     }
     fetchData();
   }, [slug]);
 
   return {
     error,
-    loading,
+    isLoading,
     challenge,
   };
 }

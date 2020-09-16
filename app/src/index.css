@@ -5,10 +5,60 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #515A5A;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #884EA0;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #633974;
+}
+@font-face {
+  font-family: 'aAtmospheric';
+  font-style: normal;
+  src: url('./assets/aAtmospheric.ttf');
+}
+
+
+pre {
+  border: 1px solid #404452;
+  color: white;
+}
+
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 3em;
+  padding-top: 0.1px;
+  padding-bottom: 0.1px;
+  border-left: 0.5em #404452 solid;
+  background: #26272C;
+}
+
+tr {
+  border-top: 1px solid #c6cbd1;
+}
+
+th,
+td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
 }

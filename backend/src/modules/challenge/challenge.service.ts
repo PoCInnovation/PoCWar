@@ -1,9 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import {
   Challenge as ChallengeModel,
-  ChallengeWhereUniqueInput,
-  ChallengeWhereInput,
-  ChallengeOrderByInput,
   TestUpdateWithWhereUniqueWithoutChallengeInput,
   TestCreateWithoutChallengeInput,
   Enumerable,
@@ -11,29 +8,77 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
+import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
 
 @Injectable()
 export class ChallengeService {
   constructor(private prisma: PrismaService) {}
 
-  async challenge(
-    challengeWhereUniqueInput: ChallengeWhereUniqueInput,
-  ): Promise<ChallengeModel | null> {
-    return this.prisma.challenge.findOne({
-      where: challengeWhereUniqueInput,
-    });
+  private static formatTestArgs = (args) => `${args.map((arg) => JSON.stringify(arg)).join(' ')}`;
+
+  private static formatChallenge(
+    {
+      codeSources: [{ passAllTests, code } = { passAllTests: false, code: undefined }], ...challenge
+    }: ChallengeModel & {codeSources?: {passAllTests: boolean, code?: string}[]},
+  ): GetChallengeResponseDto {
+    return {
+      passAllTests,
+      codeSource: code,
+      ...challenge,
+    };
   }
 
-  async challenges(params: {
-    skip?: number;
-    take?: number;
-    cursor?: ChallengeWhereUniqueInput;
-    where?: ChallengeWhereInput;
-    orderBy?: ChallengeOrderByInput;
-  }): Promise<ChallengeModel[]> {
-    return this.prisma.challenge.findMany({
-      ...params,
+  async challenge(slug: string, userId?: string): Promise<GetChallengeResponseDto | null> {
+    const challenge = await this.prisma.challenge.findOne({
+      where: { slug },
+      include: {
+        codeSources: {
+          take: userId ? 1 : 0,
+          where: { authorId: userId },
+          select: {
+            passAllTests: true,
+            code: true,
+          },
+        },
+      },
     });
+    if (!challenge) {
+      throw new NotFoundException(`Challenge ${slug} not found`);
+    }
+    return ChallengeService.formatChallenge(challenge);
+  }
+
+  async paginateChallenge(
+    page: number, pageSize: number, userId?: string,
+  ): Promise<GetChallengesDto> {
+    const challengeCount = await this.prisma.challenge.count();
+    const toSkip = (page - 1) * pageSize;
+    if (toSkip >= challengeCount) {
+      return {
+        challenges: [],
+        pageCount: Math.ceil(challengeCount / pageSize),
+        pageSize,
+      };
+    }
+    const challenges: GetChallengeResponseDto[] = (await this.prisma.challenge.findMany({
+      skip: toSkip,
+      take: pageSize,
+      include: {
+        author: {
+          select: { name: true },
+        },
+        codeSources: {
+          take: userId ? 1 : 0,
+          where: { authorId: userId },
+          select: { passAllTests: true },
+        },
+      },
+    })).map((challenge) => ChallengeService.formatChallenge(challenge));
+    return {
+      challenges,
+      pageCount: Math.ceil(challengeCount / pageSize),
+      pageSize,
+    };
   }
 
   async challengeByIdWithTests(challengeId: string): Promise<ChallengeModel[]> {
@@ -46,7 +91,9 @@ export class ChallengeService {
   }
 
   async createChallenge(
-    userId: string, { name, slug, tests, description, input_example, output_example, category }: CreateChallengeDto,
+    userId: string, {
+      name, slug, tests, description, input_example, output_example, category,
+    }: CreateChallengeDto,
   ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
       data: {
@@ -60,7 +107,9 @@ export class ChallengeService {
           connect: { id: userId },
         },
         tests: {
-          create: tests.map(({ args, ...test }) => ({ ...test, args: args.join(' ') })),
+          create: tests.map(({ args, ...test }) => (
+            { ...test, args: ChallengeService.formatTestArgs(args) }
+          )),
         },
       },
     });
@@ -103,11 +152,11 @@ export class ChallengeService {
     const toUpdate: Enumerable<TestUpdateWithWhereUniqueWithoutChallengeInput> = [];
     challengeDto.tests.forEach(({ id, args, ...testModel }) => {
       if (!id) {
-        toCreate.push({ args: args.join(' '), ...testModel });
+        toCreate.push({ args: ChallengeService.formatTestArgs(args), ...testModel });
       } else if (challenge.tests.find((test) => id === test.id)) {
         toUpdate.push({
           where: { id },
-          data: { args: args.join(' '), ...testModel },
+          data: { args: ChallengeService.formatTestArgs(args), ...testModel },
         });
       }
     });

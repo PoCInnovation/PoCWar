@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import { makeStyles, CircularProgress, Grid } from '@material-ui/core';
-import NavBar from '../containers/NavBar';
+import { useDispatch } from 'react-redux';
+import Paper from '@material-ui/core/Paper';
 import Editor from '../components/Editor/Editor';
 import StatingDisplay from '../containers/StatingDisplay';
-
 import StdLog from '../components/StdLog/StdLog';
 import useChallenge from '../hooks/challenge';
-import EditorSubBar from '../containers/editorSubBar';
-import { submitCode } from '../hooks/submit';
-import TestResultList from '../containers/TestResultList';
+import EditorSubBar from '../containers/EditorSubBar';
+import submitCode from '../hooks/submit';
+import { clearSnackbar, showSnackbar } from '../reducers/actions/snackBarAction';
+import { langsForSubmit } from '../consts/languages';
+// import ProgressBar from '@bit/react-bootstrap.react-bootstrap.progress-bar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   gridRoot: {
     position: 'relative',
   },
   loading: {
     paddingTop: '20%',
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    background: theme.palette.primary.main,
+    margin: '2%',
   },
 }));
 
@@ -24,17 +32,19 @@ export default function ChallengeLayout() {
   const classes = useStyles();
   const query = new URLSearchParams(window.location.search);
   const challengeID = query.get('challengeID');
-  const c = useChallenge(challengeID);
+  // const { isLoading, challenge } = useChallenge(challengeID);
+  const dispatch = useDispatch();
   let display = null;
 
   const [theme, setTheme] = useState('dracula');
-  const [language, setLanguage] = useState('python');
+  const [language, setLanguage] = useState('python3');
   const [editValue, setEditValue] = useState('');
   const [stdout, setStdout] = useState('');
   const [stderr, setStderr] = useState('');
-  const [testsResult, setTestResult] = useState('');
-  const [testsList, setTestList] = useState(undefined);
-  const [isSubmiting, setIsSubmiting] = useState(false);
+  const [testsResult, setTestResult] = useState({ passed: null, failed: null });
+  const [testsList, setTestList] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isLoading, challenge } = useChallenge(challengeID, setEditValue);
 
   window.onload = () => {
     if (localStorage.getItem(challengeID) !== null) {
@@ -42,35 +52,51 @@ export default function ChallengeLayout() {
     }
   };
 
-  function onEditorChange(change) {
+  const onEditorChange = (change) => {
     setEditValue(change);
     localStorage.setItem(challengeID, change);
-  }
+  };
 
-  if (c.loading === true) {
+  const formatTestsErrOutput = (tests) => tests
+    .filter((test) => !test.pass && (test.exitStatus !== 0 || test.stderr !== ''))
+    .map((test) => `\n\n** ${test.name} **\nExit status: ${test.exitStatus}\nOutput:\n-- START --\n${test.stderr}\n-- END --\n`)
+    .join('\n\n');
+
+  const formatTestsStdOutput = (tests) => tests
+    .filter((test) => !test.pass)
+    .map((test) => `\n\n** ${test.name} **\nOutput:\n-- START --\n${test.stdout}\n-- END --\n`)
+    .join('\n\n');
+
+  if (isLoading) {
     display = (
-      <>
+      <div>
         <Grid className={classes.loading} container justify='center'>
           <CircularProgress color='secondary' />
-          ;
         </Grid>
-      </>
+      </div>
     );
-  } else if (c.challenge !== null) {
-    const d = c.challenge;
-    console.log(d);
+  } else if (challenge !== null) {
     display = (
-      <>
+      <div>
         <Grid className={classes.gridRoot} container spacing={0}>
           <Grid item xs={12} sm={4}>
             <StatingDisplay
-              title={d.title}
-              inputExample={d.input_example}
-              outputExample={d.output_example}
-              stating={d.description}
+              title={challenge.title}
+              inputExample={challenge.input_example}
+              outputExample={challenge.output_example}
+              stating={challenge.description}
             />
-            <StdLog stdout={stdout} stderr={stderr} />
-            <TestResultList tests={testsList} />
+            <StdLog stdout={stdout} stderr={stderr} tests={testsList} />
+            <Paper className={classes.paper} elevation={3}>
+              <p style={{ textAlign: 'left' }}>
+                Tests passed:
+                {testsResult.passed}
+              </p>
+              <p style={{ textAlign: 'left' }}>
+                Tests Failed:
+                {testsResult.failed}
+              </p>
+            </Paper>
           </Grid>
           <Grid item xs={12} sm={8}>
             <Editor
@@ -85,29 +111,39 @@ export default function ChallengeLayout() {
               language={language}
               setLanguage={setLanguage}
               editValue={editValue}
-              isSubmiting={isSubmiting}
+              isSubmitting={isSubmitting}
               onClickSubmit={async () => {
-                const res = await submitCode(c.challenge, language, editValue);
-                if (res === undefined) {
-                  return;
+                try {
+                  setIsSubmitting(true);
+                  dispatch(showSnackbar('Challenge submitted, executing code...', 'info'));
+                  const res = await submitCode(challenge.id, langsForSubmit[language], editValue);
+                  if (res.compilation) {
+                    setStderr(`${res.compilation.err}${formatTestsErrOutput(res.tests)}`);
+                    setStdout(`${res.compilation.out}${formatTestsStdOutput(res.tests)}`);
+                  }
+                  setTestResult({ passed: res.passed, failed: res.failed });
+                  setTestList(res.tests);
+                  setIsSubmitting(false);
+                  dispatch(clearSnackbar());
+                  if (res.failed === 0) {
+                    dispatch(showSnackbar('All tests passed !', 'success'));
+                  } else {
+                    dispatch(showSnackbar('You didnt pass all the tests :\'(', 'error'));
+                  }
+                } catch (e) {
+                  setIsSubmitting(false);
+                  dispatch(showSnackbar(e.response ? e.response.data.message : 'Fail to submit code'));
                 }
-                if (res.compilation !== undefined) {
-                  setStderr(res.compilation.err);
-                  setStdout(res.compilation.out);
-                }
-                setTestResult({ passed: res.passed, failed: res.failed });
-                setTestList(res.tests);
               }}
             />
           </Grid>
         </Grid>
-      </>
+      </div>
     );
   }
 
   return (
     <div>
-      <NavBar />
       {display}
     </div>
   );

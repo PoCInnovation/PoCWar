@@ -1,3 +1,3 @@
-const autocompleteLanguages = ['javascript', 'python', 'c', 'cpp', 'ruby', 'rust'];
+const autocompleteLanguages = ['javascript', 'python3', 'C', 'C++', 'ruby', 'rust', 'go'];
 
 export default autocompleteLanguages;

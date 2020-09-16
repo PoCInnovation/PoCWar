@@ -2,9 +2,11 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Typography, Paper } from '@material-ui/core';
-import theme from '../consts/themes';
+import defaultTheme from '../consts/themes';
+import ReactMarkdown from "react-markdown";
+import htmlParser from 'react-markdown/plugins/html-parser';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
   },
@@ -28,62 +30,42 @@ const useStyles = makeStyles(() => ({
   paperBlock: {
     margin: '2%',
     background: theme.palette.primary.main,
-    overflow: 'auto',
   },
   inputPaper: {
     paddingTop: '5px',
     paddingBottom: '2px',
     margin: '2%',
     background: theme.palette.primary.light,
-  }
+  },
 }));
 
-export default function StatingDisplay({ title, stating, inputExample, outputExample }) {
-  const classes = useStyles();
-  stating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  inputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  outputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-
+export default function StatingDisplay({
+  title, stating, inputExample, outputExample,
+}) {
+  const classes = useStyles(defaultTheme);
+  const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
+  const parseHtml = htmlParser({
+    isValidNode: node => node.type !== 'script',
+    processingInstructions: [/* ... */]
+  });
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paperBlock}>
+    <div className={classes.root} style={{height:400, overflowY:'auto'}}>
+      <div className={classes.paperBlock}>
         <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
+          <Typography align='justify' component='span' variant='body2'>
             {title}
           </Typography>
         </Box>
         <Box className={classes.textBlock} color='text.secondary'>
-          <Typography align='left' component={'span'} variant={'body2'}>
-            {stating}
-          </Typography>
+        <ReactMarkdown
+          source={stating}
+          escapeHtml={false} 
+          astPlugins={[parseHtml]}
+        />
         </Box>
-
-        <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
-            Input example
-        </Typography>
-        </Box>
-        <Paper className={classes.inputPaper}>
-          <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component={'span'} variant={'body2'}>
-              {inputExample}
-            </Typography>
-          </Box>
-        </Paper>
-
-        <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='h1' variant='h5'>
-            Expected output
-        </Typography>
-        </Box>
-        <Paper className={classes.inputPaper}>
-          <Box className={classes.textBlock} color='text.secondary'>
-            <Typography align='left' component={'span'} variant={'body2'}>
-              {outputExample}
-            </Typography>
-          </Box>
-        </Paper>
-      </Paper>
+      </div>
     </div>
   );
 }

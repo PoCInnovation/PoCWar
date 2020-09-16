@@ -4,10 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { registerRoute } from '../consts/routes';
 
-
-// textTransform: 'none',
-
-export function RegButton() {
+function RegButton() {
   const history = useHistory();
   const redirectRegister = () => {
     history.push(registerRoute);
@@ -20,13 +17,10 @@ export function RegButton() {
   );
 }
 
-export function RegisterButton() {
+export default function RegisterButton() {
   const location = useLocation();
-  if (location.pathname === registerRoute) {
+  if (location.pathname === registerRoute || !!Cookies.get('user')) {
     return <div />;
   }
-  if (Cookies.get('user') === undefined) {
-    return <RegButton />;
-  }
-  return <div />;
+  return <RegButton />;
 }

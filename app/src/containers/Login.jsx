@@ -25,16 +25,12 @@ const loginFormFields = [
     type: 'password',
     inputRef: {
       minLength: {
-        value: 8,
-        message: 'Should contain at least 8 characters',
+        value: 4,
+        message: 'Should contain at least 4 characters',
       },
       maxLength: {
         value: 40,
         message: 'Should not exceed 40 character',
-      },
-      pattern: {
-        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])/,
-        message: 'Should contains at least 1 digit, 1 lowercase, 1 uppercase and 1 special character',
       },
       autoFocus: false,
     },

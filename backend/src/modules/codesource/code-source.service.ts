@@ -27,6 +27,12 @@ export class CodeSourceService {
     });
   }
 
+  async tests(challengeId: string): Promise<TestModel[]> {
+    return this.prisma.test.findMany({
+      where: { challengeId }
+    })
+  }
+
   async codeSources(params: {
     skip?: number;
     take?: number;

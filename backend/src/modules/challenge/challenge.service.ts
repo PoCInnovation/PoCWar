@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import {
   Challenge as ChallengeModel,
   TestUpdateWithWhereUniqueWithoutChallengeInput,
   TestCreateWithoutChallengeInput,
   Enumerable,
+  Test as TestModel,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
+import { PutTestDto } from 'src/common/dto/put-test.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -40,6 +42,9 @@ export class ChallengeService {
             code: true,
           },
         },
+        tests: {
+          where: { challenge: { slug } }
+        }
       },
     });
     if (!challenge) {
@@ -170,5 +175,27 @@ export class ChallengeService {
         },
       },
     });
+  }
+
+  async putTests(userId: string, challengeSlug: string, tests: PutTestDto[]): Promise<TestModel[]> {
+    const { count } = await this.prisma.test.deleteMany({
+      where: { challenge: { slug: challengeSlug, authorId: userId } },
+    });
+
+    if (count === 0) {
+      throw new ForbiddenException('forbidden');
+    }
+
+    return Promise.all(tests.map(({ args, ...test }) => this.prisma.test.create({
+      data: {
+        ...test,
+        args: args.join(' '),
+        challenge: {
+          connect: {
+            slug: challengeSlug,
+          },
+        },
+      },
+    })));
   }
 }

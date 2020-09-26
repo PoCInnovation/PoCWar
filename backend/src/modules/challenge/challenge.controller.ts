@@ -23,6 +23,7 @@ import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { CreateChallengeResponseDto } from '../../common/dto/response/create-challenge-response.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
+import { PutTestDto } from 'src/common/dto/put-test.dto';
 
 @ApiTags('Challenge')
 @Controller()
@@ -94,5 +95,10 @@ export class ChallengeController {
   ): Promise<string> {
     const { name } = await this.challengeService.updateChallenge(user.id, challengeDto, slug);
     return `Challenge ${name} successfully updated.`;
+  }
+
+  @Put('challenge/:slug/tests')
+  async putTests(@AuthUser() { id }: AuthUserDto, @Param('slug') slug: string, @Body() tests: PutTestDto[]): Promise<void> {
+    await this.challengeService.putTests(id, slug, tests);
   }
 }

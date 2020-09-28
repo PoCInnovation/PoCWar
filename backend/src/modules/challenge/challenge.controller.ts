@@ -10,11 +10,14 @@ import {
   Delete,
   Put,
   ForbiddenException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse,
   ApiOkResponse, ApiOperation, ApiResponse, ApiTags,
 } from '@nestjs/swagger';
+import { PutTestDto } from 'src/common/dto/put-test.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ChallengeService } from './challenge.service';
 import { AuthUser } from '../../common/decorators/auth-user.decorator';
 import { JwtAuthGuard, OptionalJwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -23,7 +26,6 @@ import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { CreateChallengeResponseDto } from '../../common/dto/response/create-challenge-response.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
-import { PutTestDto } from 'src/common/dto/put-test.dto';
 
 @ApiTags('Challenge')
 @Controller()
@@ -67,7 +69,11 @@ export class ChallengeController {
       const { id, slug } = await this.challengeService.createChallenge(user.id, challenge);
       return { id, slug };
     } catch (e) {
-      throw new ForbiddenException('Slug is already taken');
+      // @ts-ignore
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002' && e.meta?.target?.includes('email')) {
+        throw new ForbiddenException('Email already exists');
+      }
+      throw new InternalServerErrorException('Internal error');
     }
   }
 

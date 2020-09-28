@@ -29,8 +29,8 @@ export class CodeSourceService {
 
   async tests(challengeId: string): Promise<TestModel[]> {
     return this.prisma.test.findMany({
-      where: { challengeId }
-    })
+      where: { challengeId },
+    });
   }
 
   async codeSources(params: {

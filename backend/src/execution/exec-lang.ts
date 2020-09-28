@@ -1,6 +1,5 @@
 import * as Docker from 'dockerode';
 import * as fse from 'fs-extra';
-import * as os from 'os';
 import generateTests from './generate-tests';
 import { SupportedLangInfo } from '../common/constants/supported-langs';
 import { ExecutionResultInterface } from '../common/dto/challenge-result.dto';

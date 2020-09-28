@@ -1,4 +1,6 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException, Injectable, NotFoundException, UnauthorizedException,
+} from '@nestjs/common';
 import {
   Challenge as ChallengeModel,
   TestUpdateWithWhereUniqueWithoutChallengeInput,
@@ -6,11 +8,11 @@ import {
   Enumerable,
   Test as TestModel,
 } from '@prisma/client';
+import { PutTestDto } from 'src/common/dto/put-test.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
 import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
-import { PutTestDto } from 'src/common/dto/put-test.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -43,8 +45,8 @@ export class ChallengeService {
           },
         },
         tests: {
-          where: { challenge: { slug } }
-        }
+          where: { challenge: { slug } },
+        },
       },
     });
     if (!challenge) {

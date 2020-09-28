@@ -1,5 +1,14 @@
 import {
-  Controller, Get, Request, Post, UseGuards, Body, ForbiddenException, Delete, Patch,
+  Controller,
+  Get,
+  Request,
+  Post,
+  UseGuards,
+  Body,
+  ForbiddenException,
+  Delete,
+  Patch,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -11,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User as UserModel } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
@@ -45,8 +55,12 @@ export class AuthController {
   ): Promise<string> {
     return this.authService.register(userData)
       .then(() => 'User has been successfully created')
-      .catch(() => {
-        throw new ForbiddenException('Email already exists');
+      .catch((error: PrismaClientKnownRequestError) => {
+        // @ts-ignore
+        if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+          throw new ForbiddenException('Email already exists');
+        }
+        throw new InternalServerErrorException('Internal error');
       });
   }
 

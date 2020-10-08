@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { Typography, Paper } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import defaultTheme from '../consts/themes';
 import ReactMarkdown from "react-markdown";
 import htmlParser from 'react-markdown/plugins/html-parser';
@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   paperBlock: {
     margin: '2%',
     background: theme.palette.primary.main,
+    minHeight: '90%',
+    borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 10,
   },
   inputPaper: {
     paddingTop: '5px',
@@ -40,12 +44,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StatingDisplay({
-  title, stating, inputExample, outputExample,
+  title, stating
 }) {
   const classes = useStyles(defaultTheme);
-  const formattedStating = stating.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  const formattedInputExample = inputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
-  const formattedOutputExample = outputExample.split('\n').map((item, i) => <p key={i}>{item}</p>);
   const parseHtml = htmlParser({
     isValidNode: node => node.type !== 'script',
     processingInstructions: [/* ... */]
@@ -53,17 +54,12 @@ export default function StatingDisplay({
   return (
     <div className={classes.root} style={{height:400, overflowY:'auto'}}>
       <div className={classes.paperBlock}>
-        <Box className={classes.titleBlock} color='text.primary'>
-          <Typography align='justify' component='span' variant='body2'>
-            {title}
-          </Typography>
-        </Box>
         <Box className={classes.textBlock} color='text.secondary'>
-        <ReactMarkdown
-          source={stating}
-          escapeHtml={false} 
-          astPlugins={[parseHtml]}
-        />
+          <ReactMarkdown
+            source={stating}
+            escapeHtml={false} 
+            astPlugins={[parseHtml]}
+          />
         </Box>
       </div>
     </div>

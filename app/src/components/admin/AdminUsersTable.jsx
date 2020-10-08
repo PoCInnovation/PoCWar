@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
+import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
-import { showSnackbar } from '../reducers/actions/snackBarAction';
-import useChallenges from '../hooks/challenges';
-import { useAdminGetUsers, useAdminDeleteUsers } from '../hooks/admin';
-import { http, getHeaders } from '../utils/server';
-import {getUserFromCookie} from "../utils/auth";
+import { showSnackbar } from '../../reducers/actions/snackBarAction';
+import useChallenges from '../../hooks/challenges';
+import { useAdminGetUsers, useAdminDeleteUsers } from '../../hooks/admin';
+import { http, getHeaders } from '../../utils/server';
+import {getUserFromCookie} from "../../utils/auth";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -36,12 +28,20 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
+  root: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
+  },
+  footer: {
+    backgroundColor: theme.palette.primary.dark
+  }
 }));
 
 export function AdminUserTable() {
   const user = getUserFromCookie();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [gridData, setGridData] = useState({
     columns: [
       { title: 'Email', field: 'email', editable: 'never' },
@@ -107,7 +107,6 @@ export function AdminUserTable() {
       </div>
     );
   }
-
   return (
     <div className={classes.main}>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
@@ -115,6 +114,7 @@ export function AdminUserTable() {
         title='Users'
         columns={gridData.columns}
         data={gridData.data}
+        rowsPerPage={rowsPerPage}
         style={{backgroundColor: '#272A35'}}
         options={{
           headerStyle: {backgroundColor: '#272A35'}
@@ -124,47 +124,6 @@ export function AdminUserTable() {
           onRowDelete,
         }}
       />
-    </div>
-  );
-}
-
-export function AdminChallsTable() {
-  const classes = useStyles();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const rows = useChallenges('1');
-  if (rows.isLoading) {
-    return (
-      <div>
-        <Grid container justify='center'>
-          <CircularProgress color='secondary' />
-        </Grid>
-      </div>
-    );
-  }
-  return (
-    <div className={classes.main}>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.head}></TableCell>
-              <TableCell className={classes.head}>Name</TableCell>
-              <TableCell className={classes.head}>Category</TableCell>
-              <TableCell className={classes.head}>Author</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.challengesList?.challenges.map((row, index) => (
-              <TableRow key={row.name}>
-                <TableCell className={classes.rows}>{index+1}</TableCell>
-                <TableCell className={classes.rows}>{row.name}</TableCell>
-                <TableCell className={classes.rows}>{row.category}</TableCell>
-                <TableCell className={classes.rows}>{row.author.name}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function ChallengeDescription({
   const challengeOnClick = () => {
     history.push({
       pathname: editorRoute,
-      search: `?challengeID=${slug}`,
+      search: `?challengeSlug=${slug}`,
     });
   };
 

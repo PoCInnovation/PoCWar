@@ -1,10 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
+import BuildIcon from '@material-ui/icons/Build';
 import { withRouter } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
 import ChallengeList from '../containers/ChallengeList';
-import { createChallRoute } from '../consts/routes';
+import { createChallRoute, adminRoute } from '../consts/routes';
 import { userIsAdmin } from '../utils/auth';
 
 const useStyles = makeStyles(() => ({
@@ -25,16 +26,28 @@ const ChallengeHome = withRouter(({ history }) => {
   const redirectCreateChall = () => {
     history.push(createChallRoute);
   };
+  const redirectAdmin = () => {
+    history.push(adminRoute);
+  };
 
   const fab = userIsAdmin() ? (
-    <Fab
-      color='primary'
-      aria-label='create'
-      onClick={redirectCreateChall}
-      className={classes.redirectCreateChallenge}
-    >
-      <CreateIcon />
-    </Fab>
+    <div style={{display: 'flex', flexDirection: 'row'}} className={classes.redirectCreateChallenge}>
+      <Fab
+        color='primary'
+        aria-label='create'
+        onClick={redirectCreateChall}
+        style={{marginRight: 10}}
+      >
+        <CreateIcon />
+      </Fab>
+      <Fab
+        color='primary'
+        aria-label='admin'
+        onClick={redirectAdmin}
+      >
+        <BuildIcon />
+      </Fab>
+    </div>
   ) : '';
   return (
     <div>

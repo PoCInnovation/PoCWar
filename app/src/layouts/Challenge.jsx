@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ChallengeLayout() {
   const classes = useStyles();
   const query = new URLSearchParams(window.location.search);
-  const challengeID = query.get('challengeID');
+  const challengeID = query.get('challengeSlug');
   // const { isLoading, challenge } = useChallenge(challengeID);
   const dispatch = useDispatch();
   let display = null;
@@ -70,9 +70,9 @@ export default function ChallengeLayout() {
   if (isLoading) {
     display = (
       <div>
-        <Grid className={classes.loading} container justify='center'>
-          <CircularProgress color='secondary' />
-        </Grid>
+      <Grid className={classes.loading} container justify='center'>
+        <CircularProgress color='secondary' />
+      </Grid>
       </div>
     );
   } else if (challenge !== null) {
@@ -81,9 +81,7 @@ export default function ChallengeLayout() {
         <Grid className={classes.gridRoot} container spacing={0}>
           <Grid item xs={12} sm={4}>
             <StatingDisplay
-              title={challenge.title}
-              inputExample={challenge.input_example}
-              outputExample={challenge.output_example}
+              title={challenge.name}
               stating={challenge.description}
             />
             <StdLog stdout={stdout} stderr={stderr} tests={testsList} />

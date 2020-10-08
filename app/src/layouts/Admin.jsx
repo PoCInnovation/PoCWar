@@ -6,7 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { AdminUserTable, AdminChallsTable } from '../containers/AdminUser';
+import { AdminUserTable } from '../components/admin/AdminUsersTable';
+import AdminChallsTable from '../components/admin/AdminChallsTable';
+import { withRouter } from 'react-router-dom';
 
 function TabPanel(props) {
   const {
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AdminLayout() {
+const Admin = withRouter(({ history }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -75,8 +77,10 @@ export default function AdminLayout() {
       <AdminUserTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AdminChallsTable />
+        <AdminChallsTable history={history} />
       </TabPanel>
     </div>
   );
-}
+})
+
+export default Admin;

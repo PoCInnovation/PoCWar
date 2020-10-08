@@ -152,7 +152,8 @@ export default function ChallengeEditor(
               borderRadius: 5,
               overflow: 'auto',
               color: 'white',
-              height: 600
+              height: 600,
+              padding: 10
             }}
           >
           <ReactMarkdown

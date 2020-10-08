@@ -18,7 +18,7 @@ import Fab from '@material-ui/core/Fab';
 import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import { http, getHeaders } from '../../utils/server';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { editChallRoute } from '../../consts/routes';
+import { editChallRoute, createChallRoute } from '../../consts/routes';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -27,6 +27,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { clearSnackbar, showSnackbar } from '../../reducers/actions/snackBarAction';
 import { useDispatch } from 'react-redux';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -86,7 +87,7 @@ Fade.propTypes = {
   onExited: PropTypes.func,
 };
 
-function TablePaginationActions(props) {
+function TablePaginationActions(props, history) {
     const classes = useStyles();
     const theme = useTheme();
     const { count, page, rowsPerPage, onChangePage } = props;
@@ -137,6 +138,13 @@ function TablePaginationActions(props) {
           aria-label="last page"
         >
           {theme.direction === 'rtl' ? <FirstPageIcon color="secondary" /> : <LastPageIcon color="secondary" />}
+        </IconButton>
+        <IconButton
+            color='primary'
+            aria-label='create'
+            onClick={() => history.push(createChallRoute)}
+          >
+          <AddCircleIcon color="secondary"/>
         </IconButton>
       </div>
     );
@@ -313,7 +321,7 @@ export default function AdminChallsTable({ history }) {
               }}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
+              ActionsComponent={(props) => TablePaginationActions(props, history)}
             />
           </TableRow>
         </TableFooter>

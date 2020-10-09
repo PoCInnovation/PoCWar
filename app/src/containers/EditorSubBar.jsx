@@ -62,7 +62,7 @@ export default function EditorSubBar({
       <Grid container spacing={0}>
         <Grid item xs={12} sm={4}>
           <FormControl className={classes.formControl}>
-          <InputLabel>Themes</InputLabel>
+            <InputLabel>Themes</InputLabel>
             <Select
               labelId='change_label'
               id='change_form'

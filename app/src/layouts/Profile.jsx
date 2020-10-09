@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   li: {
     display: 'flex',
     flexDirection: 'linum',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   input: {
     color: 'black',
@@ -79,38 +79,42 @@ const ProfileLayout = withRouter(({ history }) => {
     profile = <CircularProgress color='secondary' />;
   } else {
     profile = (
-      <div style={{width: '25%'}}>
+      <div style={{ width: '25%' }}>
         <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <Paper className={classes.paper} elevation={3}>
-          <form onSubmit={(onSubmit, onSubmitError) => {console.log(onSubmit, onSubmitError)}}>
+            <form onSubmit={(onSubmit, onSubmitError) => { console.log(onSubmit, onSubmitError); }}>
               <ul style={{
-                 color: 'black', listStyleType: 'none', width: '80%'
+                color: 'black', listStyleType: 'none', width: '80%',
               }}
               >
                 <li className={classes.li}>
                   <p>Name</p>
                   {isEditing
-                    ? <TextField
-                        id="newName"
-                        label="New name"
+                    ? (
+                      <TextField
+                        id='newName'
+                        label='New name'
                         required
                         InputProps={{
                           className: classes.input,
                         }}
                       />
+                    )
                     : <p>{user.profileData.name}</p>}
                 </li>
                 <li className={classes.li}>
                   <p>Email</p>
                   {isEditing
-                    ? <TextField
-                        id="newMail"
-                        label="New mail"
+                    ? (
+                      <TextField
+                        id='newMail'
+                        label='New mail'
                         required
                         InputProps={{
                           className: classes.input,
                         }}
                       />
+                    )
                     : <p>{user.profileData.email}</p>}
                 </li>
                 <li className={classes.li}>
@@ -129,38 +133,42 @@ const ProfileLayout = withRouter(({ history }) => {
             </form>
           </Paper>
         </div>
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <LogoutButton email='Disconnect' />
           {isEditing
-              ? <div>
-                  <Fab
-                    color='primary'
-                    aria-label='create'
-                    style={{float: 'right'}}
-                    size="small"
-                    onClick={() => {setEditing(!isEditing)}}
-                  >
-                    <CloseIcon />
-                  </Fab>
-                  <Button
-                    color='primary'
-                    aria-label='create'
-                    style={{float: 'right'}}
-                    size="small"
-                    type='submit'
-                  >
-                    <CheckIcon />
-                  </Button>
-                </div>
-              : <Fab
+            ? (
+              <div>
+                <Fab
                   color='primary'
                   aria-label='create'
-                  style={{float: 'right'}}
-                  size="small"
-                  onClick={() => {setEditing(!isEditing)}}
+                  style={{ float: 'right' }}
+                  size='small'
+                  onClick={() => { setEditing(!isEditing); }}
                 >
-                  <CreateIcon />
-                </Fab>}
+                  <CloseIcon />
+                </Fab>
+                <Button
+                  color='primary'
+                  aria-label='create'
+                  style={{ float: 'right' }}
+                  size='small'
+                  type='submit'
+                >
+                  <CheckIcon />
+                </Button>
+              </div>
+            )
+            : (
+              <Fab
+                color='primary'
+                aria-label='create'
+                style={{ float: 'right' }}
+                size='small'
+                onClick={() => { setEditing(!isEditing); }}
+              >
+                <CreateIcon />
+              </Fab>
+            )}
         </div>
       </div>
     );

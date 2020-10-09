@@ -167,7 +167,10 @@ export default function ChallengeEditor({
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '10px', width: '100%' }}>
+        <div style={{
+          display: 'flex', flexDirection: 'column', marginRight: '10px', width: '100%',
+        }}
+        >
           <TextField
             variant='outlined'
             margin='normal'

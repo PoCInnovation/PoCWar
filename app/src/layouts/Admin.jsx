@@ -6,9 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { withRouter } from 'react-router-dom';
 import { AdminUserTable } from '../components/admin/AdminUsersTable';
 import AdminChallsTable from '../components/admin/AdminChallsTable';
-import { withRouter } from 'react-router-dom';
 
 function TabPanel(props) {
   const {
@@ -74,13 +74,13 @@ const Admin = withRouter(({ history }) => {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-      <AdminUserTable />
+        <AdminUserTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <AdminChallsTable history={history} />
       </TabPanel>
     </div>
   );
-})
+});
 
 export default Admin;

@@ -31,12 +31,12 @@ const ChallengeHome = withRouter(({ history }) => {
   };
 
   const fab = userIsAdmin() ? (
-    <div style={{display: 'flex', flexDirection: 'row'}} className={classes.redirectCreateChallenge}>
+    <div style={{ display: 'flex', flexDirection: 'row' }} className={classes.redirectCreateChallenge}>
       <Fab
         color='primary'
         aria-label='create'
         onClick={redirectCreateChall}
-        style={{marginRight: 10}}
+        style={{ marginRight: 10 }}
       >
         <CreateIcon />
       </Fab>

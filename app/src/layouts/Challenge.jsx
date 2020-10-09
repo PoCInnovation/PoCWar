@@ -70,9 +70,9 @@ export default function ChallengeLayout() {
   if (isLoading) {
     display = (
       <div>
-      <Grid className={classes.loading} container justify='center'>
-        <CircularProgress color='secondary' />
-      </Grid>
+        <Grid className={classes.loading} container justify='center'>
+          <CircularProgress color='secondary' />
+        </Grid>
       </div>
     );
   } else if (challenge !== null) {

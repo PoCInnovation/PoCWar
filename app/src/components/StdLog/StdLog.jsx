@@ -91,8 +91,8 @@ export default function StdLog({ stdout, stderr, tests }) {
           </Typography>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={2} style={{height: 170, overflowY: 'scroll'}}>
-        <Box className={classes.textBlock} color='text.accent' style={{marginLeft: 10}}>
+      <TabPanel value={value} index={2} style={{ height: 170, overflowY: 'scroll' }}>
+        <Box className={classes.textBlock} color='text.accent' style={{ marginLeft: 10 }}>
           <TestResultList tests={tests} />
         </Box>
       </TabPanel>

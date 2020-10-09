@@ -53,7 +53,7 @@ const registerFormFields = [
       maxLength: {
         value: 40,
         message: 'Should not exceed 40 character',
-      }
+      },
     },
   },
   {
@@ -69,7 +69,7 @@ const registerFormFields = [
       maxLength: {
         value: 40,
         message: 'Should not exceed 40 character',
-      }
+      },
     },
   },
 ];

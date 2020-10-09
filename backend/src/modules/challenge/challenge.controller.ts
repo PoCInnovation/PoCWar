@@ -70,8 +70,8 @@ export class ChallengeController {
       return { id, slug };
     } catch (e) {
       // @ts-ignore
-      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002' && e.meta?.target?.includes('email')) {
-        throw new ForbiddenException('Email already exists');
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002' && e.meta?.target?.includes('slug')) {
+        throw new ForbiddenException('Challenge slug already exists');
       }
       throw new InternalServerErrorException('Internal error');
     }

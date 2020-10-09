@@ -12,7 +12,11 @@ import { PutTestDto } from 'src/common/dto/put-test.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateChallengeDto } from '../../common/dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../../common/dto/update-challenge.dto';
-import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/response/get-challenge-response.dto';
+import {
+  GetChallengeResponseDto,
+  GetChallengeResponseWithSourceAndTestsDto,
+  GetChallengesDto
+} from '../../common/dto/response/get-challenge-response.dto';
 
 @Injectable()
 export class ChallengeService {
@@ -22,17 +26,21 @@ export class ChallengeService {
 
   private static formatChallenge(
     {
-      codeSources: [{ passAllTests, code } = { passAllTests: false, code: undefined }], ...challenge
-    }: ChallengeModel & {codeSources?: {passAllTests: boolean, code?: string}[]},
-  ): GetChallengeResponseDto {
+      codeSources: [{ passAllTests, code } = { passAllTests: false, code: undefined }], tests, ...challenge
+    }: ChallengeModel & { codeSources?: { passAllTests: boolean, code?: string }[], tests?: TestModel[]},
+  ): GetChallengeResponseDto | GetChallengeResponseWithSourceAndTestsDto {
     return {
       passAllTests,
       codeSource: code,
+      tests: tests?.map(({ id, challengeId, args, ...test }) => ({
+        ...test,
+        args: args.split(" ").map(arg => arg.slice(1, -1)),
+      })),
       ...challenge,
     };
   }
 
-  async challenge(slug: string, userId?: string): Promise<GetChallengeResponseDto | null> {
+  async challenge(slug: string, userId?: string): Promise<GetChallengeResponseWithSourceAndTestsDto> {
     const challenge = await this.prisma.challenge.findOne({
       where: { slug },
       include: {
@@ -52,7 +60,7 @@ export class ChallengeService {
     if (!challenge) {
       throw new NotFoundException(`Challenge ${slug} not found`);
     }
-    return ChallengeService.formatChallenge(challenge);
+    return ChallengeService.formatChallenge(challenge) as GetChallengeResponseWithSourceAndTestsDto;
   }
 
   async paginateChallenge(

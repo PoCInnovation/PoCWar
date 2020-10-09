@@ -15,12 +15,6 @@ export class GetChallengeResponseDto {
   description: string;
 
   @ApiProperty()
-  input_example: string;
-
-  @ApiProperty()
-  output_example: string;
-
-  @ApiProperty()
   category: string;
 
   @ApiProperty()

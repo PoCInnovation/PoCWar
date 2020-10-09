@@ -16,18 +16,18 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Fab from '@material-ui/core/Fab';
 import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
-import { http, getHeaders } from '../../utils/server';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { editChallRoute, createChallRoute } from '../../consts/routes';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { useSpring, animated } from 'react-spring/web.cjs';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import { clearSnackbar, showSnackbar } from '../../reducers/actions/snackBarAction';
 import { useDispatch } from 'react-redux';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { showSnackbar } from '../../reducers/actions/snackBarAction';
+import { editChallRoute, createChallRoute } from '../../consts/routes';
+import { http, getHeaders } from '../../utils/server';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2.5),
   },
   footer: {
-    backgroundColor: theme.palette.primary.dark
+    backgroundColor: theme.palette.primary.dark,
   },
   modal: {
     display: 'flex',
@@ -52,12 +52,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   confirmTitle: {
-    color: theme.palette.secondary.dark
-  }
+    color: theme.palette.secondary.dark,
+  },
 }));
 
-const Fade = React.forwardRef(function Fade(props, ref) {
-  const { in: open, children, onEnter, onExited, ...other } = props;
+const Fade = React.forwardRef((props, ref) => {
+  const {
+    in: open, children, onEnter, onExited, ...other
+  } = props;
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
@@ -88,68 +90,70 @@ Fade.propTypes = {
 };
 
 function TablePaginationActions(props, history) {
-    const classes = useStyles();
-    const theme = useTheme();
-    const { count, page, rowsPerPage, onChangePage } = props;
-  
-    const handleFirstPageButtonClick = (event) => {
-      onChangePage(event, 0);
-    };
-  
-    const handleBackButtonClick = (event) => {
-      onChangePage(event, page - 1);
-    };
-  
-    const handleNextButtonClick = (event) => {
-      onChangePage(event, page + 1);
-    };
-  
-    const handleLastPageButtonClick = (event) => {
-      onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-  
-    return (
-      <div className={classes.root}>
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="first page"
-        >
-          {theme.direction === 'rtl' ? <LastPageIcon color="secondary" /> : <FirstPageIcon color="secondary" />}
-        </IconButton>
-        <IconButton
-          color="primary"
-          onClick={handleBackButtonClick}
-          disabled={page === 0}
-          aria-label="previous page"
-        >
-          {theme.direction === 'rtl' ? <KeyboardArrowRight color="secondary" /> : <KeyboardArrowLeft color="secondary" />}
-        </IconButton>
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="next page"
-        >
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft color="secondary" /> : <KeyboardArrowRight color="secondary" />}
-        </IconButton>
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="last page"
-        >
-          {theme.direction === 'rtl' ? <FirstPageIcon color="secondary" /> : <LastPageIcon color="secondary" />}
-        </IconButton>
-        <IconButton
-            color='primary'
-            aria-label='create'
-            onClick={() => history.push(createChallRoute)}
-          >
-          <AddCircleIcon color="secondary"/>
-        </IconButton>
-      </div>
-    );
-  }
-  
+  const classes = useStyles();
+  const theme = useTheme();
+  const {
+    count, page, rowsPerPage, onChangePage,
+  } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onChangePage(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onChangePage(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onChangePage(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <div className={classes.root}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label='first page'
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon color='secondary' /> : <FirstPageIcon color='secondary' />}
+      </IconButton>
+      <IconButton
+        color='primary'
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label='previous page'
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight color='secondary' /> : <KeyboardArrowLeft color='secondary' />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label='next page'
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft color='secondary' /> : <KeyboardArrowRight color='secondary' />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label='last page'
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon color='secondary' /> : <LastPageIcon color='secondary' />}
+      </IconButton>
+      <IconButton
+        color='primary'
+        aria-label='create'
+        onClick={() => history.push(createChallRoute)}
+      >
+        <AddCircleIcon color='secondary' />
+      </IconButton>
+    </div>
+  );
+}
+
 export default function AdminChallsTable({ history }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const classes = useStyles();
@@ -171,22 +175,22 @@ export default function AdminChallsTable({ history }) {
   const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.secondary.dark
+      color: theme.palette.secondary.dark,
     },
     body: {
       fontSize: 20,
       //
     },
   }))(TableCell);
-  
-  const StyledTableRow = withStyles((theme) => ({
+
+  const StyledTableRow = withStyles(() => ({
     root: {
       '&:nth-of-type(odd)': {
         backgroundColor: '#1A1C23',
       },
       '&:nth-of-type(even)': {
         backgroundColor: '#272A35',
-      }
+      },
     },
   }))(TableRow);
 
@@ -203,19 +207,26 @@ export default function AdminChallsTable({ history }) {
     async function fetchData() {
       await http.get(`/challenge?page=${page + 1}&pageSize=${rowsPerPage}`, getHeaders())
         .then((res) => {
-          res.data.challenges.forEach((chall) => {chall.author = chall.author.name});
-          setGridData({ ...gridData, data: res.data.challenges, pageCount: res.data.pageCount });
+          setGridData({
+            ...gridData,
+            data: res.data.challenges.map(({ author, ...challenge }) => ({
+              ...challenge,
+              author: author.name,
+            })),
+            pageCount: res.data.pageCount,
+          });
           setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+
     fetchData();
   }, [page, rowsPerPage]);
 
   const deleteChallenge = (slug) => {
-    http.delete(`/challenge/${slug}`, getHeaders()).then((res) => {
+    http.delete(`/challenge/${slug}`, getHeaders()).then(() => {
       dispatch(showSnackbar('Challenge successfully deleted.', 'success'));
       setPage(1);
       setPage(0);
@@ -223,7 +234,7 @@ export default function AdminChallsTable({ history }) {
       console.log(err);
       dispatch(showSnackbar('An error occured :/, might try again later', 'error'));
     });
-  }
+  };
 
   if (isLoading) {
     return (
@@ -236,40 +247,44 @@ export default function AdminChallsTable({ history }) {
   }
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
+      <Table className={classes.table} aria-label='customized table'>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Edit</StyledTableCell>
-            <StyledTableCell align="left">Name</StyledTableCell>
-            <StyledTableCell align="right">Author</StyledTableCell>
-            <StyledTableCell align="right">Slug</StyledTableCell>
+            <StyledTableCell align='center'>Edit</StyledTableCell>
+            <StyledTableCell align='left'>Name</StyledTableCell>
+            <StyledTableCell align='right'>Author</StyledTableCell>
+            <StyledTableCell align='right'>Slug</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {gridData.data.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell align="center" style={{width: 150}}>
-                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+              <StyledTableCell align='center' style={{ width: 150 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                   <Fab
-                      color='primary'
-                      aria-label='create'
-                      onClick={() => history.push(editChallRoute + '?challengeSlug=' + row.slug)}
-                    >
+                    color='primary'
+                    aria-label='create'
+                    onClick={() => history.push(`${editChallRoute}?challengeSlug=${row.slug}`)}
+                  >
                     <CreateIcon />
                   </Fab>
                   <Fab
                     color='primary'
                     aria-label='create'
-                    onClick={() => {setConfirmOpen(row.slug)}}
+                    onClick={() => {
+                      setConfirmOpen(row.slug);
+                    }}
                   >
                     <DeleteForeverIcon />
                   </Fab>
                   <Modal
-                    aria-labelledby="spring-modal-title"
-                    aria-describedby="spring-modal-description"
+                    aria-labelledby='spring-modal-title'
+                    aria-describedby='spring-modal-description'
                     className={classes.modal}
-                    open={confirmOpen == row.slug}
-                    onClose={() => {setConfirmOpen(undefined);}}
+                    open={confirmOpen === row.slug}
+                    onClose={() => {
+                      setConfirmOpen(undefined);
+                    }}
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                     BackdropProps={{
@@ -278,31 +293,39 @@ export default function AdminChallsTable({ history }) {
                   >
                     <Fade in={row.slug === confirmOpen}>
                       <div className={classes.paper}>
-                        <h2 className={classes.confirmTitle}>Are you sure you want to delete {row.slug} ?</h2>
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <Button variant="contained" color="secondary" onClick={() => setConfirmOpen(undefined)}>
-                          Ooops...
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          style={{minWidth: 210}}
-                          align="right"
-                          onClick={() => {setConfirmOpen(undefined);deleteChallenge(row.slug) }}
-                        >
-                          I know what i'm doing !
-                        </Button>
+                        <h2 className={classes.confirmTitle}>
+                          Are you sure you want to delete
+                          {row.slug}
+                          {' '}
+                          ?
+                        </h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <Button variant='contained' color='secondary' onClick={() => setConfirmOpen(undefined)}>
+                            Ooops...
+                          </Button>
+                          <Button
+                            variant='contained'
+                            color='primary'
+                            style={{ minWidth: 210 }}
+                            align='right'
+                            onClick={() => {
+                              setConfirmOpen(undefined);
+                              deleteChallenge(row.slug);
+                            }}
+                          >
+                            I know what i&apos;m doing !
+                          </Button>
                         </div>
                       </div>
                     </Fade>
                   </Modal>
                 </div>
               </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
+              <StyledTableCell component='th' scope='row'>
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.author}</StyledTableCell>
-              <StyledTableCell align="right">{row.slug}</StyledTableCell>
+              <StyledTableCell align='right'>{row.author}</StyledTableCell>
+              <StyledTableCell align='right'>{row.slug}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

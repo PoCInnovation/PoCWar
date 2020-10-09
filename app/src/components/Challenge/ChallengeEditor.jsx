@@ -7,13 +7,13 @@ import Fab from '@material-ui/core/Fab';
 import { useDispatch } from 'react-redux';
 import 'ace-builds/src-noconflict/mode-json';
 import { useForm } from 'react-hook-form';
-import { showSnackbar } from '../../reducers/actions/snackBarAction';
 import AceEditor from 'react-ace';
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
 import htmlParser from 'react-markdown/plugins/html-parser';
+import { showSnackbar } from '../../reducers/actions/snackBarAction';
 import editorThemes from '../../consts/editorThemes';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   input: {
     background: '#272A35',
   },
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ChallengeEditor(
-  { history, name, category, slug, description, testList, setList, submit }
-) {
+export default function ChallengeEditor({
+  name, category, slug, description, testList, setList, submit,
+}) {
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const [theme, setTheme] = useState('dracula');
@@ -45,13 +45,13 @@ export default function ChallengeEditor(
   };
 
   const parseHtml = htmlParser({
-    isValidNode: node => node.type !== 'script',
-    processingInstructions: [/* ... */]
+    isValidNode: (node) => node.type !== 'script',
+    processingInstructions: [/* ... */],
   });
 
   const onThemeChange = (newTheme) => {
     setTheme(newTheme);
-  }
+  };
 
   return (
     <div>
@@ -60,7 +60,7 @@ export default function ChallengeEditor(
         style={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}
       >
         <div style={{
@@ -153,17 +153,17 @@ export default function ChallengeEditor(
               overflow: 'auto',
               color: 'white',
               height: 600,
-              padding: 10
+              padding: 10,
             }}
           >
-          <ReactMarkdown
-            source={_description}
-            escapeHtml={false}
-            astPlugins={[parseHtml]}
-            style={{
-              height: 200,
-            }}
-          />
+            <ReactMarkdown
+              source={_description}
+              escapeHtml={false}
+              astPlugins={[parseHtml]}
+              style={{
+                height: 200,
+              }}
+            />
           </div>
         </div>
 
@@ -193,7 +193,7 @@ export default function ChallengeEditor(
             style={{
               borderRadius: '3px',
             }}
-            mode="json"
+            mode='json'
             theme={theme}
             fontSize={16}
             width='100%'
@@ -205,9 +205,12 @@ export default function ChallengeEditor(
             showPrintMargin={false}
             editorProps={{ $blockScrolling: true }}
             value={_testList}
-            onChange={(change) => { _setList(change); setList(change);}}
+            onChange={(change) => {
+              _setList(change);
+              setList(change);
+            }}
           />
-          <div style={{width: '25%'}}>
+          <div style={{ width: '25%' }}>
             <InputLabel>Themes</InputLabel>
             <Select
               labelId='change_label'
@@ -216,7 +219,7 @@ export default function ChallengeEditor(
               onChange={(event) => { onThemeChange(event.target.value); }}
             >
               {editorThemes.map((newThemes) => (
-                <MenuItem key={newThemes} value={newThemes} style={{backgroundColor: '#272A35'}}>
+                <MenuItem key={newThemes} value={newThemes} style={{ backgroundColor: '#272A35' }}>
                   {newThemes}
                 </MenuItem>
               ))}

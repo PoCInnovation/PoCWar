@@ -16,9 +16,7 @@ const EditChallenge = withRouter(({ history }) => {
   const [testList, setList] = useState();
   const submitChallenge = async (data) => {
     try {
-      data.input_example = '----';
-      data.output_example = '----';
-      await http.patch(`/admin/challenge/${challengeSlug}`, {...data}, getHeaders())
+      await http.patch(`/admin/challenge/${challengeSlug}`, data, getHeaders())
         .then(() => {
           console.log('Challenge updated, waiting for tests');
         })
@@ -45,7 +43,7 @@ const EditChallenge = withRouter(({ history }) => {
     );
   }
   return (
-    <ChallengeEditor 
+    <ChallengeEditor
       history={history}
       name={challenge.name}
       category={challenge.category}

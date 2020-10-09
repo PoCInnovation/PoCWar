@@ -18,7 +18,7 @@ import { GetChallengeResponseDto, GetChallengesDto } from '../../common/dto/resp
 export class ChallengeService {
   constructor(private prisma: PrismaService) {}
 
-  private static formatTestArgs = (args) => `${args.map((arg) => JSON.stringify(arg)).join(' ')}`;
+  static formatTestArgs = (args) => `${args.map((arg) => JSON.stringify(arg)).join(' ')}`;
 
   private static formatChallenge(
     {
@@ -99,7 +99,7 @@ export class ChallengeService {
 
   async createChallenge(
     userId: string, {
-      name, slug, tests, description, input_example, output_example, category,
+      name, slug, tests, description, category,
     }: CreateChallengeDto,
   ): Promise<ChallengeModel> {
     return this.prisma.challenge.create({
@@ -107,8 +107,6 @@ export class ChallengeService {
         name,
         slug,
         description,
-        input_example,
-        output_example,
         category,
         author: {
           connect: { id: userId },
@@ -191,7 +189,7 @@ export class ChallengeService {
     return Promise.all(tests.map(({ args, ...test }) => this.prisma.test.create({
       data: {
         ...test,
-        args: args.join(' '),
+        args: ChallengeService.formatTestArgs(args),
         challenge: {
           connect: {
             slug: challengeSlug,

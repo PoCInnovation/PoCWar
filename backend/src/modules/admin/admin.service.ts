@@ -15,6 +15,7 @@ import { PatchUserAdminDto } from '../../common/dto/patch-user.dto';
 import { PatchChallengeAdminDto } from '../../common/dto/patch-challenge.dto';
 import { PutTestAdminDto } from '../../common/dto/put-test.dto';
 import { GetUserDto, GetUsersResponseDto } from '../../common/dto/response/get-users-response.dto';
+import { ChallengeService } from '../challenge/challenge.service';
 
 @Injectable()
 export class AdminService {
@@ -122,8 +123,6 @@ export class AdminService {
         name: challenge.name || undefined,
         slug: challenge.slug || undefined,
         category: challenge.category || undefined,
-        input_example: challenge.input_example || undefined,
-        output_example: challenge.output_example || undefined,
         description: challenge.description || undefined,
       },
     });
@@ -137,7 +136,7 @@ export class AdminService {
     return Promise.all(tests.map(({ args, ...test }) => this.prisma.test.create({
       data: {
         ...test,
-        args: args.join(' '),
+        args: ChallengeService.formatTestArgs(args),
         challenge: {
           connect: {
             slug: challengeSlug,

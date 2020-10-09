@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { withStyles, makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 import { showSnackbar } from '../../reducers/actions/snackBarAction';
 import useChallenges from '../../hooks/challenges';
 import { useAdminGetUsers, useAdminDeleteUsers } from '../../hooks/admin';
 import { http, getHeaders } from '../../utils/server';
-import {getUserFromCookie} from "../../utils/auth";
+import { getUserFromCookie } from '../../utils/auth';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2.5),
   },
   footer: {
-    backgroundColor: theme.palette.primary.dark
-  }
+    backgroundColor: theme.palette.primary.dark,
+  },
 }));
 
 export function AdminUserTable() {
@@ -57,8 +57,8 @@ export function AdminUserTable() {
     async function fetchData() {
       await http.get(`/admin/users?page=${page}&pageSize=100`, getHeaders())
         .then((res) => {
-          console.log(user.id, res.data)
-          const users = user ? res.data.users.filter(u => u.id !== user.id) : res.data.users;
+          console.log(user.id, res.data);
+          const users = user ? res.data.users.filter((u) => u.id !== user.id) : res.data.users;
           setGridData({ ...gridData, data: users });
           setIsLoading(false);
         })
@@ -72,7 +72,7 @@ export function AdminUserTable() {
   // const onRowAdd = (newData) => new Promise((resolve) => {});
 
   const onRowUpdate = (newData, oldData) => new Promise((resolve) => {
-    http.patch(`/admin/users/${newData.id}`, {role: newData.role }, getHeaders())
+    http.patch(`/admin/users/${newData.id}`, { role: newData.role }, getHeaders())
       .then(() => {
         const data = [...gridData.data];
         data[data.indexOf(oldData)] = newData;
@@ -109,15 +109,15 @@ export function AdminUserTable() {
   }
   return (
     <div className={classes.main}>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+      <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons' />
       <MaterialTable
         title='Users'
         columns={gridData.columns}
         data={gridData.data}
         rowsPerPage={rowsPerPage}
-        style={{backgroundColor: '#272A35'}}
+        style={{ backgroundColor: '#272A35' }}
         options={{
-          headerStyle: {backgroundColor: '#272A35'}
+          headerStyle: { backgroundColor: '#272A35' },
         }}
         editable={{
           onRowUpdate,

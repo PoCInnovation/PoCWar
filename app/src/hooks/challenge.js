@@ -11,12 +11,15 @@ export default function useChallenge(slug, setEditValue) {
       await http.get(`/challenge/${slug}`, getOptionalHeaders())
         .then(({ data: { codeSource, ...data } }) => {
           setEditValue(codeSource);
-          for (let test of data.tests) {
-            if (typeof(test.args) === 'string') {
-              test.args = test.args.split('\"').filter((el) => el !== '');
-            }
-          }
-          setChallenge(data);
+          setChallenge({
+            ...data,
+            tests: data.tests.map((test) => {
+              if (typeof test.args === 'string') {
+                return test.args.split('"').filter((el) => el !== '');
+              }
+              return test.args;
+            }),
+          });
           setIsLoading(false);
         })
         .catch((err) => {

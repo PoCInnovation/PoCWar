@@ -9,8 +9,6 @@
         "name": "Simple Challenge",
         "slug": "Simple-Challenge",
         "description": "A simple post about life",
-        "input_example": "",
-        "output_example": "simple",
         "category": "Basics",
         "tests": {
           "create": [

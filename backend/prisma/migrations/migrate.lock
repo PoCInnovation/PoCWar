@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20200825141650-init
+20201009035746-remove_input_output_example

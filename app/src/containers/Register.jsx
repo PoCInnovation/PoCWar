@@ -13,6 +13,10 @@ const registerFormFields = [
     autoComplete: 'email',
     inputRef: {
       required: 'Email is required',
+      pattern: {
+        value: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-zA-Z]{2,}\b/,
+        message: 'You must enter a valid email.'
+      },
       minLength: {
         value: 5,
         message: 'Should contain at least 5 characters',

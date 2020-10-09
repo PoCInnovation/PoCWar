@@ -7,7 +7,7 @@ export const http = axios.create({
 
 export const getHeaders = () => {
   const headers = {
-    Authorization: `Bearer ${JSON.parse(Cookies.get('user')).token}`,
+    Authorization: `Bearer ${Cookies.getJSON('user').token}`,
   };
   return { headers };
 };

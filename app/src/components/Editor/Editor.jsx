@@ -9,7 +9,7 @@ import { makeStyles, Paper } from '@material-ui/core';
 
 import editorThemes from '../../consts/editorThemes';
 import autocompleteLanguages from '../../consts/autoComplete';
-import { languages, langsForSubmit } from '../../consts/languages';
+import { languages } from '../../consts/languages';
 
 // eslint-disable-next-line global-require,import/no-dynamic-require
 editorThemes.forEach((editorTheme) => require(`ace-builds/src-noconflict/theme-${editorTheme}`));
@@ -21,6 +21,15 @@ autocompleteLanguages.forEach((lang) => {
   require(`ace-builds/src-noconflict/snippets/${languages[lang]}`);
 });
 
+const langsForAce = {
+  C: 'c_cpp',
+  'C++': 'c_cpp',
+  python3: 'python',
+  javascript: 'javascript',
+  go: 'golang',
+  ruby: 'ruby',
+  rust: 'rust',
+}
 
 const useStyles = makeStyles(() => ({
   paperBlock: {
@@ -40,7 +49,7 @@ export default function Editor({
     <Paper className={classes.paperBlock}>
       <AceEditor
         className={classes.editor}
-        mode={langsForSubmit[language]}
+        mode={langsForAce[language]}
         theme={theme}
         fontSize={16}
         width='100%'

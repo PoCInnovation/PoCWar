@@ -81,7 +81,6 @@ export default function ChallengeLayout() {
         <Grid className={classes.gridRoot} container spacing={0}>
           <Grid item xs={12} sm={4}>
             <StatingDisplay
-              title={challenge.name}
               stating={challenge.description}
             />
             <StdLog stdout={stdout} stderr={stderr} tests={testsList} />

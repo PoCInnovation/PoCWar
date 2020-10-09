@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Grid, FormControl, InputLabel, makeStyles, Select, MenuItem, Button, CircularProgress,
 } from '@material-ui/core';
-import languages from '../consts/languages';
 import editorThemes from '../consts/editorThemes';
 import autocompleteLanguages from '../consts/autoComplete';
 

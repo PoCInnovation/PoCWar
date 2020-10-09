@@ -159,8 +159,7 @@ export default function AdminChallsTable({ history }) {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [slugToDelete, setSlugToDelete] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const dispatch = useDispatch();
   const [gridData, setGridData] = useState({
     columns: [
@@ -207,14 +206,14 @@ export default function AdminChallsTable({ history }) {
     async function fetchData() {
       await http.get(`/challenge?page=${page + 1}&pageSize=${rowsPerPage}`, getHeaders())
         .then((res) => {
-          setGridData({
-            ...gridData,
+          setGridData(g => {return {
+            ...g,
             data: res.data.challenges.map(({ author, ...challenge }) => ({
               ...challenge,
               author: author.name,
             })),
             pageCount: res.data.pageCount,
-          });
+          }});
           setIsLoading(false);
         })
         .catch((err) => {

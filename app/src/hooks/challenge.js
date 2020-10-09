@@ -14,10 +14,7 @@ export default function useChallenge(slug, setEditValue) {
           setChallenge({
             ...data,
             tests: data.tests.map((test) => {
-              if (typeof test.args === 'string') {
-                return test.args.split('"').filter((el) => el !== '');
-              }
-              return test.args;
+              return {...test, args: test.args};
             }),
           });
           setIsLoading(false);

@@ -3,15 +3,14 @@ import { withRouter } from 'react-router-dom';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import ChallengeEditor from '../components/Challenge/ChallengeEditor';
-import useChallenge, { useChallengeTests } from '../hooks/challenge';
+import useChallenge from '../hooks/challenge';
 import { getHeaders, http } from '../utils/server';
 import { showSnackbar } from '../reducers/actions/snackBarAction';
 
 const EditChallenge = withRouter(({ history }) => {
   const query = new URLSearchParams(window.location.search);
   const challengeSlug = query.get('challengeSlug');
-  const [codeSource, setEditCode] = useState('');
-  const { isLoading, challenge } = useChallenge(challengeSlug, setEditCode);
+  const { isLoading, challenge } = useChallenge(challengeSlug, () => {});
   const dispatch = useDispatch();
   const [testList, setList] = useState();
   const submitChallenge = async (data) => {

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, ValidateNested } from 'class-validator';
+import { CreateTestDto } from '../create-test.dto';
 
 export class GetChallengeResponseDto {
   @ApiProperty()
@@ -15,18 +16,17 @@ export class GetChallengeResponseDto {
   description: string;
 
   @ApiProperty()
-  input_example: string;
-
-  @ApiProperty()
-  output_example: string;
-
-  @ApiProperty()
   category: string;
 
   @ApiProperty()
   passAllTests: boolean;
+}
 
-  @ApiProperty({ description: 'only if has already submitted once and not for pagination' })
+export class GetChallengeResponseWithSourceAndTestsDto extends GetChallengeResponseDto {
+  @ApiProperty()
+  tests: CreateTestDto[];
+
+  @ApiProperty({ description: 'only if has already submitted once' })
   codeSource?: string;
 }
 

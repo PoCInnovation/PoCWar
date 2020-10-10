@@ -10,7 +10,7 @@ import HomeLayout from './layouts/Home';
 import LoginLayout from './layouts/Login';
 import RegisterLayout from './layouts/Register';
 import CreateChallLayout from './layouts/CreateChallenge';
-import EditChallLayout from './layouts/EditChallenge';
+import EditChallenge from './layouts/EditChallenge';
 import theme from './consts/themes';
 import {
   createChallRoute,
@@ -49,8 +49,12 @@ export default function App() {
       <Router>
         <NavBar />
         <Switch>
-          <AuthenticatedRoute path={createChallRoute} component={CreateChallLayout} auth={isAdmin} />
-          <AuthenticatedRoute path={editChallRoute} component={EditChallLayout} auth={isAdmin} />
+          <AuthenticatedRoute
+            path={createChallRoute}
+            component={CreateChallLayout}
+            auth={isAdmin}
+          />
+          <AuthenticatedRoute path={editChallRoute} component={EditChallenge} auth={isAdmin} />
           <AuthenticatedRoute path={editorRoute} component={ChallengeLayout} auth={isAuth} />
           <Route path={loginRoute}>
             <LoginLayout />

@@ -1,10 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { Typography } from '@material-ui/core';
-import defaultTheme from '../consts/themes';
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
 import htmlParser from 'react-markdown/plugins/html-parser';
+import defaultTheme from '../consts/themes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,21 +42,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function StatingDisplay({
-  title, stating
-}) {
+export default function StatingDisplay({ stating }) {
   const classes = useStyles(defaultTheme);
   const parseHtml = htmlParser({
-    isValidNode: node => node.type !== 'script',
-    processingInstructions: [/* ... */]
+    isValidNode: (node) => node.type !== 'script',
+    processingInstructions: [/* ... */],
   });
   return (
-    <div className={classes.root} style={{height:400, overflowY:'auto'}}>
+    <div className={classes.root} style={{ height: 400, overflowY: 'auto' }}>
       <div className={classes.paperBlock}>
         <Box className={classes.textBlock} color='text.secondary'>
           <ReactMarkdown
             source={stating}
-            escapeHtml={false} 
+            escapeHtml={false}
             astPlugins={[parseHtml]}
           />
         </Box>

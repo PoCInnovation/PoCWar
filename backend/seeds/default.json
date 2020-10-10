@@ -6,20 +6,244 @@
   "challenges": {
     "create": [
       {
-        "name": "Simple Challenge",
-        "slug": "Simple-Challenge",
-        "description": "A simple post about life",
-        "input_example": "",
-        "output_example": "simple",
-        "category": "Basics",
+        "name": "Print combn",
+        "category": "CPool",
+        "slug": "print-combn",
+        "description": "# Print combn\n\n +Write a function that displays, in ascending order, all the numbers composed by **n** different digits numbers\n(**n** being given as a parameter). Given **n** digits (all different), only the smallest number composed by\nthoses digits must be displayed.\n\n## Example 1\n\n- ### Input\n>  `3`\n- ### Output\n> `012, 013, 014, 015, 016, 017, 018, 019, 023, ..., 789`\n\n\n## Example 2\n- ### Input\n> `1`\n- ### Output\n> `1, 2, 3, 4, 5, 6, 7, 8, 9`",
         "tests": {
           "create": [
             {
-              "args": "",
-              "name": "simple test",
+              "name": "Test my_print_combn(3)",
+              "out": "012, 013, 014, 015, 016, 017, 018, 019, 023, 024, 025, 026, 027, 028, 029, 034, 035, 036, 037, 038, 039, 045, 046, 047, 048, 049, 056, 057, 058, 059, 067, 068, 069, 078, 079, 089, 123, 124, 125, 126, 127, 128, 129, 134, 135, 136, 137, 138, 139, 145, 146, 147, 148, 149, 156, 157, 158, 159, 167, 168, 169, 178, 179, 189, 234, 235, 236, 237, 238, 239, 245, 246, 247, 248, 249, 256, 257, 258, 259, 267, 268, 269, 278, 279, 289, 345, 346, 347, 348, 349, 356, 357, 358, 359, 367, 368, 369, 378, 379, 389, 456, 457, 458, 459, 467, 468, 469, 478, 479, 489, 567, 568, 569, 578, 579, 589, 678, 679, 689, 789",
+              "err": "",
               "ret": 0,
-              "out": "simple",
-              "err": ""
+              "args": "\"3\""
+            },
+            {
+              "name": "Test my_print_combn(9)",
+              "out": "012345678, 012345679, 012345689, 012345789, 012346789, 012356789, 012456789, 013456789, 023456789, 123456789",
+              "err": "",
+              "ret": 0,
+              "args": "\"9\""
+            },
+            {
+              "name": "Test my_print_combn(1)",
+              "out": "1, 2, 3, 4, 5, 6, 7, 8, 9",
+              "err": "",
+              "ret": 0,
+              "args": "\"1\""
+            },
+            {
+              "name": "Test my_print_combn(2)",
+              "out": "01, 02, 03, 04, 05, 06, 07, 08, 09, 12, 13, 14, 15, 16, 17, 18, 19, 23, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 45, 46, 47, 48, 49, 56, 57, 58, 59, 67, 68, 69, 78, 79, 89",
+              "err": "",
+              "ret": 0,
+              "args": "\"2\""
+            }
+          ]
+        }
+      },
+      {
+        "name": "nQueen",
+        "category": "CPool",
+        "slug": "n-queen",
+        "description": "# nQueen\n\nWrite a function that returns the number of possible ways to place **n** queens on a **n**x**n** chessboard without\nthem being able to run into each other in a single move.\n\n |Args|Output|\n |--------|----------|\n |`\"1\"`|1|\n |`\"2\"`|0|\n |`\"3\"`|0|\n |`\"4\"`|2|\n |`\"5\"`|10|\n\n_one possible way to place 8 queen on a 8x8 chessboard._\n![nqueen.png](https://miro.medium.com/max/500/1*Zm2pbDR5CS2w2xeUbTBxQQ.png)\n",
+        "tests": {
+          "create": [
+            {
+              "name": "Test 1",
+              "out": "1",
+              "err": "",
+              "ret": 0,
+              "args": "\"1\""
+            },
+            {
+              "name": "Test 2",
+              "out": "0",
+              "err": "",
+              "ret": 0,
+              "args": "\"2\""
+            },
+            {
+              "name": "Test 3",
+              "out": "0",
+              "err": "",
+              "ret": 0,
+              "args": "\"3\""
+            },
+            {
+              "name": "Test 4",
+              "out": "2",
+              "err": "",
+              "ret": 0,
+              "args": "\"4\""
+            },
+            {
+              "name": "Test 5",
+              "out": "10",
+              "err": "",
+              "ret": 0,
+              "args": "\"5\""
+            },
+            {
+              "name": "Test 6",
+              "out": "4",
+              "err": "",
+              "ret": 0,
+              "args": "\"6\""
+            },
+            {
+              "name": "Test 7",
+              "out": "40",
+              "err": "",
+              "ret": 0,
+              "args": "\"7\""
+            },
+            {
+              "name": "Test 8",
+              "out": "92",
+              "err": "",
+              "ret": 0,
+              "args": "\"8\""
+            },
+            {
+              "name": "Test 9",
+              "out": "352",
+              "err": "",
+              "ret": 0,
+              "args": "\"9\""
+            },
+            {
+              "name": "Test 10",
+              "out": "724",
+              "err": "",
+              "ret": 0,
+              "args": "\"10\""
+            },
+            {
+              "name": "Test 11",
+              "out": "2680",
+              "err": "",
+              "ret": 0,
+              "args": "\"11\""
+            },
+            {
+              "name": "Test 12",
+              "out": "14200",
+              "err": "",
+              "ret": 0,
+              "args": "\"12\""
+            },
+            {
+              "name": "Test 13",
+              "out": "73712",
+              "err": "",
+              "ret": 0,
+              "args": "\"13\""
+            }
+          ]
+        }
+      },
+      {
+        "name": "Factorial",
+        "category": "CPool",
+        "slug": "factorial",
+        "description": "# Factorial\n\nPrint factorial of **n** given in arguments.\n\n## Example\n\n |Args|Output|\n |-|-|\n |`\"4\"`|`24`|\n |`\"5\"`|`120`|\n |`\"6\"`|`720`|\n\n_formula for n factorial_\n\n![factorial.png](https://wikimedia.org/api/rest_v1/media/math/render/svg/45a110f046a29010023eb0e64637bd4b5abdff92)",
+        "tests": {
+          "create": [
+            {
+              "name": "Test 1",
+              "out": "1",
+              "err": "",
+              "ret": 0,
+              "args": "\"1\""
+            },
+            {
+              "name": "Test 2",
+              "out": "2",
+              "err": "",
+              "ret": 0,
+              "args": "\"2\""
+            },
+            {
+              "name": "Test 3",
+              "out": "6",
+              "err": "",
+              "ret": 0,
+              "args": "\"3\""
+            },
+            {
+              "name": "Test 4",
+              "out": "24",
+              "err": "",
+              "ret": 0,
+              "args": "\"4\""
+            },
+            {
+              "name": "Test 5",
+              "out": "120",
+              "err": "",
+              "ret": 0,
+              "args": "\"5\""
+            },
+            {
+              "name": "Test 6",
+              "out": "720",
+              "err": "",
+              "ret": 0,
+              "args": "\"6\""
+            },
+            {
+              "name": "Test 7",
+              "out": "5040",
+              "err": "",
+              "ret": 0,
+              "args": "\"7\""
+            },
+            {
+              "name": "Test 8",
+              "out": "479001600",
+              "err": "",
+              "ret": 0,
+              "args": "\"12\""
+            }
+          ]
+        }
+      },
+      {
+        "name": "Adventuring Time",
+        "category": "Basics",
+        "slug": "adventuring-time",
+        "description": "_From CodinGame_\n\n# Adventuring Time\n\n## The \"program\":\nTwo adventurers are going to duel, each of them has health points **HP1** and **HP2** and apply **D1** and **D2** damage at their opponents each round.\n\nYour program must output which adventurer win and how many round are needed to end the duel.\nThere are no draw.\n\n### INPUT\n **Line 1**: Health point **HP1** and damage **D1** of the first duelist.\n\n **Line 2**: Health point **HP2** and damage **D2** of the second duelist.\n\n### OUTPUT\n **Line 1**: The winner number 1 or 2 and how many rounds were needed to end the duel.\n\n### CONSTRAINTS\n`0 < HP1 (argv[1]) ≤ 10000`\n\n`0 ≤ D1 (argv[2]) ≤ 50`\n\n`0 < HP2 (argv[3]) ≤ 10000`\n\n`0 ≤ D2 (argv[4]) ≤ 50`\n\n### EXAMPLE\n |Input|Output|\n |-|\n|`\"100\" \"1\" \"1\" \"2\"`|`2 1`|",
+        "tests": {
+          "create": [
+            {
+              "name": "Test 1",
+              "out": "1 5",
+              "err": "",
+              "ret": 0,
+              "args": "\"20\" \"2\" \"10\" \"1\""
+            },
+            {
+              "name": "Test 2",
+              "out": "1 236",
+              "err": "",
+              "ret": 0,
+              "args": "\"6789\" \"42\" \"9876\" \"20\""
+            },
+            {
+              "name": "Test 3",
+              "out": "1 335",
+              "err": "",
+              "ret": 0,
+              "args": "\"10\" \"4\" \"1337\" \"0\""
+            },
+            {
+              "name": "Test 4",
+              "out": "2 1",
+              "err": "",
+              "ret": 0,
+              "args": "\"1\" \"1\" \"9001\" \"9001\""
             }
           ]
         }

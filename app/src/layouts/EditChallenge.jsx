@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import ChallengeEditor from '../components/Challenge/ChallengeEditor';
-import useChallenge, { useChallengeTests } from '../hooks/challenge';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { getHeaders, http } from '../utils/server';
 import { useDispatch } from 'react-redux';
+import ChallengeEditor from '../components/Challenge/ChallengeEditor';
+import useChallenge from '../hooks/challenge';
+import { getHeaders, http } from '../utils/server';
 import { showSnackbar } from '../reducers/actions/snackBarAction';
 
 const EditChallenge = withRouter(({ history }) => {
   const query = new URLSearchParams(window.location.search);
   const challengeSlug = query.get('challengeSlug');
-  const [codeSource, setEditCode] = useState('');
-  const {isLoading, challenge} = useChallenge(challengeSlug, setEditCode);
+  const { isLoading, challenge } = useChallenge(challengeSlug, () => {});
   const dispatch = useDispatch();
   const [testList, setList] = useState();
   const submitChallenge = async (data) => {
     try {
-      data.input_example = '----';
-      data.output_example = '----';
-      await http.patch(`/admin/challenge/${challengeSlug}`, {...data}, getHeaders())
+      await http.patch(`/admin/challenge/${challengeSlug}`, data, getHeaders())
         .then(() => {
           console.log('Challenge updated, waiting for tests');
         })
@@ -27,7 +24,7 @@ const EditChallenge = withRouter(({ history }) => {
         });
       await http.put(`/admin/challenge/${challengeSlug}/tests`, JSON.parse(testList), getHeaders())
         .then(() => {
-          history.push(`/admin`);
+          history.push('/admin');
         })
         .catch((err) => {
           dispatch(showSnackbar(err.response ? err.response.data.message : 'Failed to update tests.'));
@@ -39,19 +36,19 @@ const EditChallenge = withRouter(({ history }) => {
   };
   if (isLoading) {
     return (
-      <Grid style={{paddingTop: '20%'}} container justify='center'>
+      <Grid style={{ paddingTop: '20%' }} container justify='center'>
         <CircularProgress color='secondary' />
       </Grid>
     );
   }
   return (
-    <ChallengeEditor 
+    <ChallengeEditor
       history={history}
       name={challenge.name}
       category={challenge.category}
       slug={challenge.slug}
       description={challenge.description}
-      testList={JSON.stringify(challenge?.tests, null, 4)}
+      testList={JSON.stringify(challenge ? challenge.tests : '', null, 4)}
       setList={setList}
       submit={submitChallenge}
     />

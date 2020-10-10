@@ -56,7 +56,7 @@ export default function ChallengeDescription({
           <span
             className={classes.title}
             style={{
-              paddingTop: challHeight/2-10
+              paddingTop: challHeight / 2 - 10,
             }}
           >
             {title}
@@ -64,7 +64,7 @@ export default function ChallengeDescription({
           <span
             className={classes.category}
             style={{
-              paddingTop: challHeight/2-10
+              paddingTop: challHeight / 2 - 10,
             }}
           >
             {category}

@@ -19,17 +19,9 @@ export class CreateChallengeDto {
   slug: string;
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(2048)
   @ApiProperty()
   description: string;
-
-  @IsString()
-  @ApiProperty()
-  input_example: string;
-
-  @IsString()
-  @ApiProperty()
-  output_example: string;
 
   @IsString()
   @MinLength(4)

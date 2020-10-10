@@ -6,31 +6,25 @@ import { Role } from '@prisma/client';
 
 export class PatchUserDto {
   @IsOptional()
-  @IsEmail()
   @IsString()
-  @MinLength(3)
+  @MinLength(3, { message: 'New name is too short' })
   @MaxLength(50)
   name?: string;
 
   @IsOptional()
+  @IsEmail()
   @IsString()
   @MaxLength(50)
   email?: string;
 
   @IsOptional()
   @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])(?=.{8,40})/,
-    { message: 'password too weak' },
-  )
+  @MinLength(4)
   oldPassword?: string;
 
   @IsOptional()
   @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*.\-_])(?=.{8,40})/,
-    { message: 'password too weak' },
-  )
+  @MinLength(4, { message: 'New password is too short' })
   password?: string;
 }
 

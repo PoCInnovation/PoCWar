@@ -1,0 +1,15 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteField",
+      "model": "Challenge",
+      "field": "input_example"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Challenge",
+      "field": "output_example"
+    }
+  ]
+}

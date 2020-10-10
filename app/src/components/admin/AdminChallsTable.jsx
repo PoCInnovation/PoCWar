@@ -206,14 +206,14 @@ export default function AdminChallsTable({ history }) {
     async function fetchData() {
       await http.get(`/challenge?page=${page + 1}&pageSize=${rowsPerPage}`, getHeaders())
         .then((res) => {
-          setGridData(g => {return {
+          setGridData((g) => ({
             ...g,
             data: res.data.challenges.map(({ author, ...challenge }) => ({
               ...challenge,
               author: author.name,
             })),
             pageCount: res.data.pageCount,
-          }});
+          }));
           setIsLoading(false);
         })
         .catch((err) => {

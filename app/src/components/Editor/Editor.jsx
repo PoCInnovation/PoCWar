@@ -29,7 +29,7 @@ const langsForAce = {
   go: 'golang',
   ruby: 'ruby',
   rust: 'rust',
-}
+};
 
 const useStyles = makeStyles(() => ({
   paperBlock: {

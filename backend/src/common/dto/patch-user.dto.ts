@@ -1,5 +1,5 @@
 import {
-  validate, IsEmail, IsString, MaxLength, MinLength, Matches, IsEnum, IsOptional, isValidationOptions,
+  IsEmail, IsString, MaxLength, MinLength, Matches, IsEnum, IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
@@ -7,7 +7,7 @@ import { Role } from '@prisma/client';
 export class PatchUserDto {
   @IsOptional()
   @IsString()
-  @MinLength(3, {message: 'New name is too short'})
+  @MinLength(3, { message: 'New name is too short' })
   @MaxLength(50)
   name?: string;
 
@@ -24,7 +24,7 @@ export class PatchUserDto {
 
   @IsOptional()
   @IsString()
-  @MinLength(4, {message: 'New password is too short'})
+  @MinLength(4, { message: 'New password is too short' })
   password?: string;
 }
 

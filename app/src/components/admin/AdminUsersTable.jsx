@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function AdminUserTable() {
-  //const user = getUserFromCookie();
+  // const user = getUserFromCookie();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -55,8 +55,8 @@ export function AdminUserTable() {
     async function fetchData() {
       await http.get(`/admin/users?page=${page + 1}&pageSize=${rowsPerPage}`, getHeaders())
         .then((res) => {
-          //const users = user ? res.data.users.filter((u) => u.id !== user.id) : res.data.users;
-          setGridData(g => {return { ...g, data: res.data.users, pageCount: res.data.pageCount }});
+          // const users = user ? res.data.users.filter((u) => u.id !== user.id) : res.data.users;
+          setGridData((g) => ({ ...g, data: res.data.users, pageCount: res.data.pageCount }));
           setIsLoading(false);
         })
         .catch((err) => {
@@ -112,7 +112,7 @@ export function AdminUserTable() {
         rowsPerPage={rowsPerPage}
         totalCount={gridData.pageCount * rowsPerPage}
         page={page}
-        onChangePage={(page_, rowsPerPage_) => {setPage(page_);setRowsPerPage(rowsPerPage_);}}
+        onChangePage={(page_, rowsPerPage_) => { setPage(page_); setRowsPerPage(rowsPerPage_); }}
         style={{ backgroundColor: '#272A35' }}
         options={{
           headerStyle: { backgroundColor: '#272A35' },

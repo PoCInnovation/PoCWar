@@ -24,7 +24,7 @@ export class GetChallengeResponseDto {
 
 export class GetChallengeResponseWithSourceAndTestsDto extends GetChallengeResponseDto {
   @ApiProperty()
-  tests: CreateTestDto[]
+  tests: CreateTestDto[];
 
   @ApiProperty({ description: 'only if has already submitted once' })
   codeSource?: string;

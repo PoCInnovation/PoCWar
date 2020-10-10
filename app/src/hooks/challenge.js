@@ -13,9 +13,7 @@ export default function useChallenge(slug, setEditValue) {
           setEditValue(codeSource);
           setChallenge({
             ...data,
-            tests: data.tests.map((test) => {
-              return {...test, args: test.args};
-            }),
+            tests: data.tests.map((test) => ({ ...test, args: test.args })),
           });
           setIsLoading(false);
         })

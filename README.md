@@ -2,34 +2,6 @@
 
 La plateforme de PoC pour créer des challenges
 
-React
-Nestjs
-Prisma
-Postgresql
-sql
-Docker
-markdown
-material-ui
-json
-github
-eslint
-npm
-nodejs
-docker-compose
-html
-css
-typescript
-javascript
-react-ace
-bash
-json
-unit tests
-react-hooks
-react-hook-form
-decorateurs javascript
-class-validator
-swagger pour la doc
-
 langage supporté
 c cpp go javascript python ruby rust
 
@@ -41,13 +13,15 @@ Une fois le code réalisé, vous pourrez l'exécuter et voir sa sortie.
 
 ## Table of Contents
 
-- pré requis
-- installation
-- architecture et fonctionnement
+- Pré-requis
+- Installation
+- Architecture et fonctionnement
+- Technologies utilisés
+- Langages supportés
 
 ## Pré-requis
 
-- Avoir git, npm et docker d'installé
+Avoir git, npm et docker d'installé
 
 ## Installation
 
@@ -99,3 +73,34 @@ _Image 5: Pannel réservé aux administrateurs._
 
 ![challenge edition](assets/edit-challenge.png)
 _Image 6: Écran d'édition des challenges, uniquement accessible aux administrateurs._
+
+
+## Technologies utilisées
+
+- React
+- Nestjs
+- Prisma
+- Postgresql
+- sql
+- Docker
+- markdown
+- material-ui
+- github
+- eslint
+- npm
+- nodejs
+- docker-compose
+- html
+- css
+- typescript
+- javascript
+- react-ace
+- bash
+- json
+- unit tests
+- react-hooks
+- react-hook-form
+- decorateurs javascript
+- class-validator
+- swagger pour la doc
+

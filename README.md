@@ -2,22 +2,20 @@
 
 La plateforme de PoC pour créer des challenges
 
-langage supporté
-c cpp go javascript python ruby rust
-
-MVC
-
-PoCWar est une plateforme en ligne permettant de réaliser des challenges de programmation créés en amont par les administrateurs de la plateforme.
-Une fois connecté sur la plateforme, vous pourrez choisir un challenge, vous aurez alors une consigne avec une entrée d'exemple ainsi qu'une sortie d'exemple. Vous aurez un éditeur de code dans lequel il vous faudra rédiger votre programme.
-Une fois le code réalisé, vous pourrez l'exécuter et voir sa sortie.
-
 ## Table of Contents
 
+- Description
 - Pré-requis
 - Installation
 - Architecture et fonctionnement
 - Technologies utilisés
 - Langages supportés
+
+## Description
+
+PoCWar est une plateforme en ligne permettant de réaliser des challenges de programmation créés en amont par les administrateurs de la plateforme.
+Une fois connecté sur la plateforme, vous pourrez choisir un challenge, vous aurez alors une consigne avec une entrée d'exemple ainsi qu'une sortie d'exemple. Vous aurez un éditeur de code dans lequel il vous faudra rédiger votre programme.
+Une fois le code réalisé, vous pourrez l'exécuter et voir sa sortie.
 
 ## Pré-requis
 
@@ -103,4 +101,14 @@ _Image 6: Écran d'édition des challenges, uniquement accessible aux administra
 - decorateurs javascript
 - class-validator
 - swagger pour la doc
+
+## Langages supportés
+
+- c
+- cpp
+- go
+- javascript
+- python
+- ruby
+- rust
 
